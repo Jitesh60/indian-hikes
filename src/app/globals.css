@@ -1,26 +1,226 @@
 @import "tailwindcss";
 
+/* ============================================================
+   Altitude gradient design system
+   Colour is mapped to elevation: forest -> meadow -> snow.
+   ============================================================ */
+
+@theme {
+  /* base */
+  --color-spruce-900: #0c1613;
+  --color-spruce-800: #12211e;
+  --color-spruce-700: #1a2f2a;
+  --color-spruce-600: #26433c;
+
+  /* altitude bands */
+  --color-deodar-700: #173328;
+  --color-deodar-600: #1f4438;
+  --color-deodar-500: #2f6350;
+  --color-deodar-400: #4c8770;
+
+  --color-bugyal-600: #a97d16;
+  --color-bugyal-500: #d4a22b;
+  --color-bugyal-400: #e6bd5a;
+  --color-bugyal-200: #f2e0ac;
+
+  --color-rhodo-700: #8d2a36;
+  --color-rhodo-600: #b23a48;
+  --color-rhodo-500: #c85563;
+  --color-rhodo-200: #f0cdd1;
+
+  --color-glacier-700: #4a6f82;
+  --color-glacier-600: #6e93a6;
+  --color-glacier-400: #a6c2cf;
+  --color-glacier-200: #d4e2e8;
+
+  /* paper: cold, blue-leaning white — snow shade, not cream */
+  --color-snow-50: #f4f7f7;
+  --color-snow-100: #e9eeee;
+  --color-snow-200: #dbe3e3;
+  --color-snow-300: #c3cfcf;
+  --color-snow-400: #96a5a4;
+  --color-snow-500: #6b7b7a;
+
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-card: 2px;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --page: var(--color-snow-100);
+  --ink: var(--color-spruce-800);
+  --muted: var(--color-snow-500);
+  --rule: var(--color-snow-300);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  border-color: var(--rule);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-feature-settings: "tnum" 0;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Display face: Fraunces with its soft + wonk axes dialled in.
+   Not a neutral delivery vehicle — this is the page's voice. */
+.font-display {
+  font-family: var(--font-display);
+  font-variation-settings: "SOFT" 28, "WONK" 1, "opsz" 84;
+  letter-spacing: -0.021em;
+}
+
+.font-display-tight {
+  font-family: var(--font-display);
+  font-variation-settings: "SOFT" 14, "WONK" 0, "opsz" 20;
+  letter-spacing: -0.012em;
+}
+
+/* Every altitude, price, distance and count is tabular. */
+.nums {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+.measure {
+  max-width: 64ch;
+}
+
+.measure-wide {
+  max-width: 74ch;
+}
+
+/* Focus that is always visible, on both paper and dark panels. */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-bugyal-500);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.on-dark :where(a, button, input, select, textarea, summary):focus-visible {
+  outline-color: var(--color-bugyal-400);
+}
+
+/* Contour hatching used behind dark panels — drawn, not a gradient wash. */
+.contours {
+  background-image: repeating-linear-gradient(
+    172deg,
+    color-mix(in srgb, var(--color-glacier-600) 9%, transparent) 0 1px,
+    transparent 1px 17px
+  );
+}
+
+.grain {
+  position: relative;
+}
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.35;
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    color-mix(in srgb, var(--color-spruce-800) 18%, transparent) 0.5px,
+    transparent 0.5px
+  );
+  background-size: 4px 4px;
+}
+
+/* Scrollbars inside data tables */
+.thin-scroll::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+.thin-scroll::-webkit-scrollbar-thumb {
+  background: var(--color-snow-300);
+  border-radius: 99px;
+}
+.thin-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* The single orchestrated page-load moment: the ridge draws itself in. */
+@keyframes ridge-draw {
+  from {
+    stroke-dashoffset: var(--len, 2000);
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.ridge-draw {
+  stroke-dasharray: var(--len, 2000);
+  animation: ridge-draw 1900ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.rise {
+  animation: rise 700ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .ridge-draw {
+    stroke-dasharray: none;
+  }
+}
+
+/* Range input styled as an altitude slider */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  width: 100%;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 3px;
+  background: var(--color-snow-300);
+}
+input[type="range"]::-moz-range-track {
+  height: 3px;
+  background: var(--color-snow-300);
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 16px;
+  width: 16px;
+  margin-top: -6.5px;
+  border-radius: 99px;
+  background: var(--color-spruce-800);
+  border: 3px solid var(--color-bugyal-500);
+  cursor: pointer;
+}
+input[type="range"]::-moz-range-thumb {
+  height: 16px;
+  width: 16px;
+  border: 3px solid var(--color-bugyal-500);
+  border-radius: 99px;
+  background: var(--color-spruce-800);
+  cursor: pointer;
 }
