@@ -1,12 +1,15 @@
-"use client";
-
-import { useState } from "react";
-import { Minus, Plus } from "lucide-react";
-import { SiteHeader } from "@/components/site/SiteHeader";
-import { SiteFooter } from "@/components/site/SiteFooter";
+import type { Metadata } from "next";
+import { MessageCircle } from "lucide-react";
+import { InfoShell } from "@/components/site/InfoShell";
+import { FaqAccordion, type FaqGroup } from "@/components/site/content/FaqAccordion";
 import { Button } from "@/components/site/ui";
 
-const GROUPS = [
+export const metadata: Metadata = {
+  title: "Questions people ask",
+  description: "Answers to the questions people ask most before they book a trek.",
+};
+
+const GROUPS: FaqGroup[] = [
   {
     group: "Choosing a trek",
     qs: [
@@ -38,77 +41,37 @@ const GROUPS = [
 ];
 
 export default function FaqPage() {
-  const [open, setOpen] = useState<string | null>(GROUPS[0].qs[0][0]);
-
   return (
-    <>
-      <SiteHeader />
-      <main className="mx-auto max-w-[1360px] px-5 sm:px-8 py-12 sm:py-16">
-        <header className="mb-12 max-w-[54ch]">
-          <h1 className="font-display text-[clamp(2.3rem,5vw,3.4rem)] leading-[1.03]">
-            Questions people ask before they book
-          </h1>
-          <p className="mt-5 text-[17px] leading-relaxed text-spruce-800/70">
-            These are the ones that come up most. If yours is not here, ask us — the answer
-            usually ends up on this page.
-          </p>
-        </header>
+    <InfoShell
+      photo="valley"
+      eyebrow="Questions people ask"
+      title="Questions people ask before they book"
+      intro="These are the ones that come up most. If yours is not here, ask us — the answer usually ends up on this page."
+    >
+      <div className="grid gap-x-8 gap-y-8 pt-6 sm:pt-10 lg:grid-cols-[minmax(0,1fr)_340px]">
+        <FaqAccordion groups={GROUPS} />
 
-        <div className="grid lg:grid-cols-[minmax(0,1fr)_320px] gap-x-16 gap-y-12">
-          <div className="space-y-14">
-            {GROUPS.map((g) => (
-              <section key={g.group}>
-                <h2 className="font-display text-[clamp(1.6rem,3vw,2.1rem)] leading-tight mb-6">
-                  {g.group}
-                </h2>
-                <div className="border-t border-snow-300">
-                  {g.qs.map(([q, a]) => {
-                    const on = open === q;
-                    return (
-                      <div key={q} className="border-b border-snow-300">
-                        <button
-                          onClick={() => setOpen(on ? null : q)}
-                          aria-expanded={on}
-                          className="w-full flex items-start justify-between gap-6 py-5 text-left group"
-                        >
-                          <span className="text-[17.5px] font-semibold leading-snug group-hover:text-deodar-600 transition-colors">
-                            {q}
-                          </span>
-                          <span className="shrink-0 mt-1 text-snow-500">
-                            {on ? <Minus size={18} /> : <Plus size={18} />}
-                          </span>
-                        </button>
-                        {on && (
-                          <p className="pb-6 -mt-1 text-[16.5px] leading-[1.68] text-spruce-800/80 measure">
-                            {a}
-                          </p>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </section>
-            ))}
-          </div>
-
-          <aside className="lg:sticky lg:top-6 self-start border border-snow-300 bg-snow-50 p-7">
-            <h2 className="font-display-tight text-[21px] leading-tight">
+        <aside className="self-start lg:sticky lg:top-28">
+          <div className="rounded-bento bg-ink-900 p-6 text-white sm:p-8">
+            <span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-ember-500">
+              <MessageCircle size={19} />
+            </span>
+            <h2 className="mt-6 text-[22px] font-semibold leading-tight tracking-[-0.02em]">
               Still deciding between two treks?
             </h2>
-            <p className="mt-3 text-[15px] leading-relaxed text-spruce-800/70">
+            <p className="mt-3 text-[15px] leading-relaxed text-white/65">
               Tell us your fitness honestly and the weeks you can take off. We will tell
               you which one to book, and sometimes that neither is right yet.
             </p>
-            <Button href="/contact" variant="dark" className="mt-6 w-full">
+            <Button href="/contact" variant="light" className="mt-6 w-full">
               Ask us directly
             </Button>
-            <Button href="/treks" variant="outline" className="mt-3 w-full">
+            <Button href="/treks" variant="outline-light" className="mt-3 w-full">
               Compare all treks
             </Button>
-          </aside>
-        </div>
-      </main>
-      <SiteFooter />
-    </>
+          </div>
+        </aside>
+      </div>
+    </InfoShell>
   );
 }

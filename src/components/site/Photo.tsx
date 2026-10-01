@@ -2,12 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import { photos, photoUrl, type PhotoKey } from "@/data/photos";
-import { RidgeArt } from "@/components/viz/RidgeArt";
 
 /**
- * A photograph that fills its parent (the parent must be positioned and
- * sized). Generated ridge artwork sits underneath, so the slot is never
- * empty: it shows while the photo loads, and stays if the photo fails.
+ * A real photograph that fills its parent (the parent must be positioned
+ * and sized). While it loads, a softened preview decoded from the photo's
+ * own BlurHash sits underneath — the same colours and composition, just
+ * out of focus — and the sharp image fades in over it.
  */
 export function Photo({
   name,
@@ -17,6 +17,7 @@ export function Photo({
   priority = false,
   alt,
   position = "center",
+  sizes,
 }: {
   name: PhotoKey;
   width?: number;
@@ -26,46 +27,54 @@ export function Photo({
   /** Override the registry alt text; pass "" for purely decorative use. */
   alt?: string;
   position?: string;
+  sizes?: string;
 }) {
   const def = photos[name];
   const ref = useRef<HTMLImageElement>(null);
-  const [state, setState] = useState<"loading" | "loaded" | "error">("loading");
+  const [loaded, setLoaded] = useState(false);
 
   // The image can finish loading before hydration attaches onLoad.
   useEffect(() => {
     const img = ref.current;
-    if (img?.complete) setState(img.naturalWidth > 0 ? "loaded" : "error");
+    if (img?.complete && img.naturalWidth > 0) setLoaded(true);
   }, []);
 
+  const w = Math.min(width, 2400);
+  const srcSet = [0.5, 1, 1.5]
+    .map((f) => Math.round(w * f))
+    .filter((x) => x >= 240 && x <= Math.min(3200, def.width))
+    .map((x) => `${photoUrl(name, x)} ${x}w`)
+    .join(", ");
+
   return (
-    <div className={`absolute inset-0 overflow-hidden ${def.tone === "dark" ? "bg-ink-900" : "bg-mist-200"} ${className}`}>
-      {state !== "loaded" && (
-        <RidgeArt
-          seed={def.id}
-          tone={def.tone ?? "cool"}
-          className="absolute inset-0 h-full w-full"
-        />
-      )}
-      {state !== "error" && (
-        // Plain <img>: Unsplash serves through a redirect, which next/image
-        // cannot optimise, and we want the browser to fetch it directly.
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          ref={ref}
-          src={photoUrl(name, width)}
-          alt={alt ?? def.alt}
-          loading={priority ? "eager" : "lazy"}
-          fetchPriority={priority ? "high" : undefined}
-          decoding="async"
-          referrerPolicy="no-referrer"
-          onLoad={() => setState("loaded")}
-          onError={() => setState("error")}
-          style={{ objectPosition: position }}
-          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
-            state === "loaded" ? "opacity-100" : "opacity-0"
-          } ${imgClassName}`}
-        />
-      )}
+    <div
+      className={`absolute inset-0 overflow-hidden ${def.tone === "dark" ? "bg-ink-900" : "bg-mist-200"} ${className}`}
+    >
+      <div
+        aria-hidden="true"
+        className={`absolute inset-0 scale-110 bg-cover bg-center blur-xl transition-opacity duration-700 ${
+          loaded ? "opacity-0" : "opacity-100"
+        }`}
+        style={{ backgroundImage: `url(${def.blur})`, backgroundPosition: position }}
+      />
+      {/* Plain <img>: Unsplash's CDN already resizes and negotiates format,
+          so there's nothing for next/image to add. */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        ref={ref}
+        src={photoUrl(name, w)}
+        srcSet={srcSet || undefined}
+        sizes={sizes ?? `(max-width: 768px) 100vw, ${Math.round(w / 1.6)}px`}
+        alt={alt ?? def.alt}
+        loading={priority ? "eager" : "lazy"}
+        fetchPriority={priority ? "high" : undefined}
+        decoding="async"
+        onLoad={() => setLoaded(true)}
+        style={{ objectPosition: position }}
+        className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
+          loaded ? "opacity-100" : "opacity-0"
+        } ${imgClassName}`}
+      />
     </div>
   );
 }

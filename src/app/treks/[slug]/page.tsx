@@ -1,17 +1,35 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Leaf, Check, Minus, Heart, Share2 } from "lucide-react";
+import {
+  ArrowUpRight,
+  Check,
+  ChevronRight,
+  Heart,
+  Leaf,
+  MapPin,
+  Minus,
+  Share2,
+  TrainFront,
+  Mountain,
+  CalendarDays,
+  Route,
+  Gauge,
+  Footprints,
+} from "lucide-react";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
-import { RidgeArt } from "@/components/viz/RidgeArt";
+import { Photo } from "@/components/site/Photo";
+import { Reveal } from "@/components/site/motion";
 import { AltitudeProfile } from "@/components/viz/AltitudeProfile";
 import { DepartureList } from "@/components/site/DepartureList";
 import { TrekCard } from "@/components/site/TrekViews";
-import { DifficultyMeter, Pill } from "@/components/site/ui";
+import { TrekTabs } from "@/components/site/trek/TrekTabs";
+import { Button, DifficultyMeter, Eyebrow, Pill, SectionHead, Stars } from "@/components/site/ui";
 import { treks, trekBySlug, departuresFor } from "@/data/treks";
 import { stories } from "@/data/stories";
-import { band, ft2m, inr } from "@/lib/types";
+import { trekCover, trekPhotos } from "@/data/photos";
+import { band, ft2m, inr, type Departure, type Trek } from "@/lib/types";
 
 export function generateStaticParams() {
   return treks.map((t) => ({ slug: t.slug }));
@@ -28,6 +46,24 @@ export async function generateMetadata({
   return { title: trek.name, description: trek.tagline };
 }
 
+const TABS = [
+  { id: "overview", label: "Overview" },
+  { id: "itinerary", label: "Itinerary" },
+  { id: "departures", label: "Departures" },
+  { id: "fee", label: "Fee" },
+];
+
+/* Which stat cells get a right-hand hairline at 2 / 3 / 5 columns. */
+const HAIRLINE = [
+  "",
+  "after:hidden sm:after:block",
+  "sm:after:hidden lg:after:block",
+  "after:hidden sm:after:block",
+];
+
+/* Sections land below the fixed header and the sticky tab bar. */
+const ANCHOR = "scroll-mt-[150px] sm:scroll-mt-[160px]";
+
 export default async function TrekPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const trek = trekBySlug(slug);
@@ -43,173 +79,283 @@ export default async function TrekPage({ params }: { params: Promise<{ slug: str
     .map((x) => x.t);
   const related_story = stories.find((s) => s.trek === trek.slug);
   const topBand = band(trek.maxAltFt);
+  const gallery = (trekPhotos[trek.slug] ?? []).slice(1, 4);
+  const peakDay = trek.profile.reduce((a, b) => (b.altFt > a.altFt ? b : a), trek.profile[0]);
+
+  const stats: { label: string; value: string; sub: string; icon: typeof Mountain; grade?: boolean }[] = [
+    {
+      label: "Max altitude",
+      value: `${trek.maxAltFt.toLocaleString("en-IN")} ft`,
+      sub: `${ft2m(trek.maxAltFt).toLocaleString("en-IN")} m · ${topBand.label}`,
+      icon: Mountain,
+    },
+    { label: "Duration", value: `${trek.days} days`, sub: `${trek.nights} nights on the trail`, icon: CalendarDays },
+    { label: "Distance", value: `${trek.trailKm} km`, sub: `From ${trek.basecamp}`, icon: Route },
+    { label: "Grade", value: trek.difficulty, sub: trek.firstTimer ? "Fine for a first trek" : "Some experience helps", icon: Gauge, grade: true },
+    { label: "Trek fee", value: inr(trek.price), sub: "Per person, excl. transport", icon: Footprints },
+  ];
 
   return (
     <>
-      {/* ── Masthead ── */}
-      <div className="bg-spruce-900 text-snow-100 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-45">
-          <RidgeArt seed={trek.slug} tone="dark" className="w-full h-full" snowline={false} />
-        </div>
-        <div className="relative">
-          <SiteHeader variant="dark" />
-          <div className="mx-auto max-w-[1360px] px-5 sm:px-8 pt-12 pb-14 sm:pt-16 sm:pb-16">
-            <nav aria-label="Breadcrumb" className="text-[13.5px] text-glacier-400 mb-6">
-              <Link href="/treks" className="hover:text-snow-100 transition-colors">
-                All treks
-              </Link>
-              <span className="mx-2 text-glacier-700">/</span>
-              <span>{trek.state}</span>
-            </nav>
+      <SiteHeader variant="dark" />
 
-            <div className="grid lg:grid-cols-[1.35fr_1fr] gap-x-16 gap-y-8 items-end">
-              <div>
-                <h1 className="font-display text-[clamp(2.7rem,6.5vw,4.6rem)] leading-[0.97] text-snow-50">
-                  {trek.name}
-                </h1>
-                <p className="mt-4 text-[18px] leading-snug text-glacier-200/80 max-w-[46ch]">
-                  {trek.tagline}
-                </p>
-                <div className="mt-6 flex flex-wrap items-center gap-2.5">
-                  <span className="inline-block border border-glacier-700/60 px-2.5 py-1 text-[12.5px] text-glacier-200">
-                    {trek.region}, {trek.state}
+      {/* ── Hero ── */}
+      <div className="px-3 pt-3 sm:px-5 sm:pt-4">
+        <section className="relative isolate mx-auto max-w-[1320px] overflow-hidden rounded-bento bg-ink-900 text-white">
+          <div className="absolute inset-0 -z-10">
+            <Photo name={trekCover(trek.slug)} width={2000} priority />
+            <div className="scrim-t absolute inset-0" />
+            <div className="scrim-b absolute inset-0" />
+          </div>
+
+          <div className="flex min-h-[680px] flex-col justify-between gap-10 px-4 pb-4 pt-[100px] sm:min-h-[760px] sm:px-8 sm:pb-8 sm:pt-[120px]">
+            <div className="flex items-center justify-between gap-3">
+              <nav aria-label="Breadcrumb" className="glass min-w-0 rounded-full px-4 py-2 text-[13px]">
+                <ol className="flex min-w-0 items-center gap-1.5">
+                  <li className="shrink-0">
+                    <Link href="/treks" className="text-white/75 transition-colors hover:text-white">
+                      All treks
+                    </Link>
+                  </li>
+                  <li aria-hidden="true" className="text-white/40">
+                    <ChevronRight size={13} />
+                  </li>
+                  <li className="shrink-0 text-white/75">{trek.state}</li>
+                  <li aria-hidden="true" className="hidden text-white/40 sm:block">
+                    <ChevronRight size={13} />
+                  </li>
+                  <li className="hidden truncate font-medium sm:block" aria-current="page">
+                    {trek.name}
+                  </li>
+                </ol>
+              </nav>
+              <div className="flex shrink-0 items-center gap-2">
+                <button
+                  type="button"
+                  aria-label="Save this trek"
+                  className="glass inline-flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-white/25"
+                >
+                  <Heart size={16} />
+                </button>
+                <button
+                  type="button"
+                  aria-label="Share this trek"
+                  className="glass inline-flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-white/25"
+                >
+                  <Share2 size={16} />
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <div className="max-w-[820px] px-1 sm:px-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="glass inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[12.5px]">
+                    <MapPin size={12} aria-hidden="true" /> {trek.region}, {trek.state}
                   </span>
                   {trek.greenTrails && (
-                    <span className="inline-flex items-center gap-1.5 bg-deodar-600 px-2.5 py-1 text-[12.5px] text-snow-50">
-                      <Leaf size={12} /> Green Trails route
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-pine-500 px-3 py-1.5 text-[12.5px] font-medium">
+                      <Leaf size={12} aria-hidden="true" /> Green Trails route
                     </span>
                   )}
-                  <span className="nums inline-block border border-glacier-700/60 px-2.5 py-1 text-[12.5px] text-glacier-200">
-                    ★ {trek.rating} from {trek.reviews.toLocaleString("en-IN")} trekkers
+                  <span className="glass inline-flex items-center rounded-full px-3 py-1.5">
+                    <Stars rating={trek.rating} reviews={trek.reviews} onDark />
                   </span>
                 </div>
+                <h1 className="mt-5 font-display text-[clamp(2.9rem,8vw,6.4rem)] leading-[0.94]">
+                  {trek.name}
+                </h1>
+                <p className="mt-4 max-w-[46ch] text-[17px] leading-snug text-white/80 sm:text-[19px]">
+                  {trek.tagline}
+                </p>
               </div>
 
-              <dl className="on-dark grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-px bg-glacier-700/30 border border-glacier-700/30">
-                {[
-                  ["Highest point", `${trek.maxAltFt.toLocaleString("en-IN")} ft`, `${ft2m(trek.maxAltFt).toLocaleString("en-IN")} m · ${topBand.label}`],
-                  ["On the trail", `${trek.days} days`, `${trek.trailKm} km walking`],
-                  ["Starts from", trek.basecamp, `Railhead ${trek.railhead}`],
-                  ["Trek fee", inr(trek.price), "Excludes transport"],
-                ].map(([l, v, s]) => (
-                  <div key={l} className="bg-spruce-900/80 px-4 py-3.5">
-                    <dt className="text-[11.5px] text-glacier-400">{l}</dt>
-                    <dd className="nums text-[18px] font-semibold text-snow-50 mt-1 leading-none">{v}</dd>
-                    <dd className="nums text-[11.5px] text-glacier-400/70 mt-1.5">{s}</dd>
+              {/* Frosted stat panel */}
+              <dl className="glass mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-[24px] sm:grid-cols-3 lg:grid-cols-5">
+                {stats.map((s, i) => (
+                  <div
+                    key={s.label}
+                    className={[
+                      "relative px-4 py-4 sm:px-5 sm:py-5",
+                      i === stats.length - 1 ? "col-span-2 sm:col-span-1" : "",
+                      // hairlines between cells in the same row (2, 3 or 5 per row)
+                      "after:absolute after:inset-y-4 after:right-0 after:w-px after:bg-white/20",
+                      HAIRLINE[i] ?? "after:hidden",
+                    ].join(" ")}
+                  >
+                    <dt className="flex items-center gap-1.5 text-[12px] text-white/65">
+                      <s.icon size={13} aria-hidden="true" /> {s.label}
+                    </dt>
+                    <dd className="nums mt-2 text-[20px] font-semibold leading-none tracking-[-0.02em] sm:text-[24px]">
+                      {s.grade ? (
+                        <span className="text-[17px] sm:text-[18px]">
+                          <DifficultyMeter difficulty={trek.difficulty} size="md" onDark />
+                        </span>
+                      ) : (
+                        s.value
+                      )}
+                    </dd>
+                    <dd className="nums mt-1.5 text-[12px] text-white/60">{s.sub}</dd>
                   </div>
                 ))}
               </dl>
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* ── Sticky action bar ── */}
-      <div className="sticky top-0 z-20 bg-snow-50 border-b border-snow-300">
-        <div className="mx-auto max-w-[1360px] px-5 sm:px-8 py-3 flex items-center justify-between gap-5">
-          <div className="flex items-center gap-5 min-w-0 overflow-x-auto thin-scroll">
-            <DifficultyMeter difficulty={trek.difficulty} />
-            <span className="nums text-[13.5px] text-snow-500 whitespace-nowrap">
-              {trek.seasons.join(" · ")}
-            </span>
-            <span className="nums text-[13.5px] text-snow-500 whitespace-nowrap hidden sm:inline">
-              {openSlots} slots open
-            </span>
-          </div>
-          <div className="flex items-center gap-2 shrink-0">
-            <button aria-label="Save this trek" className="p-2.5 border border-snow-300 hover:border-spruce-800 transition-colors">
-              <Heart size={16} />
-            </button>
-            <button aria-label="Share this trek" className="p-2.5 border border-snow-300 hover:border-spruce-800 transition-colors">
-              <Share2 size={16} />
-            </button>
-            <a
-              href="#departures"
-              className="bg-bugyal-500 text-spruce-900 px-5 py-2.5 text-[14.5px] font-semibold hover:bg-bugyal-400 transition-colors"
-            >
-              Pick a date
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <main className="mx-auto max-w-[1360px] px-5 sm:px-8">
-        {/* ── The profile: this trek's signature ── */}
-        <section className="py-14 sm:py-16 border-b border-snow-300">
-          <h2 className="font-display text-[clamp(1.7rem,3.2vw,2.3rem)] leading-tight mb-2">
-            What the {trek.days} days look like as a line
-          </h2>
-          <p className="text-[16px] text-spruce-800/65 measure mb-8">
-            Every camp plotted at its real height. The colour under the line is the
-            altitude band you are sleeping in that night.
-          </p>
-          <div className="text-spruce-800">
-            <div className="sm:hidden">
-              <AltitudeProfile profile={trek.profile} height={560} fontScale={2.4} />
-            </div>
-            <div className="hidden sm:block">
-              <AltitudeProfile profile={trek.profile} height={330} />
-            </div>
-          </div>
         </section>
+      </div>
 
-        <div className="grid lg:grid-cols-[minmax(0,1fr)_340px] gap-x-16 py-14 sm:py-16">
-          <div className="min-w-0">
-            <section>
-              <h2 className="font-display text-[clamp(1.7rem,3.2vw,2.3rem)] leading-tight">
-                About this trek
-              </h2>
-              <p className="mt-5 text-[17.5px] leading-[1.65] text-spruce-800/85 measure">
-                {trek.summary}
-              </p>
+      {/* ── Sticky tab bar ── */}
+      <div className="sticky top-[78px] z-40 mt-3 px-3 sm:top-[86px] sm:px-5">
+        <TrekTabs tabs={TABS} cta={{ href: "#departures", label: "Pick a date" }} />
+      </div>
 
-              <ul className="mt-9 space-y-5 border-l-2 border-bugyal-500 pl-6">
-                {trek.whyThis.map((w) => (
-                  <li key={w} className="text-[16px] leading-relaxed text-spruce-800/80 measure">
-                    {w}
-                  </li>
-                ))}
-              </ul>
+      <main className="px-3 pb-16 pt-5 sm:px-5 sm:pb-24 sm:pt-6">
+        <div className="mx-auto grid max-w-[1320px] gap-4 sm:gap-5 lg:grid-cols-[minmax(0,1fr)_360px]">
+          <div className="min-w-0 space-y-4 sm:space-y-5">
+            {/* ── Overview ── */}
+            <section id="overview" aria-labelledby="overview-h" className={`${ANCHOR} grid gap-4 sm:gap-5 md:grid-cols-5`}>
+              <Reveal className="rounded-bento bg-white p-6 shadow-soft sm:p-9 md:col-span-3">
+                <Eyebrow>About this trek</Eyebrow>
+                <h2 id="overview-h" className="mt-3 font-display text-[clamp(1.6rem,3vw,2.2rem)] leading-[1.08]">
+                  {trek.days} days, {trek.trailKm} km, one high point
+                </h2>
+                <p className="mt-4 text-[16px] leading-[1.7] text-ink-600">{trek.summary}</p>
+                <dl className="mt-7 grid grid-cols-2 gap-3">
+                  <Fact icon={MapPin} label="Basecamp" value={trek.basecamp} />
+                  <Fact icon={TrainFront} label="Railhead" value={trek.railhead} />
+                </dl>
+              </Reveal>
+
+              <Reveal delay={0.08} className="flex flex-col rounded-bento bg-ice-100 p-6 sm:p-8 md:col-span-2">
+                <Eyebrow>Why this trek</Eyebrow>
+                <ol className="mt-5 space-y-4">
+                  {trek.whyThis.map((w, i) => (
+                    <li key={w} className="flex gap-3.5">
+                      <span className="nums inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white text-[12.5px] font-semibold text-ink-900 shadow-soft">
+                        {i + 1}
+                      </span>
+                      <p className="text-[14.5px] leading-relaxed text-ink-700">{w}</p>
+                    </li>
+                  ))}
+                </ol>
+              </Reveal>
             </section>
 
-            {/* Itinerary — genuinely a sequence, so it is numbered */}
-            <section className="mt-16">
-              <h2 className="font-display text-[clamp(1.7rem,3.2vw,2.3rem)] leading-tight mb-8">
-                Day by day
-              </h2>
-              <ol className="relative">
+            {/* Booking card inline on phones and tablets */}
+            <div className="lg:hidden">
+              <BookingCard trek={trek} deps={deps} openSlots={openSlots} />
+            </div>
+
+            {/* Gallery bento */}
+            {gallery.length > 0 && (
+              <Reveal className="grid auto-rows-[150px] grid-cols-2 gap-3 sm:auto-rows-[190px] sm:grid-cols-4 sm:gap-4">
+                {gallery[0] && (
+                  <figure className="relative col-span-2 row-span-2 overflow-hidden rounded-bento">
+                    <Photo name={gallery[0]} width={1200} />
+                    <figcaption className="glass absolute bottom-3 left-3 rounded-full px-3 py-1.5 text-[12px] text-white">
+                      On the trail
+                    </figcaption>
+                  </figure>
+                )}
+                {gallery[1] && (
+                  <figure className="relative overflow-hidden rounded-[22px]">
+                    <Photo name={gallery[1]} width={700} />
+                  </figure>
+                )}
+                <div className="flex flex-col justify-between rounded-[22px] bg-ink-900 p-4 text-white sm:p-5">
+                  <p className="text-[12px] text-white/60">Trekkers rate it</p>
+                  <div>
+                    <p className="nums text-[34px] font-semibold leading-none tracking-[-0.03em]">
+                      {trek.rating.toFixed(1)}
+                    </p>
+                    <p className="nums mt-1.5 text-[12px] text-white/60">
+                      from {trek.reviews.toLocaleString("en-IN")} reviews
+                    </p>
+                  </div>
+                </div>
+                {gallery[2] && (
+                  <figure className="relative col-span-2 overflow-hidden rounded-[22px]">
+                    <Photo name={gallery[2]} width={1000} />
+                  </figure>
+                )}
+              </Reveal>
+            )}
+
+            {/* ── Itinerary ── */}
+            <section id="itinerary" aria-labelledby="itinerary-h" className={`${ANCHOR} rounded-bento bg-white p-5 shadow-soft sm:p-9`}>
+              <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
+                <div>
+                  <Eyebrow>Itinerary</Eyebrow>
+                  <h2 id="itinerary-h" className="mt-3 font-display text-[clamp(1.6rem,3vw,2.2rem)] leading-[1.08]">
+                    The {trek.days} days as a line
+                  </h2>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <Pill tone="red">
+                    <Mountain size={11} aria-hidden="true" /> Summit day {peakDay.day} · {trek.maxAltFt.toLocaleString("en-IN")} ft
+                  </Pill>
+                  <Pill tone="neutral">{trek.trailKm} km on foot</Pill>
+                </div>
+              </div>
+
+              <div className="mt-6 rounded-[22px] bg-mist-50 px-2 pb-3 pt-4 text-ink-900 sm:px-5 sm:pt-6">
+                <div className="sm:hidden">
+                  <AltitudeProfile profile={trek.profile} height={760} fontScale={2.8} />
+                </div>
+                <div className="hidden sm:block">
+                  <AltitudeProfile profile={trek.profile} height={330} />
+                </div>
+              </div>
+
+              <h3 className="mb-6 mt-10 text-[18px] font-semibold tracking-[-0.02em]">Day by day</h3>
+              <ol>
                 {trek.profile.map((d, i) => {
-                  const b = band(d.altFt);
                   const prev = i > 0 ? trek.profile[i - 1].altFt : d.altFt;
                   const delta = d.altFt - prev;
+                  const isPeak = d.day === peakDay.day;
+                  const last = i === trek.profile.length - 1;
                   return (
-                    <li key={d.day} className="grid grid-cols-[40px_1fr] gap-x-5 pb-8 last:pb-0 relative">
-                      {i < trek.profile.length - 1 && (
-                        <span
-                          className="absolute left-[19px] top-9 bottom-0 w-px bg-snow-300"
-                          aria-hidden="true"
-                        />
+                    <li key={d.day} className="relative grid grid-cols-[44px_1fr] gap-x-4 pb-7 last:pb-0 sm:gap-x-5">
+                      {!last && (
+                        <span className="absolute bottom-0 left-[21.5px] top-12 w-px bg-mist-300" aria-hidden="true" />
                       )}
                       <span
-                        className="nums relative z-10 w-10 h-10 flex items-center justify-center text-[14px] font-semibold text-snow-50 shrink-0"
-                        style={{ background: b.color }}
+                        className={[
+                          "nums relative z-10 inline-flex h-11 w-11 items-center justify-center rounded-full text-[14px] font-semibold",
+                          isPeak
+                            ? "bg-ember-500 text-white shadow-[0_8px_20px_-8px_rgb(255_106_43/0.7)]"
+                            : "bg-ink-900 text-white",
+                        ].join(" ")}
+                        aria-label={`Day ${d.day}`}
                       >
-                        {d.day}
+                        {String(d.day).padStart(2, "0")}
                       </span>
-                      <div className="pt-1.5">
-                        <h3 className="font-display-tight text-[20px] leading-tight">{d.label}</h3>
-                        <p className="nums text-[13px] text-snow-500 mt-1">
-                          {d.altFt.toLocaleString("en-IN")} ft
-                          {d.km > 0 && ` · ${d.km} km on foot`}
+                      <div className="min-w-0 pt-1">
+                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                          <h4 className="text-[18px] font-semibold leading-tight tracking-[-0.02em] text-ink-900">
+                            {d.label}
+                          </h4>
+                          {isPeak && <Pill tone="red">Highest point</Pill>}
+                        </div>
+                        <p className="nums mt-2 flex flex-wrap gap-1.5 text-[12px]">
+                          <span className="rounded-full bg-mist-100 px-2.5 py-1 text-ink-600">
+                            {d.altFt.toLocaleString("en-IN")} ft
+                          </span>
+                          {d.km > 0 && (
+                            <span className="rounded-full bg-mist-100 px-2.5 py-1 text-ink-600">{d.km} km on foot</span>
+                          )}
                           {i > 0 && delta !== 0 && (
-                            <span className={delta > 0 ? " text-deodar-600" : " text-glacier-700"}>
-                              {` · ${delta > 0 ? "+" : "−"}${Math.abs(delta).toLocaleString("en-IN")} ft`}
+                            <span
+                              className={`rounded-full px-2.5 py-1 ${
+                                delta > 0 ? "bg-ember-500/10 text-ember-600" : "bg-ice-100 text-ice-500"
+                              }`}
+                            >
+                              {delta > 0 ? "▲ +" : "▼ −"}
+                              {Math.abs(delta).toLocaleString("en-IN")} ft
                             </span>
                           )}
                         </p>
-                        <p className="mt-2 text-[15.5px] leading-relaxed text-spruce-800/75 measure">
-                          {d.note}
-                        </p>
+                        <p className="mt-2.5 max-w-[64ch] text-[15px] leading-relaxed text-ink-600">{d.note}</p>
                       </div>
                     </li>
                   );
@@ -218,56 +364,86 @@ export default async function TrekPage({ params }: { params: Promise<{ slug: str
             </section>
 
             {/* Fitness */}
-            <section className="mt-16 border border-snow-300 bg-snow-50 p-7 sm:p-9">
-              <h2 className="font-display text-[clamp(1.5rem,2.6vw,2rem)] leading-tight">
-                Before we confirm you
-              </h2>
-              <p className="mt-4 text-[16px] leading-relaxed text-spruce-800/75 measure">
-                {trek.fitnessNote}
-              </p>
-              <div className="mt-7 flex flex-wrap gap-x-12 gap-y-5">
+            <Reveal className="grid gap-5 overflow-hidden rounded-bento bg-ink-900 p-6 text-white sm:grid-cols-[1.4fr_1fr] sm:p-9">
+              <div>
+                <Eyebrow onDark>Before we confirm you</Eyebrow>
+                <h2 className="mt-3 font-display text-[clamp(1.5rem,2.6vw,2rem)] leading-[1.1]">
+                  Fitness we&apos;ll ask to see
+                </h2>
+                <p className="mt-3 max-w-[54ch] text-[15px] leading-relaxed text-white/70">{trek.fitnessNote}</p>
+                <Button href="/fitness" variant="outline-light" size="sm" className="mt-6">
+                  How we check fitness <ArrowUpRight size={14} />
+                </Button>
+              </div>
+              <div className="glass flex flex-col justify-between gap-6 rounded-[22px] p-5">
                 <div>
-                  <p className="text-[12.5px] text-snow-500 mb-1">Target to hit before you arrive</p>
-                  <p className="nums font-display-tight text-[24px] leading-none">{trek.fitnessTarget}</p>
+                  <p className="text-[12px] text-white/60">Target to hit before you arrive</p>
+                  <p className="nums mt-2 text-[26px] font-semibold leading-tight tracking-[-0.02em]">
+                    {trek.fitnessTarget}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-[12.5px] text-snow-500 mb-1">Grade</p>
-                  <div className="pt-1">
-                    <DifficultyMeter difficulty={trek.difficulty} size="md" />
-                  </div>
+                  <p className="mb-2 text-[12px] text-white/60">Grade</p>
+                  <DifficultyMeter difficulty={trek.difficulty} size="md" onDark />
                 </div>
               </div>
-              <Link
-                href="/fitness"
-                className="inline-block mt-7 text-[15px] font-semibold border-b-2 border-bugyal-500 pb-0.5 hover:border-spruce-800 transition-colors"
-              >
-                How we check fitness
-              </Link>
+            </Reveal>
+
+            {/* ── Departures ── */}
+            <section id="departures" aria-labelledby="departures-h" className={`${ANCHOR} rounded-bento bg-white p-5 shadow-soft sm:p-9`}>
+              <Eyebrow>Departures</Eyebrow>
+              <h2 id="departures-h" className="mt-3 font-display text-[clamp(1.6rem,3vw,2.2rem)] leading-[1.08]">
+                Open departures
+              </h2>
+              <p className="mb-7 mt-2.5 max-w-[60ch] text-[15px] leading-relaxed text-ink-500">
+                Slot counts update as people book. Departures marked with a leaf run smaller
+                groups and spend a day on waste recovery.
+              </p>
+              <DepartureList departures={deps} slug={trek.slug} price={trek.price} />
             </section>
 
-            {/* Inclusions */}
-            <section className="mt-16">
-              <h2 className="font-display text-[clamp(1.7rem,3.2vw,2.3rem)] leading-tight mb-7">
-                What the fee covers
-              </h2>
-              <div className="grid sm:grid-cols-2 gap-x-10 gap-y-8">
+            {/* ── Fee ── */}
+            <section id="fee" aria-labelledby="fee-h" className={`${ANCHOR} rounded-bento bg-white p-5 shadow-soft sm:p-9`}>
+              <div className="flex flex-wrap items-end justify-between gap-4">
                 <div>
-                  <h3 className="text-[14px] font-semibold mb-3.5 text-deodar-600">Included</h3>
+                  <Eyebrow>Fee</Eyebrow>
+                  <h2 id="fee-h" className="mt-3 font-display text-[clamp(1.6rem,3vw,2.2rem)] leading-[1.08]">
+                    What the fee covers
+                  </h2>
+                </div>
+                <p className="nums text-[14px] text-ink-500">
+                  <span className="text-[22px] font-semibold tracking-[-0.02em] text-ink-900">{inr(trek.price)}</span>{" "}
+                  per person
+                </p>
+              </div>
+              <div className="mt-7 grid gap-3 sm:grid-cols-2 sm:gap-4">
+                <div className="rounded-[22px] bg-mist-50 p-5 sm:p-6">
+                  <h3 className="mb-4 inline-flex items-center gap-2 text-[14px] font-semibold text-pine-600">
+                    <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-pine-500 text-white">
+                      <Check size={13} aria-hidden="true" />
+                    </span>
+                    Included
+                  </h3>
                   <ul className="space-y-2.5">
                     {trek.included.map((i) => (
-                      <li key={i} className="flex gap-2.5 text-[15px] leading-snug text-spruce-800/80">
-                        <Check size={16} className="text-deodar-500 shrink-0 mt-0.5" />
+                      <li key={i} className="flex gap-2.5 text-[14.5px] leading-snug text-ink-700">
+                        <Check size={16} className="mt-0.5 shrink-0 text-pine-500" aria-hidden="true" />
                         {i}
                       </li>
                     ))}
                   </ul>
                 </div>
-                <div>
-                  <h3 className="text-[14px] font-semibold mb-3.5 text-rhodo-600">Not included</h3>
+                <div className="rounded-[22px] bg-mist-50 p-5 sm:p-6">
+                  <h3 className="mb-4 inline-flex items-center gap-2 text-[14px] font-semibold text-ink-700">
+                    <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-ink-400 text-white">
+                      <Minus size={13} aria-hidden="true" />
+                    </span>
+                    Not included
+                  </h3>
                   <ul className="space-y-2.5">
                     {trek.excluded.map((i) => (
-                      <li key={i} className="flex gap-2.5 text-[15px] leading-snug text-spruce-800/80">
-                        <Minus size={16} className="text-rhodo-500 shrink-0 mt-0.5" />
+                      <li key={i} className="flex gap-2.5 text-[14.5px] leading-snug text-ink-700">
+                        <Minus size={16} className="mt-0.5 shrink-0 text-ink-400" aria-hidden="true" />
                         {i}
                       </li>
                     ))}
@@ -279,85 +455,54 @@ export default async function TrekPage({ params }: { params: Promise<{ slug: str
             {related_story && (
               <Link
                 href={`/stories/${related_story.slug}`}
-                className="group block mt-16 border border-snow-300 p-7 hover:bg-snow-50 transition-colors"
+                className="group grid gap-5 rounded-bento bg-white p-3 shadow-soft transition-shadow hover:shadow-[0_28px_50px_-24px_rgb(16_24_40/0.35)] sm:grid-cols-[220px_1fr] sm:items-center"
               >
-                <Pill tone="gold">From the field</Pill>
-                <h3 className="font-display-tight text-[22px] leading-tight mt-3.5 group-hover:text-deodar-600 transition-colors">
-                  {related_story.title}
-                </h3>
-                <p className="mt-2 text-[15px] leading-relaxed text-spruce-800/65 measure">
-                  {related_story.standfirst}
-                </p>
-                <p className="nums mt-4 text-[13px] text-snow-500">
-                  {related_story.author} · {related_story.minutes} min read
-                </p>
+                <div className="relative aspect-[16/9] overflow-hidden rounded-[20px] sm:aspect-square">
+                  <Photo
+                    name="hikerView"
+                    width={600}
+                    alt=""
+                    imgClassName="transition-transform duration-700 group-hover:scale-105"
+                  />
+                </div>
+                <div className="px-3 pb-3 sm:px-2 sm:pb-0 sm:pr-6">
+                  <Pill tone="gold">From the field</Pill>
+                  <h3 className="mt-3 text-[21px] font-semibold leading-tight tracking-[-0.02em] text-ink-900">
+                    {related_story.title}
+                  </h3>
+                  <p className="mt-2 line-clamp-2 text-[14.5px] leading-relaxed text-ink-500">
+                    {related_story.standfirst}
+                  </p>
+                  <p className="nums mt-4 inline-flex items-center gap-1.5 text-[13px] font-medium text-ink-900">
+                    {related_story.author} · {related_story.minutes} min read
+                    <ArrowUpRight size={14} className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                  </p>
+                </div>
               </Link>
             )}
           </div>
 
-          {/* ── Booking rail ── */}
-          <aside className="mt-14 lg:mt-0">
-            <div className="lg:sticky lg:top-[88px] border border-snow-300 bg-snow-50">
-              <div className="p-6 border-b border-snow-300">
-                <p className="text-[13px] text-snow-500">Trek fee per person</p>
-                <p className="nums font-display text-[34px] leading-none mt-1.5">{inr(trek.price)}</p>
-                <p className="text-[13px] text-snow-500 mt-2">
-                  Plus {inr(2400)} for shared transport from {trek.railhead}, if you want it.
-                </p>
-              </div>
-              <dl className="p-6 space-y-3.5 text-[14px] border-b border-snow-300">
-                {[
-                  ["Grade", trek.difficulty],
-                  ["Season", trek.seasons.join(", ")],
-                  ["Group size", trek.difficulty === "Difficult" ? "15 maximum" : "20 maximum"],
-                  ["Pick-up", `${trek.railhead}, 6:30 am`],
-                  ["Slots open", `${openSlots} across ${deps.length} dates`],
-                ].map(([k, v]) => (
-                  <div key={k} className="flex justify-between gap-5">
-                    <dt className="text-snow-500 shrink-0">{k}</dt>
-                    <dd className="nums text-right">{v}</dd>
-                  </div>
-                ))}
-              </dl>
-              <div className="p-6">
-                <a
-                  href="#departures"
-                  className="block text-center bg-bugyal-500 text-spruce-900 px-5 py-3.5 font-semibold hover:bg-bugyal-400 transition-colors"
-                >
-                  Choose your dates
-                </a>
-                <p className="text-[12.5px] text-snow-500 mt-3.5 leading-relaxed">
-                  Free to cancel up to 30 days before departure. After that the refund
-                  drops on a published scale.
-                </p>
-              </div>
+          {/* ── Booking rail (desktop) ── */}
+          <aside className="hidden lg:block" aria-label="Book this trek">
+            <div className="sticky top-[160px]">
+              <BookingCard trek={trek} deps={deps} openSlots={openSlots} />
             </div>
           </aside>
         </div>
 
-        {/* ── Departures ── */}
-        <section id="departures" className="py-14 sm:py-16 border-t border-snow-300 scroll-mt-20">
-          <h2 className="font-display text-[clamp(1.9rem,3.6vw,2.6rem)] leading-tight mb-2">
-            Open departures
-          </h2>
-          <p className="text-[16px] text-spruce-800/65 measure mb-9">
-            Slot counts update as people book. Departures marked with a leaf run smaller
-            groups and spend a day on waste recovery.
-          </p>
-          <DepartureList departures={deps} slug={trek.slug} price={trek.price} />
-        </section>
-
         {/* ── Related ── */}
-        <section className="py-14 sm:py-16 border-t border-snow-300">
-          <h2 className="font-display text-[clamp(1.9rem,3.6vw,2.6rem)] leading-tight mb-2">
-            If this one is not right
-          </h2>
-          <p className="text-[16px] text-spruce-800/65 measure mb-9">
-            Three treks that sit at a similar height, so they will ask something similar of you.
-          </p>
-          <div className="grid sm:grid-cols-3 gap-x-7 gap-y-10">
-            {related.map((t) => (
-              <TrekCard key={t.slug} trek={t} />
+        <section className="mx-auto mt-16 max-w-[1320px] sm:mt-24" aria-label="Similar treks">
+          <SectionHead
+            eyebrow="Similar treks"
+            title="If this one is not right"
+            intro="Three treks that sit at a similar height, so they will ask something similar of you."
+            action={{ href: "/treks", label: "All treks" }}
+          />
+          <div className="grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
+            {related.map((t, i) => (
+              <Reveal key={t.slug} delay={i * 0.06} className="h-full">
+                <TrekCard trek={t} />
+              </Reveal>
             ))}
           </div>
         </section>
@@ -365,5 +510,64 @@ export default async function TrekPage({ params }: { params: Promise<{ slug: str
 
       <SiteFooter />
     </>
+  );
+}
+
+function Fact({ icon: Icon, label, value }: { icon: typeof MapPin; label: string; value: string }) {
+  return (
+    <div className="flex items-center gap-3 rounded-[18px] bg-mist-100 p-3">
+      <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-ink-700">
+        <Icon size={16} aria-hidden="true" />
+      </span>
+      <div className="min-w-0">
+        <dt className="text-[11.5px] text-ink-400">{label}</dt>
+        <dd className="truncate text-[14.5px] font-medium text-ink-900">{value}</dd>
+      </div>
+    </div>
+  );
+}
+
+function BookingCard({ trek, deps, openSlots }: { trek: Trek; deps: Departure[]; openSlots: number }) {
+  return (
+    <div className="rounded-bento bg-ink-900 p-6 text-white shadow-[0_30px_60px_-30px_rgb(10_13_16/0.6)] sm:p-7">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="text-[12.5px] text-white/60">Trek fee per person</p>
+          <p className="nums mt-1.5 text-[38px] font-semibold leading-none tracking-[-0.03em]">{inr(trek.price)}</p>
+        </div>
+        <span className="nums rounded-full bg-white/10 px-3 py-1.5 text-[12px] text-white/80">
+          {openSlots} slots open
+        </span>
+      </div>
+      <p className="mt-3 text-[13px] leading-relaxed text-white/55">
+        Plus {inr(2400)} for shared transport from {trek.railhead}, if you want it.
+      </p>
+
+      <dl className="mt-6 rounded-[20px] bg-white/[0.06] px-4 text-[13.5px]">
+        {[
+          ["Grade", trek.difficulty],
+          ["Season", trek.seasons.join(", ")],
+          ["Group size", trek.difficulty === "Difficult" ? "15 maximum" : "20 maximum"],
+          ["Pick-up", `${trek.railhead}, 6:30 am`],
+          ["Slots open", `${openSlots} across ${deps.length} dates`],
+        ].map(([k, v]) => (
+          <div key={k} className="flex justify-between gap-5 border-b border-white/10 py-3 last:border-b-0">
+            <dt className="shrink-0 text-white/55">{k}</dt>
+            <dd className="nums text-right">{v}</dd>
+          </div>
+        ))}
+      </dl>
+
+      <a
+        href="#departures"
+        className="mt-6 flex items-center justify-center gap-2 rounded-full bg-ember-500 px-5 py-3.5 text-[15px] font-medium text-white shadow-[0_8px_24px_-8px_rgb(255_106_43/0.6)] transition-colors hover:bg-ember-600"
+      >
+        Choose your dates <ArrowUpRight size={16} aria-hidden="true" />
+      </a>
+      <p className="mt-4 text-[12.5px] leading-relaxed text-white/50">
+        Free to cancel up to 30 days before departure. After that the refund drops on a
+        published scale.
+      </p>
+    </div>
   );
 }

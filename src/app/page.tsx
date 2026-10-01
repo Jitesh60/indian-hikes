@@ -624,7 +624,7 @@ export default function HomePage() {
 
         {/* ── 7. Promo banner with a brush highlight ──────────────────── */}
         <section className="px-3 py-20 sm:px-5 sm:py-28">
-          <Reveal className="relative mx-auto grid max-w-[1320px] overflow-hidden rounded-bento bg-white shadow-soft md:grid-cols-[1.25fr_1fr]">
+          <Reveal className="relative mx-auto grid max-w-[1320px] grid-cols-[minmax(0,1fr)] overflow-hidden rounded-bento bg-white shadow-soft md:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)]">
             <div className="relative min-h-[300px] md:min-h-[440px]">
               <Photo name="summitGroup" width={1600} />
             </div>

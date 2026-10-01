@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
-import { InfoShell, Prose, H2 } from "@/components/site/InfoShell";
+import { ArrowDown, Check } from "lucide-react";
+import { InfoShell, Panel, Prose, H2, Stat } from "@/components/site/InfoShell";
+import { Reveal } from "@/components/site/motion";
+import { Photo } from "@/components/site/Photo";
+import { Button, Pill } from "@/components/site/ui";
+import type { PhotoKey } from "@/data/photos";
 import { inr } from "@/lib/types";
 
 export const metadata: Metadata = {
@@ -7,9 +12,19 @@ export const metadata: Metadata = {
   description: "A kit list by weight, with what to rent instead of buy.",
 };
 
-const KIT = [
+const KIT: {
+  id: string;
+  group: string;
+  short: string;
+  photo: PhotoKey;
+  note: string;
+  items: [string, string, "Buy" | "Rent"][];
+}[] = [
   {
+    id: "essentials",
     group: "The four that decide your trek",
+    short: "Essentials",
+    photo: "bootsGrass",
     note: "Get these right and the rest is detail. Get them wrong and nothing else helps.",
     items: [
       ["Trekking shoes with ankle support", "Worn in for at least 40 km before you arrive", "Buy"],
@@ -19,7 +34,10 @@ const KIT = [
     ],
   },
   {
+    id: "layers",
     group: "Layers",
+    short: "Layers",
+    photo: "snowField",
     note: "Three thin layers beat one thick one, every time.",
     items: [
       ["Two quick-dry T-shirts", "Never cotton", "Buy"],
@@ -29,7 +47,10 @@ const KIT = [
     ],
   },
   {
+    id: "accessories",
     group: "Accessories that people forget",
+    short: "Accessories",
+    photo: "bootsBench",
     note: "Every one of these has ended somebody's day at some point.",
     items: [
       ["Sunglasses rated for snow glare", "Category 3 or 4. Snow blindness is real and it is fast", "Buy"],
@@ -41,65 +62,124 @@ const KIT = [
   },
 ];
 
+const RENTALS: [string, number][] = [
+  ["Insulation jacket", 600],
+  ["Rucksack, 55 litre", 450],
+  ["Trekking poles, pair", 250],
+];
+const BUNDLE = 1200;
+
 export default function GearPage() {
   return (
     <InfoShell
+      photo="gearFlatlay"
+      eyebrow="What to carry"
       title="Nine kilos, and most of it is not clothes"
       intro="A properly packed rucksack for a six-day winter trek weighs about nine kilograms with water in it. Most people arrive with twelve. Here is what actually earns its place."
     >
-      <Prose>
-        <p>
-          The list below is what we send everyone who books. What is marked <em>Rent</em> is
-          worth renting from us rather than buying — a down jacket you will use once every
-          two years is not a good purchase, and ours are cleaned and re-rated every season.
-        </p>
-      </Prose>
+      <Panel>
+        <div className="grid gap-x-14 gap-y-8 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,0.7fr)] lg:items-center">
+          <Prose>
+            <p>
+              The list below is what we send everyone who books. What is marked{" "}
+              <Pill tone="gold">Rent</Pill> is worth renting from us rather than buying — a
+              down jacket you will use once every two years is not a good purchase, and ours
+              are cleaned and re-rated every season.
+            </p>
+          </Prose>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="rounded-[22px] bg-ink-900 p-5">
+              <Stat value="9 kg" label="Packed properly" onDark />
+            </div>
+            <div className="rounded-[22px] bg-mist-100 p-5">
+              <Stat value="12 kg" label="What most bring" />
+            </div>
+          </div>
+        </div>
+      </Panel>
 
-      {KIT.map((section) => (
-        <section key={section.group}>
-          <H2>{section.group}</H2>
-          <p className="text-[16px] text-spruce-800/65 measure -mt-2 mb-6">{section.note}</p>
-          <div className="border-t border-snow-300">
-            {section.items.map(([n, d, mode]) => (
-              <div key={n} className="grid grid-cols-[1fr_auto] sm:grid-cols-[1.2fr_1.4fr_auto] gap-x-8 gap-y-1 py-4 border-b border-snow-300 items-baseline">
-                <p className="text-[16.5px] font-semibold">{n}</p>
-                <p className="col-span-2 sm:col-span-1 text-[14.5px] text-spruce-800/65 leading-snug">{d}</p>
-                <span
-                  className={`row-start-1 col-start-2 sm:row-auto sm:col-auto justify-self-end text-[12.5px] border px-2 py-[3px] ${
-                    mode === "Rent"
-                      ? "border-bugyal-600/40 text-bugyal-600 bg-bugyal-500/10"
-                      : "border-snow-300 text-snow-500"
-                  }`}
-                >
-                  {mode}
+      {/* Category tiles */}
+      <nav aria-label="Kit categories" className="grid gap-3 sm:grid-cols-3 sm:gap-5">
+        {KIT.map((k, i) => (
+          <Reveal key={k.id} delay={i * 0.07}>
+            <a
+              href={`#${k.id}`}
+              className="group relative block aspect-[4/3] overflow-hidden rounded-bento bg-ink-800 sm:aspect-[4/5] lg:aspect-[5/4]"
+            >
+              <Photo name={k.photo} width={900} alt="" imgClassName="transition-transform duration-700 group-hover:scale-[1.06]" />
+              <div className="scrim-b absolute inset-0" aria-hidden="true" />
+              <div className="absolute inset-x-3 bottom-3 flex items-end justify-between gap-3 sm:inset-x-4 sm:bottom-4">
+                <div className="min-w-0">
+                  <p className="nums text-[13px] text-white/70">{k.items.length} items</p>
+                  <p className="mt-0.5 text-[22px] font-semibold leading-tight tracking-[-0.02em] text-white">{k.short}</p>
+                </div>
+                <span className="glass inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white transition-colors group-hover:bg-white group-hover:text-ink-900">
+                  <ArrowDown size={17} />
                 </span>
               </div>
+            </a>
+          </Reveal>
+        ))}
+      </nav>
+
+      {KIT.map((section) => (
+        <Panel key={section.id} id={section.id} className="scroll-mt-28">
+          <H2 intro={section.note}>{section.group}</H2>
+          <ul className="grid gap-2.5 md:grid-cols-2 md:gap-3">
+            {section.items.map(([n, d, mode]) => (
+              <li
+                key={n}
+                className="flex items-start gap-4 rounded-[20px] bg-mist-50 p-4 ring-1 ring-mist-200 sm:p-5"
+              >
+                <span
+                  className={`mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${
+                    mode === "Rent" ? "bg-sun-400 text-ink-900" : "bg-ink-900 text-white"
+                  }`}
+                  aria-hidden="true"
+                >
+                  <Check size={14} strokeWidth={2.5} />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-start justify-between gap-x-3 gap-y-1.5">
+                    <p className="text-[16px] font-semibold leading-snug text-ink-900">{n}</p>
+                    <Pill tone={mode === "Rent" ? "gold" : "neutral"}>{mode}</Pill>
+                  </div>
+                  <p className="mt-1 text-[14.5px] leading-snug text-ink-500">{d}</p>
+                </div>
+              </li>
             ))}
-          </div>
-        </section>
+          </ul>
+        </Panel>
       ))}
 
-      <section>
-        <H2>Rental prices</H2>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-px bg-snow-300 border border-snow-300">
-          {[
-            ["Insulation jacket", 600],
-            ["Rucksack, 55 litre", 450],
-            ["Trekking poles, pair", 250],
-            ["Full bundle", 1200],
-          ].map(([n, p]) => (
-            <div key={n as string} className="bg-snow-50 p-6">
-              <p className="nums font-display text-[26px] leading-none">{inr(p as number)}</p>
-              <p className="text-[14px] text-spruce-800/65 mt-2.5">{n}</p>
-              <p className="text-[12.5px] text-snow-500 mt-1">For the whole trek</p>
+      {/* Rental promo, MountEquip style */}
+      <Panel tone="ice">
+        <div className="grid gap-x-14 gap-y-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center">
+          <div>
+            <H2 eyebrow="Rental prices" intro="Collected at basecamp on day one, returned on the last day. Nothing to carry up from the city.">
+              Rent the heavy things{" "}
+              <span className="brush mt-2 inline-block whitespace-nowrap">at basecamp</span>
+            </H2>
+          </div>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-2">
+            {RENTALS.map(([n, p]) => (
+              <div key={n} className="rounded-[22px] bg-white p-5 shadow-soft">
+                <p className="nums font-display text-[26px] leading-none text-ink-900">{inr(p)}</p>
+                <p className="mt-2.5 text-[14px] leading-snug text-ink-600">{n}</p>
+                <p className="mt-1 text-[12.5px] text-ink-400">For the whole trek</p>
+              </div>
+            ))}
+            <div className="rounded-[22px] bg-ink-900 p-5">
+              <p className="nums font-display text-[26px] leading-none text-white">{inr(BUNDLE)}</p>
+              <p className="mt-2.5 text-[14px] leading-snug text-white/80">Full bundle</p>
+              <p className="mt-1 text-[12.5px] text-white/50">For the whole trek</p>
             </div>
-          ))}
+          </div>
         </div>
-        <p className="text-[14px] text-snow-500 mt-4">
-          Collected at basecamp on day one, returned on the last day. Nothing to carry up
-          from the city.
-        </p>
-      </section>
+        <div className="mt-8">
+          <Button href="/treks">Pick a trek, then add rentals</Button>
+        </div>
+      </Panel>
     </InfoShell>
   );
 }

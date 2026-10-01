@@ -6,6 +6,8 @@ import { treks, departures, trekBySlug } from "@/data/treks";
 
 export const metadata: Metadata = { title: "My treks" };
 
+const EMAIL = "jitesh.bhatt@devslane.com";
+
 export default function AccountPage() {
   const booked = ["kedarkantha", "hampta-pass"]
     .map((slug) => {
@@ -25,19 +27,18 @@ export default function AccountPage() {
     { trek: trekBySlug("bhrigu-lake")!, date: "2024-06-14", summited: false },
   ];
 
+  const first = EMAIL.split(/[.@]/)[0];
+  const name = first.charAt(0).toUpperCase() + first.slice(1);
+
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto max-w-[1360px] px-5 sm:px-8 py-12 sm:py-14">
-        <header className="mb-10">
-          <p className="text-[14px] text-snow-500">Signed in as jitesh.bhatt@devslane.com</p>
-          <h1 className="font-display text-[clamp(2.2rem,4.5vw,3.2rem)] leading-[1.03] mt-1.5">
-            Your treks
-          </h1>
-        </header>
-        <AccountDashboard booked={booked} saved={saved} past={past} />
+      <main className="px-3 pb-16 sm:px-5 sm:pb-24">
+        <div className="mx-auto max-w-[1320px]">
+          <AccountDashboard email={EMAIL} name={name} booked={booked} saved={saved} past={past} />
+        </div>
       </main>
-      <SiteFooter />
+      <SiteFooter newsletter={false} />
     </>
   );
 }

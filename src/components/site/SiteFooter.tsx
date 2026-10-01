@@ -45,7 +45,7 @@ export function SiteFooter({ newsletter = true }: { newsletter?: boolean }) {
       {newsletter && (
         <section
           aria-labelledby="newsletter-title"
-          className="mx-auto mb-3 grid max-w-[1320px] overflow-hidden rounded-bento bg-ice-100 sm:mb-5 md:grid-cols-2"
+          className="mx-auto mb-3 grid max-w-[1320px] grid-cols-[minmax(0,1fr)] overflow-hidden rounded-bento bg-ice-100 sm:mb-5 md:grid-cols-2"
         >
           <div className="relative min-h-[220px] md:min-h-[300px]">
             <Photo name="snowRange2" width={1200} alt="" />
@@ -103,7 +103,7 @@ export function SiteFooter({ newsletter = true }: { newsletter?: boolean }) {
 
           <div className="mt-16 flex flex-col gap-4 border-t border-white/10 pt-7 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-[13px] text-white/45">
-              Concept redesign. A front-end demonstration — no live bookings are taken. Photography via Unsplash.
+              Concept redesign. A front-end demonstration — no live bookings are taken. Photography from <Link href="/credits" className="underline underline-offset-2 transition-colors hover:text-white">Unsplash photographers</Link>.
             </p>
             <div className="flex gap-6 text-[13px] text-white/45">
               <Link href="/policy" className="transition-colors hover:text-white">Terms</Link>
