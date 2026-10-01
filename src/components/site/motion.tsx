@@ -82,39 +82,3 @@ export function Float({
     </motion.div>
   );
 }
-
-/** Counts up to a number when it scrolls into view. */
-export function CountUp({
-  value,
-  className = "",
-  format = (n: number) => Math.round(n).toLocaleString("en-IN"),
-}: {
-  value: number;
-  className?: string;
-  format?: (n: number) => string;
-}) {
-  const reduce = useReducedMotion();
-  return (
-    <motion.span
-      className={className}
-      initial={{ opacity: reduce ? 1 : 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true }}
-      onViewportEnter={(e) => {
-        const el = (e?.target as HTMLElement | undefined) ?? null;
-        if (!el || reduce) return;
-        const start = performance.now();
-        const dur = 1400;
-        const tick = (t: number) => {
-          const p = Math.min(1, (t - start) / dur);
-          const eased = 1 - Math.pow(1 - p, 3);
-          el.textContent = format(value * eased);
-          if (p < 1) requestAnimationFrame(tick);
-        };
-        requestAnimationFrame(tick);
-      }}
-    >
-      {format(value)}
-    </motion.span>
-  );
-}

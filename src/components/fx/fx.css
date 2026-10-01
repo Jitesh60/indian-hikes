@@ -1,0 +1,401 @@
+/* ============================================================
+   fx.css — keyframes + animation classes for src/components/fx
+   Plain CSS (no Tailwind directives), so it works whether it is
+   @import-ed from globals.css or imported directly by a page.
+
+   Sources (see each component's header for the full credit):
+   - Magic UI (MIT): marquee, shimmer-slide, spin-around,
+     shiny-text, meteor
+   - Uiverse.io (MIT): compass loader (Nawsome), glass orb
+     card (G4b413l), circular text button (Creatlydev),
+     arrow button (gharsh11032000)
+   ============================================================ */
+
+/* ---- Magic UI · Marquee ------------------------------------ */
+@keyframes fx-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - var(--gap)));
+  }
+}
+@keyframes fx-marquee-vertical {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(calc(-100% - var(--gap)));
+  }
+}
+.fx-marquee {
+  animation: fx-marquee var(--duration, 40s) linear infinite;
+}
+.fx-marquee-vertical {
+  animation: fx-marquee-vertical var(--duration, 40s) linear infinite;
+}
+.fx-marquee-pause:hover .fx-marquee,
+.fx-marquee-pause:hover .fx-marquee-vertical,
+.fx-marquee-pause:focus-within .fx-marquee,
+.fx-marquee-pause:focus-within .fx-marquee-vertical {
+  animation-play-state: paused;
+}
+.fx-reverse {
+  animation-direction: reverse;
+}
+
+/* ---- Magic UI · ShimmerButton ------------------------------ */
+@keyframes fx-shimmer-slide {
+  to {
+    transform: translate(calc(100cqw - 100%), 0);
+  }
+}
+@keyframes fx-spin-around {
+  0% {
+    transform: translateZ(0) rotate(0);
+  }
+  15%,
+  35% {
+    transform: translateZ(0) rotate(90deg);
+  }
+  65%,
+  85% {
+    transform: translateZ(0) rotate(270deg);
+  }
+  100% {
+    transform: translateZ(0) rotate(360deg);
+  }
+}
+.fx-shimmer-slide {
+  animation: fx-shimmer-slide var(--speed, 3s) ease-in-out infinite alternate;
+}
+.fx-spin-around {
+  animation: fx-spin-around calc(var(--speed, 3s) * 2) linear infinite;
+}
+
+/* ---- Magic UI · AnimatedShinyText -------------------------- */
+@keyframes fx-shiny-text {
+  0%,
+  90%,
+  100% {
+    background-position: calc(-100% - var(--shiny-width)) 0;
+  }
+  30%,
+  60% {
+    background-position: calc(100% + var(--shiny-width)) 0;
+  }
+}
+.fx-shiny-text {
+  animation: fx-shiny-text 8s infinite;
+}
+
+/* ---- Magic UI · Meteors ------------------------------------ */
+@keyframes fx-meteor {
+  0% {
+    transform: rotate(var(--angle)) translateX(0);
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(var(--angle)) translateX(-500px);
+    opacity: 0;
+  }
+}
+.fx-meteor {
+  animation: fx-meteor 5s linear infinite;
+}
+
+/* ---- Uiverse · CompassLoader (Nawsome / ancient-yak-42) ---- */
+@keyframes fx-compass-arrows {
+  from {
+    transform: rotate(45deg);
+  }
+  to {
+    transform: rotate(405deg);
+  }
+}
+@keyframes fx-compass-ring-rotate {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(720deg);
+  }
+}
+@keyframes fx-compass-ring-stroke {
+  from,
+  to {
+    stroke-dashoffset: 452;
+    transform: rotate(-45deg);
+  }
+  50% {
+    stroke-dashoffset: 169.5;
+    transform: rotate(-180deg);
+  }
+}
+@keyframes fx-compass-tick {
+  from,
+  3%,
+  47%,
+  to {
+    stroke-dashoffset: -12;
+  }
+  14%,
+  36% {
+    stroke-dashoffset: 0;
+  }
+}
+.fx-compass-arrows,
+.fx-compass-ring-rotate,
+.fx-compass-ring-stroke,
+.fx-compass-tick {
+  animation-duration: var(--fx-compass-speed, 2s);
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+.fx-compass-arrows {
+  animation-name: fx-compass-arrows;
+  transform: rotate(45deg);
+  transform-origin: 16px 52px;
+}
+.fx-compass-ring-rotate,
+.fx-compass-ring-stroke {
+  transform-origin: 80px 80px;
+}
+.fx-compass-ring-rotate {
+  animation-name: fx-compass-ring-rotate;
+}
+.fx-compass-ring-stroke {
+  animation-name: fx-compass-ring-stroke;
+  transform: rotate(-45deg);
+}
+.fx-compass-tick {
+  animation-name: fx-compass-tick;
+}
+
+/* ---- Uiverse · GlassCard orbs (G4b413l / good-crab-75) ----- */
+@keyframes fx-orb-up {
+  to {
+    transform: translateY(-10px);
+  }
+}
+@keyframes fx-orb-down {
+  to {
+    transform: translateY(10px);
+  }
+}
+.fx-orb-up {
+  animation: fx-orb-up 2s ease-in infinite alternate-reverse;
+}
+.fx-orb-down {
+  animation: fx-orb-down 2s ease-in infinite alternate-reverse;
+}
+
+/* ---- Uiverse · CircularTextButton (Creatlydev / fresh-goose-83) */
+@keyframes fx-text-rotation {
+  to {
+    rotate: 360deg;
+  }
+}
+.fx-text-rotation {
+  animation: fx-text-rotation var(--fx-rotation-speed, 8s) linear infinite;
+}
+
+/* ---- Uiverse · ArrowButton (gharsh11032000 / loud-chicken-53) */
+.fx-arrow-btn {
+  --fx-accent: #ff6a2b;
+  --fx-on-accent: #111519;
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 34px;
+  border: 4px solid transparent;
+  border-radius: 100px;
+  background-color: transparent;
+  color: var(--fx-accent);
+  box-shadow: 0 0 0 2px var(--fx-accent);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.fx-arrow-btn .fx-arrow-btn__arr {
+  position: absolute;
+  width: 22px;
+  fill: var(--fx-accent);
+  z-index: 9;
+  transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.fx-arrow-btn .fx-arrow-btn__arr--1 {
+  right: 14px;
+}
+.fx-arrow-btn .fx-arrow-btn__arr--2 {
+  left: -25%;
+}
+.fx-arrow-btn .fx-arrow-btn__circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  background-color: var(--fx-accent);
+  border-radius: 50%;
+  opacity: 0;
+  z-index: -1;
+  transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.fx-arrow-btn .fx-arrow-btn__text {
+  position: relative;
+  z-index: 1;
+  transform: translateX(-12px);
+  transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.fx-arrow-btn:hover,
+.fx-arrow-btn:focus-visible {
+  box-shadow: 0 0 0 12px transparent;
+  color: var(--fx-on-accent);
+  border-radius: 12px;
+}
+.fx-arrow-btn:hover .fx-arrow-btn__arr--1,
+.fx-arrow-btn:focus-visible .fx-arrow-btn__arr--1 {
+  right: -25%;
+}
+.fx-arrow-btn:hover .fx-arrow-btn__arr--2,
+.fx-arrow-btn:focus-visible .fx-arrow-btn__arr--2 {
+  left: 14px;
+}
+.fx-arrow-btn:hover .fx-arrow-btn__text,
+.fx-arrow-btn:focus-visible .fx-arrow-btn__text {
+  transform: translateX(12px);
+}
+.fx-arrow-btn:hover .fx-arrow-btn__arr,
+.fx-arrow-btn:focus-visible .fx-arrow-btn__arr {
+  fill: var(--fx-on-accent);
+}
+.fx-arrow-btn:hover .fx-arrow-btn__circle,
+.fx-arrow-btn:focus-visible .fx-arrow-btn__circle {
+  width: 420px;
+  height: 420px;
+  opacity: 1;
+}
+.fx-arrow-btn:active {
+  scale: 0.95;
+  box-shadow: 0 0 0 4px var(--fx-accent);
+}
+
+/* ---- Uiverse · CircularTextButton (Creatlydev / fresh-goose-83) */
+.fx-ctb {
+  --fx-ctb-bg: #ff6a2b;
+  --fx-ctb-fg: #ffffff;
+  --fx-ctb-hover-bg: #111519;
+  --fx-ctb-size: 104px;
+  position: relative;
+  display: inline-grid;
+  place-content: center;
+  width: var(--fx-ctb-size);
+  height: var(--fx-ctb-size);
+  border: none;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--fx-ctb-bg);
+  color: var(--fx-ctb-fg);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background 300ms,
+    transform 200ms;
+}
+.fx-ctb__ring {
+  position: absolute;
+  inset: 0;
+}
+.fx-ctb__ring > span {
+  position: absolute;
+  inset: 7px;
+  transform: rotate(calc(var(--fx-ctb-step) * var(--index)));
+}
+.fx-ctb__circle {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+  background: var(--fx-ctb-fg);
+  color: var(--fx-ctb-bg);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.fx-ctb__icon--copy {
+  position: absolute;
+  transform: translate(-150%, 150%);
+}
+.fx-ctb:hover,
+.fx-ctb:focus-visible {
+  background: var(--fx-ctb-hover-bg);
+  transform: scale(1.05);
+}
+.fx-ctb:hover .fx-ctb__icon,
+.fx-ctb:focus-visible .fx-ctb__icon {
+  color: var(--fx-ctb-hover-bg);
+}
+.fx-ctb:hover .fx-ctb__icon:first-child,
+.fx-ctb:focus-visible .fx-ctb__icon:first-child {
+  transition: transform 0.3s ease-in-out;
+  transform: translate(150%, -150%);
+}
+.fx-ctb:hover .fx-ctb__icon--copy,
+.fx-ctb:focus-visible .fx-ctb__icon--copy {
+  transition: transform 0.3s ease-in-out 0.1s;
+  transform: translate(0);
+}
+
+/* ---- Reduced motion: every fx animation rests in its final /
+        neutral state rather than playing. ----------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .fx-marquee,
+  .fx-marquee-vertical,
+  .fx-shimmer-slide,
+  .fx-spin-around,
+  .fx-shiny-text,
+  .fx-meteor,
+  .fx-compass-arrows,
+  .fx-compass-ring-rotate,
+  .fx-compass-ring-stroke,
+  .fx-compass-tick,
+  .fx-orb-up,
+  .fx-orb-down,
+  .fx-text-rotation {
+    animation: none !important;
+  }
+  /* compass: show a full ring and lit ticks instead of a frozen first frame */
+  .fx-compass-ring-stroke {
+    stroke-dashoffset: 0;
+  }
+  .fx-compass-tick {
+    stroke-dashoffset: 0;
+  }
+  .fx-meteor {
+    display: none;
+  }
+  .fx-arrow-btn,
+  .fx-arrow-btn *,
+  .fx-ctb,
+  .fx-ctb * {
+    transition: none !important;
+  }
+}

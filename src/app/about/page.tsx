@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { ArrowUpRight } from "lucide-react";
 import { InfoShell, Panel, Prose, H2 } from "@/components/site/InfoShell";
-import { CountUp, Reveal } from "@/components/site/motion";
+import { Reveal } from "@/components/site/motion";
+import { CountUp } from "@/components/fx";
 import { Photo } from "@/components/site/Photo";
 import { Avatar, Button } from "@/components/site/ui";
 import type { PhotoKey } from "@/data/photos";
@@ -91,7 +92,7 @@ export default function AboutPage() {
                       dark ? "text-white" : "text-ink-900"
                     }`}
                   >
-                    {typeof s.n === "number" && !s.plain ? <CountUp value={s.n} /> : s.n}
+                    {typeof s.n === "number" && !s.plain ? <CountUp to={s.n} /> : s.n}
                   </dd>
                 </div>
               </Reveal>

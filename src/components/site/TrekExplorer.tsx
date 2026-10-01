@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { BlurFade } from "@/components/fx";
 import {
   LayoutGrid,
   Leaf,
@@ -446,7 +447,9 @@ export function TrekExplorer({
           ) : (
             <div className="grid gap-4 sm:grid-cols-2 sm:gap-5 xl:grid-cols-3">
               {results.map((t, i) => (
-                <TrekCard key={t.slug} trek={t} priority={i < 3} />
+                <BlurFade key={t.slug} delay={Math.min(i, 6) * 0.05} inView offset={10} blur="8px" className="h-full">
+                  <TrekCard trek={t} priority={i < 3} />
+                </BlurFade>
               ))}
             </div>
           )}

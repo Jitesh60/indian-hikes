@@ -5,7 +5,8 @@ import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { Photo } from "@/components/site/Photo";
 import { TrekCard } from "@/components/site/TrekViews";
-import { CountUp, Reveal } from "@/components/site/motion";
+import { Reveal } from "@/components/site/motion";
+import { CountUp } from "@/components/fx";
 import { Button } from "@/components/site/ui";
 import { treks } from "@/data/treks";
 
@@ -109,7 +110,7 @@ export default function GreenTrailsPage() {
               <div className="relative flex min-h-[520px] flex-col justify-end p-5 sm:min-h-[560px] sm:p-10 lg:p-12">
                 <p className="text-[14px] text-white/70">Brought down and processed</p>
                 <p className="nums font-display mt-2 text-[clamp(3.2rem,11vw,8.5rem)] leading-[0.9] text-white">
-                  <CountUp value={total} /> <span className="text-[0.4em] text-white/70">kg</span>
+                  <CountUp to={total} /> <span className="text-[0.4em] text-white/70">kg</span>
                 </p>
                 <dl className="mt-8 grid grid-cols-2 gap-2.5 sm:gap-3 lg:grid-cols-4">
                   {[
@@ -121,7 +122,7 @@ export default function GreenTrailsPage() {
                     <div key={s.l} className="glass rounded-[20px] p-4 sm:p-5">
                       <dt className="text-[12.5px] leading-snug text-white/70">{s.l}</dt>
                       <dd className="nums font-display mt-2 text-[clamp(1.8rem,3.4vw,2.6rem)] leading-none text-white">
-                        <CountUp value={s.n} />
+                        <CountUp to={s.n} />
                       </dd>
                     </div>
                   ))}

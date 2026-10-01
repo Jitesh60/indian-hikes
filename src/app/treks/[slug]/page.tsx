@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { BorderBeam } from "@/components/fx";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -529,7 +530,7 @@ function Fact({ icon: Icon, label, value }: { icon: typeof MapPin; label: string
 
 function BookingCard({ trek, deps, openSlots }: { trek: Trek; deps: Departure[]; openSlots: number }) {
   return (
-    <div className="rounded-bento bg-ink-900 p-6 text-white shadow-[0_30px_60px_-30px_rgb(10_13_16/0.6)] sm:p-7">
+    <div className="relative overflow-hidden rounded-bento bg-ink-900 p-6 text-white shadow-[0_30px_60px_-30px_rgb(10_13_16/0.6)] sm:p-7">
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-[12.5px] text-white/60">Trek fee per person</p>
@@ -568,6 +569,7 @@ function BookingCard({ trek, deps, openSlots }: { trek: Trek; deps: Departure[];
         Free to cancel up to 30 days before departure. After that the refund drops on a
         published scale.
       </p>
+      <BorderBeam size={110} duration={10} colorFrom="#ff8a52" colorTo="#ffd84d" borderWidth={1.5} />
     </div>
   );
 }

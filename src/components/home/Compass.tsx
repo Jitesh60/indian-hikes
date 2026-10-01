@@ -7,6 +7,8 @@ export function Compass({ bearing = 39, size = 190 }: { bearing?: number; size?:
   const reduce = useReducedMotion();
   const ticks = Array.from({ length: 72 }, (_, i) => i * 5);
   const r = 90;
+  // Round so server and client produce identical attribute strings.
+  const f = (n: number) => Math.round(n * 100) / 100;
 
   return (
     <svg viewBox="0 0 200 200" width={size} height={size} role="img" aria-label={`Compass showing ${bearing}° north-east`}>
@@ -18,10 +20,10 @@ export function Compass({ bearing = 39, size = 190 }: { bearing?: number; size?:
         return (
           <line
             key={deg}
-            x1={100 + Math.sin(a) * r1}
-            y1={100 - Math.cos(a) * r1}
-            x2={100 + Math.sin(a) * r}
-            y2={100 - Math.cos(a) * r}
+            x1={f(100 + Math.sin(a) * r1)}
+            y1={f(100 - Math.cos(a) * r1)}
+            x2={f(100 + Math.sin(a) * r)}
+            y2={f(100 - Math.cos(a) * r)}
             stroke={major ? "rgb(255 255 255 / 0.75)" : "rgb(255 255 255 / 0.25)"}
             strokeWidth={major ? 1.6 : 1}
           />
@@ -37,8 +39,8 @@ export function Compass({ bearing = 39, size = 190 }: { bearing?: number; size?:
         return (
           <text
             key={l}
-            x={100 + Math.sin(a) * 58}
-            y={100 - Math.cos(a) * 58 + 4}
+            x={f(100 + Math.sin(a) * 58)}
+            y={f(100 - Math.cos(a) * 58 + 4)}
             textAnchor="middle"
             fontSize="12"
             fontWeight="600"

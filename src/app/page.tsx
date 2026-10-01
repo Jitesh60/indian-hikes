@@ -15,12 +15,26 @@ import {
   Shirt,
   Mountain,
   Quote,
-  ChevronDown,
 } from "lucide-react";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { Photo } from "@/components/site/Photo";
-import { Reveal, Parallax, Float, CountUp } from "@/components/site/motion";
+import { Reveal, Parallax, Float } from "@/components/site/motion";
+import {
+  AnimatedList,
+  AnimatedShinyText,
+  ArrowButton,
+  BlurText,
+  BorderBeam,
+  CircularTextButton,
+  CountUp,
+  Magnet,
+  Marquee,
+  Meteors,
+  NumberTicker,
+  ScrollVelocity,
+  ShimmerButton,
+} from "@/components/fx";
 import { Button, Eyebrow, SectionHead, Stars, Avatar, DifficultyMeter, Pill } from "@/components/site/ui";
 import { HeroFinder } from "@/components/home/HeroFinder";
 import { Compass } from "@/components/home/Compass";
@@ -28,7 +42,7 @@ import { CircleText } from "@/components/home/CircleText";
 import { TrekRail } from "@/components/home/TrekRail";
 import { treks, departures, trekBySlug, departuresFor } from "@/data/treks";
 import { stories } from "@/data/stories";
-import { leaders } from "@/data/admin";
+import { leaders, bookings } from "@/data/admin";
 import { trekCover, trekPhotos, type PhotoKey } from "@/data/photos";
 import { inr, daysUntil } from "@/lib/types";
 
@@ -68,6 +82,7 @@ export default function HomePage() {
   const goechala = trekBySlug("goechala")!;
   const nima = leaders.find((l) => l.name === "Nima Lepcha")!;
   const spotlight = [kk, kgl, trekBySlug("sandakphu-phalut")!];
+  const justBooked = bookings.filter((b) => b.status === "confirmed").slice(0, 8);
 
   return (
     <>
@@ -81,6 +96,9 @@ export default function HomePage() {
               <Photo name="tentMilkyWay" width={2400} priority imgClassName="scale-[1.04]" />
             </Parallax>
             <div className="absolute inset-0 bg-gradient-to-b from-ink-950/55 via-ink-950/10 to-ink-950/85" aria-hidden="true" />
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-2/3 overflow-hidden" aria-hidden="true">
+              <Meteors number={9} minDelay={1} maxDelay={9} minDuration={4} maxDuration={10} />
+            </div>
 
             <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-5 pb-10 pt-32 text-center sm:pt-36">
               <Reveal>
@@ -89,14 +107,17 @@ export default function HomePage() {
                     <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ember-400 opacity-75" />
                     <span className="relative inline-flex h-2 w-2 rounded-full bg-ember-500" />
                   </span>
-                  Departures open through November 2027
+                  <AnimatedShinyText shimmerColor="rgba(255,255,255,0.95)" className="text-white/75">
+                    Departures open through November 2027
+                  </AnimatedShinyText>
                 </span>
               </Reveal>
-              <Reveal delay={0.08}>
-                <h1 className="font-display mt-6 max-w-[14ch] text-[clamp(2.8rem,8vw,6.2rem)] leading-[0.95] tracking-[-0.045em]">
-                  Your Himalaya begins here.
-                </h1>
-              </Reveal>
+              <BlurText
+                as="h1"
+                text="Your Himalaya begins here."
+                delay={110}
+                className="font-display mx-auto mt-6 max-w-[14ch] justify-center text-[clamp(2.8rem,8vw,6.2rem)] leading-[0.95] tracking-[-0.045em]"
+              />
               <Reveal delay={0.16}>
                 <p className="mx-auto mt-6 max-w-[46ch] text-[16.5px] leading-relaxed text-white/75 sm:text-[18px]">
                   {treks.length} routes across five states, walked in small groups with a trek leader
@@ -133,13 +154,15 @@ export default function HomePage() {
                 <ArrowUpRight size={18} className="shrink-0 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
               </Link>
 
-              <a
-                href="#explore"
-                className="hidden flex-col items-center gap-1 text-[12px] text-white/55 transition-colors hover:text-white sm:flex"
-              >
-                Scroll to explore
-                <ChevronDown size={18} className="animate-bounce" />
-              </a>
+              <div className="hidden justify-center sm:flex">
+                <CircularTextButton
+                  href="#explore"
+                  text="SCROLL · TO · EXPLORE · "
+                  label="Scroll to explore"
+                  size={92}
+                  speed={14}
+                />
+              </div>
 
               <Link
                 href="/treks"
@@ -161,8 +184,31 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* ── Route strip ─────────────────────────────────────────────── */}
+        <section aria-label="Our routes" className="pt-10 sm:pt-14">
+          <Marquee pauseOnHover duration="70s" gap="0.75rem" className="[mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+            {treks.map((t) => (
+              <Link
+                key={t.slug}
+                href={`/treks/${t.slug}`}
+                className="group inline-flex shrink-0 items-center gap-3 rounded-full bg-white py-1.5 pl-1.5 pr-5 shadow-soft transition-shadow hover:shadow-[0_14px_30px_-16px_rgb(16_24_40/0.35)]"
+              >
+                <span className="relative h-10 w-10 overflow-hidden rounded-full">
+                  <Photo name={trekCover(t.slug)} width={120} alt="" />
+                </span>
+                <span>
+                  <span className="block text-[14px] font-medium text-ink-900">{t.name}</span>
+                  <span className="nums block text-[12px] text-ink-400">
+                    {t.maxAltFt.toLocaleString("en-IN")} ft · {t.state}
+                  </span>
+                </span>
+              </Link>
+            ))}
+          </Marquee>
+        </section>
+
         {/* ── 2. Bento: the whole product on one screen ───────────────── */}
-        <section id="explore" className="scroll-mt-24 px-3 py-20 sm:px-5 sm:py-28">
+        <section id="explore" className="scroll-mt-24 px-3 pb-20 pt-16 sm:px-5 sm:pb-28 sm:pt-20">
           <div className="mx-auto max-w-[1320px]">
             <Reveal>
               <SectionHead
@@ -188,12 +234,28 @@ export default function HomePage() {
                   <p className="mt-6 text-[19px] font-medium leading-snug tracking-[-0.01em] text-ink-900">
                     Leave the city and walk into the Himalaya with people who know every campsite by name.
                   </p>
-                  <div className="mt-auto pt-8">
-                    <p className="nums text-[14px] font-semibold text-ink-900">1,940 trekkers last season</p>
-                    <p className="mt-1 text-[13px] text-ink-400">on Green Trails departures alone</p>
-                    <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-mist-200">
-                      <div className="h-full w-[68%] rounded-full bg-ember-500" />
-                    </div>
+                  <div className="mt-auto pt-7">
+                    <p className="mb-3 flex items-center gap-2 text-[12px] uppercase tracking-[0.14em] text-ink-400">
+                      <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-pine-500" aria-hidden="true" />
+                      Recently booked
+                    </p>
+                    <AnimatedList delay={2200} loop className="h-[168px] items-stretch gap-2 overflow-hidden">
+                      {justBooked.map((b) => (
+                        <div key={b.id} className="flex items-center gap-2.5 rounded-2xl bg-mist-100 p-2">
+                          <span className="relative h-9 w-9 shrink-0 overflow-hidden rounded-xl">
+                            <Photo name={trekCover(b.trek)} width={100} alt="" />
+                          </span>
+                          <span className="min-w-0 flex-1">
+                            <span className="block truncate text-[13px] font-medium text-ink-900">
+                              {b.trekker.split(" ")[0]} · {b.city}
+                            </span>
+                            <span className="block truncate text-[12px] text-ink-400">
+                              {b.trekName} · {b.people} {b.people === 1 ? "seat" : "seats"}
+                            </span>
+                          </span>
+                        </div>
+                      ))}
+                    </AnimatedList>
                   </div>
                 </Reveal>
 
@@ -301,14 +363,18 @@ export default function HomePage() {
                       </p>
                     </div>
                     <dl className="flex gap-5 sm:gap-7">
-                      {[
-                        [nima.treksLed.toString(), "Treks led"],
-                        [nima.rating.toFixed(1), "Rating"],
-                        [String(2026 - nima.since), "Years"],
-                      ].map(([v, l]) => (
+                      {(
+                        [
+                          [nima.treksLed, "Treks led", 0],
+                          [nima.rating, "Rating", 1],
+                          [2026 - nima.since, "Years", 0],
+                        ] as const
+                      ).map(([v, l, dp]) => (
                         <div key={l} className="text-center">
                           <dt className="sr-only">{l}</dt>
-                          <dd className="nums text-[20px] font-semibold leading-none">{v}</dd>
+                          <dd className="nums text-[20px] font-semibold leading-none">
+                            <NumberTicker value={v} decimalPlaces={dp} className="text-white" />
+                          </dd>
                           <dd aria-hidden="true" className="mt-1 text-[11.5px] text-white/60">{l}</dd>
                         </div>
                       ))}
@@ -403,6 +469,7 @@ export default function HomePage() {
                       Reserve a spot · {daysUntil(kkDep.start)} days to go
                     </Link>
                   </div>
+                  <BorderBeam size={120} duration={9} colorFrom="#ff8a52" colorTo="#ffd84d" borderWidth={1.5} />
                 </Reveal>
 
                 <Reveal delay={0.15} className="rounded-bento bg-white p-3 shadow-soft">
@@ -461,7 +528,7 @@ export default function HomePage() {
                   <Reveal key={x.l} delay={i * 0.08}>
                     <dt className="sr-only">{x.l}</dt>
                     <dd className="flex items-baseline gap-1">
-                      <CountUp value={x.v} className="nums text-[clamp(2.4rem,5vw,3.6rem)] font-semibold leading-none tracking-[-0.04em]" />
+                      <CountUp to={x.v} duration={2} className="nums text-[clamp(2.4rem,5vw,3.6rem)] font-semibold leading-none tracking-[-0.04em]" />
                       {x.s && <span className="text-[18px] text-white/70">{x.s}</span>}
                     </dd>
                     <dd aria-hidden="true" className="mt-2 text-[12.5px] uppercase tracking-[0.14em] text-white/60">
@@ -545,6 +612,18 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* ── Velocity band of route names ────────────────────────────── */}
+        <section aria-hidden="true" className="overflow-hidden pb-16 sm:pb-24">
+          <ScrollVelocity
+            texts={[
+              treks.slice(0, 8).map((t) => t.name).join("  ·  ") + "  ·  ",
+              treks.slice(8).map((t) => t.name).join("  ·  ") + "  ·  ",
+            ]}
+            velocity={40}
+            className="font-display px-3 text-[clamp(2.6rem,7vw,5.6rem)] leading-[1.1] tracking-[-0.045em] text-ink-900/[0.08]"
+          />
+        </section>
+
         {/* ── 5. Find by altitude: band pills + carousel ──────────────── */}
         <section className="px-3 pb-20 sm:px-5 sm:pb-28">
           <div className="mx-auto max-w-[1320px] rounded-bento bg-ice-100 px-5 py-14 sm:px-10 sm:py-16">
@@ -580,9 +659,9 @@ export default function HomePage() {
                   every wrapper back to the road head.
                 </p>
                 <div className="mt-8 flex flex-wrap gap-3">
-                  <Button href="/green-trails" variant="light">
+                  <ArrowButton href="/green-trails" accent="#ffffff" onAccent="#111519">
                     How Green Trails works
-                  </Button>
+                  </ArrowButton>
                   <Button href="/stories" variant="outline-light">
                     Field notes
                   </Button>
@@ -638,9 +717,11 @@ export default function HomePage() {
                 fill — and Green Trails batches run smaller groups at the same fee.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
-                <Button href="/treks?snow=1" variant="dark">
-                  Winter treks <ArrowRight size={16} />
-                </Button>
+                <Magnet padding={60} magnetStrength={4}>
+                  <ShimmerButton href="/treks?snow=1" shimmerColor="#ffffff" background="#111519" className="px-6 py-3 text-[14.5px]">
+                    Winter treks <ArrowRight size={16} />
+                  </ShimmerButton>
+                </Magnet>
                 <Button href="/departures" variant="outline">
                   Departure calendar
                 </Button>
@@ -750,9 +831,11 @@ export default function HomePage() {
                 </p>
               </Reveal>
               <Reveal delay={0.2} className="mt-9 flex flex-wrap justify-center gap-3">
-                <Button href="/treks" variant="light" size="lg">
-                  Find your trek <ArrowUpRight size={17} />
-                </Button>
+                <Magnet padding={80} magnetStrength={4}>
+                  <ShimmerButton href="/treks" shimmerColor="#ffd84d" background="#ff6a2b" className="px-8 py-4 text-[15.5px] font-medium">
+                    Find your trek <ArrowUpRight size={17} />
+                  </ShimmerButton>
+                </Magnet>
                 <Button href="/contact" variant="glass" size="lg">
                   Talk to a trek coordinator
                 </Button>

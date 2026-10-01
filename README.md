@@ -32,9 +32,20 @@ category tiles, a brush-stroke promo banner, blog cards, a newsletter strip).
   `rounded-bento` (28px).
 - **Type** is Geist throughout, set heavy and tight for display, with tabular
   numerals on every altitude, price and count.
-- **Motion** uses [`motion`](https://motion.dev): `Reveal` fades sections in on
-  scroll, `Parallax` drifts hero photos, `CountUp` animates stats. All of it
-  respects `prefers-reduced-motion`. Carousels use Embla.
+- **Motion** comes from real component libraries, vendored into
+  `src/components/fx/` with their sources and licenses noted in each file
+  (see `src/components/fx/README.md`):
+  - [React Bits](https://github.com/DavidHDev/react-bits): BlurText headline
+    reveals, CountUp stats, ScrollVelocity type bands, Magnet CTAs, and more.
+  - [Magic UI](https://github.com/magicuidesign/magicui): Marquee route strip,
+    NumberTicker, BlurFade grids, BorderBeam cards, ShimmerButton, Meteors,
+    AnimatedList booking feed.
+  - [Uiverse](https://github.com/uiverse-io/galaxy): ArrowButton, the rotating
+    "scroll to explore" seal, and the compass loader shown while routes load.
+  - Plus small helpers in `src/components/site/motion.tsx` (Reveal, Parallax,
+    Float) on [`motion`](https://motion.dev), and Embla for carousels.
+  - Everything respects `prefers-reduced-motion` and renders on the server
+    without hydration differences.
 - **The navigation** is a floating glass pill that sits clear over photo heroes
   and turns to light glass once you scroll.
 - **Altitude still matters**: the home page lets you pick treks by altitude
@@ -42,15 +53,18 @@ category tiles, a brush-stroke promo banner, blog cards, a newsletter strip).
 
 ### Photography
 
-Photos are free Unsplash images, listed by Unsplash id in
-`src/data/photos.ts` and loaded straight from Unsplash in the browser. To change
-a picture, change its id there — nothing else knows where images come from.
-`trekPhotos` maps each trek to a cover and a small gallery.
+Every photo is a real photograph from the open
+[Unsplash Lite dataset](https://github.com/unsplash/datasets) (Unsplash
+License), served from Unsplash's image CDN with responsive `srcset`s. Where
+the dataset has them, they are from the Indian and Nepal Himalaya —
+Gangotri, Manali, Tosh, Spiti, Ladakh, Dzukou, Annapurna, Everest.
+Photographers are credited on `/credits`.
 
-`<Photo>` (`src/components/site/Photo.tsx`) draws generated ridge artwork
-underneath every photo, so a slot is never empty: the artwork shows while the
-image loads and stays if it can't be fetched (offline, or a network that blocks
-Unsplash).
+`src/data/photos.ts` holds each photo's CDN URL, alt text, photographer and a
+tiny preview decoded from its BlurHash. `<Photo>` shows that softened preview
+while the full image loads, so a slot is never empty. `trekPhotos` maps each
+trek to a cover and a small gallery. To change a picture, change its entry —
+nothing else knows where images come from.
 
 The old altitude-band colour tokens (`spruce`, `deodar`, `bugyal`, `glacier`,
 `snow`) are kept only for the admin panel, which is unchanged apart from the
@@ -72,6 +86,7 @@ typeface.
 | `/account` | Trekker dashboard — upcoming, fitness, documents, saved |
 | `/login` | Passwordless sign-in |
 | `/about` `/contact` `/fitness` `/safety` `/gear` `/policy` `/faq` `/careers` | Supporting content |
+| `/credits` | Photographer credits |
 
 **Admin** (`/admin`)
 
@@ -89,7 +104,8 @@ src/
     site/         public site components
     admin/        admin shell, data table, charts
     home/         home page pieces — finder, compass, trek rail, text ring
-    viz/          altitude profile, generated ridge art (photo fallback)
+    fx/           vendored animation components (React Bits, Magic UI, Uiverse)
+    viz/          altitude profile and sparkline
   data/           treks, departures, stories, photos, admin mock data
   lib/types.ts    domain types, altitude bands, formatting
 ```

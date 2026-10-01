@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "../components/fx/fx.css";
 
 /* ============================================================
    Altitude gradient design system
@@ -102,6 +103,9 @@ html {
 }
 
 body {
+  /* clip, not hidden: guards against stray sideways scroll without
+     turning body into a scroll container (which would break sticky) */
+  overflow-x: clip;
   background: var(--page);
   color: var(--ink);
   font-family: var(--font-sans);
