@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "../components/fx/fx.css";
 
 /* ============================================================
    Altitude gradient design system
@@ -41,17 +42,56 @@
   --color-snow-400: #96a5a4;
   --color-snow-500: #6b7b7a;
 
-  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
-  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  /* ---- Revamp: mist, ink, ember ------------------------------- */
+  /* page + surfaces: cool, slightly lilac mist like high-altitude air */
+  --color-mist-50: #f7f8fa;
+  --color-mist-100: #eef0f4;
+  --color-mist-200: #e2e6ec;
+  --color-mist-300: #cdd3db;
+  --color-mist-400: #9aa3ad;
 
-  --radius-card: 2px;
+  /* ink: near-black, faintly blue — the night sky in the hero */
+  --color-ink-950: #0a0d10;
+  --color-ink-900: #111519;
+  --color-ink-800: #1a1f25;
+  --color-ink-700: #262d35;
+  --color-ink-600: #3a424c;
+  --color-ink-500: #5a6470;
+  --color-ink-400: #87909a;
+
+  /* ember: the glow of a lit tent — the single warm accent */
+  --color-ember-300: #ffb48a;
+  --color-ember-400: #ff8a52;
+  --color-ember-500: #ff6a2b;
+  --color-ember-600: #e5531a;
+
+  /* sun: promo highlighter, used sparingly */
+  --color-sun-300: #ffe680;
+  --color-sun-400: #ffd84d;
+
+  /* ice: cold sky panels */
+  --color-ice-50: #f1f8fc;
+  --color-ice-100: #e3f1f8;
+  --color-ice-200: #cbe4f1;
+  --color-ice-500: #5a9fc4;
+
+  /* pine: Green Trails */
+  --color-pine-500: #3c8a63;
+  --color-pine-600: #2c6b4c;
+
+  --font-display: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --radius-card: 20px;
+  --radius-bento: 28px;
 }
 
 :root {
-  --page: var(--color-snow-100);
-  --ink: var(--color-spruce-800);
-  --muted: var(--color-snow-500);
-  --rule: var(--color-snow-300);
+  --page: var(--color-mist-100);
+  --ink: var(--color-ink-900);
+  --muted: var(--color-ink-500);
+  --rule: var(--color-mist-200);
 }
 
 * {
@@ -63,6 +103,9 @@ html {
 }
 
 body {
+  /* clip, not hidden: guards against stray sideways scroll without
+     turning body into a scroll container (which would break sticky) */
+  overflow-x: clip;
   background: var(--page);
   color: var(--ink);
   font-family: var(--font-sans);
@@ -71,18 +114,17 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* Display face: Fraunces with its soft + wonk axes dialled in.
-   Not a neutral delivery vehicle — this is the page's voice. */
+/* Display: Geist, heavy and tight — confident, not decorative. */
 .font-display {
   font-family: var(--font-display);
-  font-variation-settings: "SOFT" 28, "WONK" 1, "opsz" 84;
-  letter-spacing: -0.021em;
+  font-weight: 600;
+  letter-spacing: -0.035em;
 }
 
 .font-display-tight {
   font-family: var(--font-display);
-  font-variation-settings: "SOFT" 14, "WONK" 0, "opsz" 20;
-  letter-spacing: -0.012em;
+  font-weight: 600;
+  letter-spacing: -0.02em;
 }
 
 /* Every altitude, price, distance and count is tabular. */
@@ -101,13 +143,13 @@ body {
 
 /* Focus that is always visible, on both paper and dark panels. */
 :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
-  outline: 2px solid var(--color-bugyal-500);
+  /* outline follows each element's own radius, so pills stay pills */
+  outline: 2px solid var(--color-ember-500);
   outline-offset: 2px;
-  border-radius: 2px;
 }
 
 .on-dark :where(a, button, input, select, textarea, summary):focus-visible {
-  outline-color: var(--color-bugyal-400);
+  outline-color: var(--color-ember-400);
 }
 
 /* Contour hatching used behind dark panels — drawn, not a gradient wash. */
@@ -200,11 +242,13 @@ input[type="range"] {
 }
 input[type="range"]::-webkit-slider-runnable-track {
   height: 3px;
-  background: var(--color-snow-300);
+  border-radius: 99px;
+  background: var(--color-mist-300);
 }
 input[type="range"]::-moz-range-track {
   height: 3px;
-  background: var(--color-snow-300);
+  border-radius: 99px;
+  background: var(--color-mist-300);
 }
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
@@ -212,15 +256,97 @@ input[type="range"]::-webkit-slider-thumb {
   width: 16px;
   margin-top: -6.5px;
   border-radius: 99px;
-  background: var(--color-spruce-800);
-  border: 3px solid var(--color-bugyal-500);
+  background: var(--color-ink-900);
+  border: 3px solid var(--color-ember-500);
   cursor: pointer;
 }
 input[type="range"]::-moz-range-thumb {
   height: 16px;
   width: 16px;
-  border: 3px solid var(--color-bugyal-500);
+  border: 3px solid var(--color-ember-500);
   border-radius: 99px;
-  background: var(--color-spruce-800);
+  background: var(--color-ink-900);
   cursor: pointer;
+}
+
+/* ============================================================
+   Revamp utilities
+   ============================================================ */
+
+/* Frosted glass panels that sit on top of photography. */
+.glass {
+  background: color-mix(in srgb, #ffffff 14%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid color-mix(in srgb, #ffffff 22%, transparent);
+}
+.glass-dark {
+  background: color-mix(in srgb, var(--color-ink-900) 55%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid color-mix(in srgb, #ffffff 12%, transparent);
+}
+.glass-light {
+  background: color-mix(in srgb, #ffffff 72%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid color-mix(in srgb, #ffffff 60%, transparent);
+}
+
+/* Soft card shadow used on white bento tiles. */
+.shadow-soft {
+  box-shadow:
+    0 1px 2px rgb(16 24 40 / 0.04),
+    0 12px 32px -12px rgb(16 24 40 / 0.12);
+}
+
+/* Readability scrim for text over photographs. */
+.scrim-b {
+  background: linear-gradient(to top, rgb(10 13 16 / 0.82), rgb(10 13 16 / 0.25) 55%, transparent);
+}
+.scrim-t {
+  background: linear-gradient(to bottom, rgb(10 13 16 / 0.6), transparent 45%);
+}
+
+/* Hand-painted highlighter stroke behind promo headlines. */
+.brush {
+  position: relative;
+  isolation: isolate;
+}
+.brush::before {
+  content: "";
+  position: absolute;
+  inset: -18% -6% -14% -8%;
+  z-index: -1;
+  background: var(--color-sun-400);
+  clip-path: polygon(2% 18%, 20% 6%, 48% 12%, 74% 2%, 98% 10%, 94% 46%, 100% 82%, 72% 94%, 44% 88%, 18% 98%, 0% 84%, 5% 50%);
+}
+
+/* Slow spin for the circular text ring. */
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.spin-slow {
+  animation: spin-slow 38s linear infinite;
+}
+
+/* Twinkle for drawn stars. */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 1; }
+}
+
+/* Hide scrollbars on horizontal rails without disabling scroll. */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.font-mono-nums {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
 }

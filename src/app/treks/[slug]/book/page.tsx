@@ -27,10 +27,12 @@ export default async function BookPage({
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto max-w-[1180px] px-5 sm:px-8 py-12 sm:py-16">
-        <BookingFlow trek={trek} departure={departure} waitlist={sp.waitlist === "1"} />
+      <main className="px-3 pb-16 pt-2 sm:px-5 sm:pb-24 sm:pt-4">
+        <div className="mx-auto max-w-[1200px]">
+          <BookingFlow trek={trek} departure={departure} waitlist={sp.waitlist === "1"} />
+        </div>
       </main>
-      <SiteFooter />
+      <SiteFooter newsletter={false} />
     </>
   );
 }

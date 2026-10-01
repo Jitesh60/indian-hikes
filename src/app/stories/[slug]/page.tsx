@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ArrowLeft, Clock } from "lucide-react";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
-import { RidgeArt } from "@/components/viz/RidgeArt";
-import { AltitudeSpark } from "@/components/viz/AltitudeProfile";
-import { Pill } from "@/components/site/ui";
+import { Photo } from "@/components/site/Photo";
+import { TrekCard } from "@/components/site/TrekViews";
+import { Reveal } from "@/components/site/motion";
+import { Avatar, Button } from "@/components/site/ui";
+import { StoryCard, storyDate, storyPhoto } from "@/components/site/content/stories";
 import { stories, storyBySlug } from "@/data/stories";
 import { trekBySlug } from "@/data/treks";
-import { inr } from "@/lib/types";
 
 export function generateStaticParams() {
   return stories.map((s) => ({ slug: s.slug }));
@@ -29,109 +31,105 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
   const story = storyBySlug(slug);
   if (!story) notFound();
   const trek = trekBySlug(story.trek);
-  const more = stories.filter((s) => s.slug !== story.slug).slice(0, 2);
+  const more = stories.filter((s) => s.slug !== story.slug).slice(0, 3);
 
   return (
     <>
-      <SiteHeader />
-      <main>
-        <article className="mx-auto max-w-[1360px] px-5 sm:px-8 py-12 sm:py-16">
-          <div className="max-w-[720px]">
-            <Pill tone={story.category === "Green Trails" ? "green" : story.category === "Safety" ? "red" : "neutral"}>
-              {story.category}
-            </Pill>
-            <h1 className="font-display text-[clamp(2.2rem,5vw,3.4rem)] leading-[1.03] mt-5">
-              {story.title}
-            </h1>
-            <p className="mt-5 text-[19px] leading-relaxed text-spruce-800/70">{story.standfirst}</p>
-            <div className="nums mt-7 pt-5 border-t border-snow-300 flex flex-wrap gap-x-6 gap-y-1 text-[13.5px] text-snow-500">
-              <span className="text-spruce-800">{story.author}</span>
-              <span>{story.role}</span>
-              <span>
-                {new Date(story.date).toLocaleDateString("en-IN", {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric",
-                })}
-              </span>
-              <span>{story.minutes} min read</span>
-            </div>
-          </div>
-
-          <div className="relative aspect-[21/9] overflow-hidden bg-spruce-800 my-12">
-            <RidgeArt seed={story.slug} tone="warm" className="w-full h-full" />
-          </div>
-
-          <div className="grid lg:grid-cols-[minmax(0,720px)_minmax(0,1fr)] gap-x-16">
-            <div>
-              {story.body.map((para, i) => (
-                <p
-                  key={i}
-                  className={`text-[18px] leading-[1.72] text-spruce-800/88 ${i ? "mt-6" : ""}`}
-                >
-                  {para}
-                </p>
-              ))}
-
-              <div className="mt-12 pt-8 border-t border-snow-300">
-                <p className="text-[15px] text-spruce-800/70 leading-relaxed measure">
-                  Written by {story.author}, {story.role.toLowerCase()}. Field notes are
-                  published as they were filed, with names of trekkers changed unless they
-                  asked us to keep them.
-                </p>
+      <SiteHeader variant="dark" />
+      <main className="px-3 pb-16 pt-3 sm:px-5 sm:pb-24 sm:pt-4">
+        <div className="mx-auto max-w-[1320px]">
+          {/* Hero */}
+          <header className="relative flex min-h-[580px] items-end overflow-hidden rounded-bento bg-ink-900 sm:min-h-[620px] lg:min-h-[680px]">
+            <Photo name={storyPhoto(story)} width={2000} priority alt="" />
+            <div className="absolute inset-0 bg-ink-950/25" aria-hidden="true" />
+            <div className="scrim-b absolute inset-0" aria-hidden="true" />
+            <div className="relative w-full px-5 pb-7 pt-[130px] sm:px-10 sm:pb-12 lg:px-14">
+              <Link
+                href="/stories"
+                className="glass inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[12.5px] font-medium text-white hover:bg-white/25"
+              >
+                <ArrowLeft size={14} /> Stories
+              </Link>
+              <p className="mt-6 text-[13px] font-medium uppercase tracking-[0.16em] text-white/70">
+                <span className="mr-2 inline-block h-1.5 w-1.5 rounded-full bg-ember-500 align-middle" aria-hidden="true" />
+                {story.category}
+              </p>
+              <h1 className="font-display mt-3 max-w-[20ch] text-[clamp(2.2rem,5.6vw,4.4rem)] leading-[1.02] text-white">
+                {story.title}
+              </h1>
+              <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3">
+                <div className="flex items-center gap-3">
+                  <Avatar name={story.author} size={44} tone="ice" />
+                  <div>
+                    <p className="text-[15px] font-medium text-white">{story.author}</p>
+                    <p className="text-[13px] text-white/65">{story.role}</p>
+                  </div>
+                </div>
+                <div className="glass nums inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-[13px] text-white">
+                  <time dateTime={story.date}>{storyDate(story.date, "long")}</time>
+                  <span className="text-white/40">·</span>
+                  <Clock size={13} /> {story.minutes} min read
+                </div>
               </div>
             </div>
+          </header>
+
+          {/* Article + trek */}
+          <div className="mt-3 grid gap-3 sm:mt-5 sm:gap-5 lg:grid-cols-[minmax(0,1fr)_360px]">
+            <article className="min-w-0 rounded-bento bg-white px-5 py-9 shadow-soft sm:px-10 sm:py-14 lg:px-16">
+              <div className="mx-auto max-w-[68ch]">
+                <p className="text-[20px] font-medium leading-[1.55] tracking-[-0.01em] text-ink-900 sm:text-[22px]">
+                  {story.standfirst}
+                </p>
+                <div className="my-8 h-px bg-mist-200 sm:my-10" />
+                {story.body.map((para, i) => (
+                  <p key={i} className={`text-[17px] leading-[1.75] text-ink-700 sm:text-[18px] ${i ? "mt-6" : ""}`}>
+                    {para}
+                  </p>
+                ))}
+
+                <div className="mt-12 flex items-start gap-4 rounded-[22px] bg-mist-100 p-5 sm:p-6">
+                  <Avatar name={story.author} size={48} tone="ink" />
+                  <p className="text-[14.5px] leading-relaxed text-ink-600">
+                    Written by <span className="font-medium text-ink-900">{story.author}</span>,{" "}
+                    {story.role.toLowerCase()}. Field notes are published as they were filed, with
+                    names of trekkers changed unless they asked us to keep them.
+                  </p>
+                </div>
+              </div>
+            </article>
 
             {trek && (
-              <aside className="mt-12 lg:mt-0">
-                <div className="lg:sticky lg:top-6 border border-snow-300 bg-snow-50">
-                  <div className="relative aspect-[16/9] bg-spruce-800">
-                    <RidgeArt seed={trek.slug} tone="cool" className="w-full h-full" />
-                  </div>
-                  <div className="p-5">
-                    <p className="text-[12.5px] text-snow-500">This story came off</p>
-                    <h2 className="font-display-tight text-[22px] leading-tight mt-1">{trek.name}</h2>
-                    <div className="text-spruce-800/60 my-3">
-                      <AltitudeSpark profile={trek.profile} width={200} height={40} />
-                    </div>
-                    <p className="nums text-[13.5px] text-snow-500">
-                      {trek.maxAltFt.toLocaleString("en-IN")} ft · {trek.days} days · {trek.difficulty}
-                    </p>
-                    <Link
-                      href={`/treks/${trek.slug}`}
-                      className="block text-center mt-5 bg-bugyal-500 text-spruce-900 px-4 py-3 font-semibold hover:bg-bugyal-400 transition-colors"
-                    >
-                      Open the trek · {inr(trek.price)}
-                    </Link>
-                  </div>
+              <aside className="min-w-0">
+                <div className="grid gap-3 lg:sticky lg:top-28">
+                  <p className="px-2 pt-1 text-[13px] font-medium uppercase tracking-[0.14em] text-ink-500 lg:pt-0">
+                    This story came off
+                  </p>
+                  <TrekCard trek={trek} />
                 </div>
               </aside>
             )}
           </div>
-        </article>
 
-        <section className="border-t border-snow-300">
-          <div className="mx-auto max-w-[1360px] px-5 sm:px-8 py-14">
-            <h2 className="font-display text-[26px] mb-7">Read next</h2>
-            <div className="grid md:grid-cols-2 gap-8">
-              {more.map((s) => (
-                <Link key={s.slug} href={`/stories/${s.slug}`} className="group flex gap-5 items-start">
-                  <div className="relative w-[130px] aspect-[4/3] shrink-0 overflow-hidden bg-spruce-800">
-                    <RidgeArt seed={s.slug} tone="warm" className="w-full h-full" />
-                  </div>
-                  <div>
-                    <h3 className="font-display-tight text-[19px] leading-tight group-hover:text-deodar-600 transition-colors">
-                      {s.title}
-                    </h3>
-                    <p className="nums mt-2 text-[13px] text-snow-500">
-                      {s.author} · {s.minutes} min
-                    </p>
-                  </div>
-                </Link>
+          {/* More stories */}
+          <section aria-labelledby="read-next" className="pt-14 sm:pt-20">
+            <div className="mb-8 flex items-end justify-between gap-4 px-2">
+              <h2 id="read-next" className="font-display text-[clamp(1.8rem,3.4vw,2.6rem)] leading-tight text-ink-900">
+                Read next
+              </h2>
+              <Button href="/stories" variant="outline" size="sm">
+                All stories
+              </Button>
+            </div>
+            <div className="grid gap-3 sm:gap-5 md:grid-cols-2 xl:grid-cols-3">
+              {more.map((s, i) => (
+                <Reveal key={s.slug} delay={i * 0.07} className={`h-full ${i === 2 ? "md:hidden xl:block" : ""}`}>
+                  <StoryCard story={s} />
+                </Reveal>
               ))}
             </div>
-          </div>
-        </section>
+          </section>
+        </div>
       </main>
       <SiteFooter />
     </>

@@ -1,35 +1,33 @@
 import type { Metadata } from "next";
-import { Fraunces, Archivo } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const fraunces = Fraunces({
+const geist = Geist({
   subsets: ["latin"],
-  variable: "--font-fraunces",
-  axes: ["SOFT", "WONK", "opsz"],
+  variable: "--font-geist",
   display: "swap",
 });
 
-const archivo = Archivo({
+const geistMono = Geist_Mono({
   subsets: ["latin"],
-  variable: "--font-archivo",
-  axes: ["wdth"],
+  variable: "--font-geist-mono",
   display: "swap",
 });
 
 export const metadata: Metadata = {
   title: {
-    default: "Indiahikes — Himalayan treks, graded by altitude",
+    default: "Indiahikes — Himalayan treks, led by people who know the mountain",
     template: "%s · Indiahikes",
   },
   description:
-    "Pick a Himalayan trek by the altitude you are ready for. Fifteen routes across Uttarakhand, Himachal, Kashmir, Sikkim and Bengal, with open departure dates and live slot counts.",
+    "Fifteen Himalayan treks across Uttarakhand, Himachal, Kashmir, Sikkim and Bengal. Small groups, trained trek leaders, open departure dates and live slot counts.",
 };
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${fraunces.variable} ${archivo.variable}`}>
+    <html lang="en" className={`${geist.variable} ${geistMono.variable}`}>
       <body className="antialiased">{children}</body>
     </html>
   );

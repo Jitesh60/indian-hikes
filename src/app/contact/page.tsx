@@ -1,140 +1,65 @@
-"use client";
+import type { Metadata } from "next";
+import { Phone, Mail, MapPin, Radio } from "lucide-react";
+import { InfoShell, Panel } from "@/components/site/InfoShell";
+import { ContactForm } from "@/components/site/content/ContactForm";
 
-import { useState } from "react";
-import { Phone, Mail, MapPin, Check } from "lucide-react";
-import { SiteHeader } from "@/components/site/SiteHeader";
-import { SiteFooter } from "@/components/site/SiteFooter";
-import { Button, Field, inputCls } from "@/components/site/ui";
-import { treks } from "@/data/treks";
+export const metadata: Metadata = {
+  title: "Contact",
+  description: "Ask us before you book — about fitness, choosing a trek, or an existing booking.",
+};
 
-const TOPICS = [
-  "Choosing between two treks",
-  "An existing booking",
-  "Fitness and whether I am ready",
-  "Group or corporate departures",
-  "Working as a trek leader",
-  "Something else",
+const CHANNELS = [
+  { icon: Phone, h: "Phone", l: "+91 80 4670 0100", href: "tel:+918046700100", s: "Monday to Saturday, 9 am – 6 pm IST" },
+  { icon: Mail, h: "Email", l: "trek@indiahikes.example", href: "mailto:trek@indiahikes.example", s: "Answered within one working day" },
+  { icon: MapPin, h: "Office · Bengaluru", l: "139, Defence Colony Road, Indiranagar", s: "Visitors welcome, but call first" },
 ];
 
 export default function ContactPage() {
-  const [sent, setSent] = useState(false);
-  const [topic, setTopic] = useState(TOPICS[0]);
-
   return (
-    <>
-      <SiteHeader />
-      <main className="mx-auto max-w-[1360px] px-5 sm:px-8 py-12 sm:py-16">
-        <header className="mb-12 max-w-[54ch]">
-          <h1 className="font-display text-[clamp(2.4rem,5vw,3.6rem)] leading-[1.02]">
-            Ask us before you book, not after
-          </h1>
-          <p className="mt-5 text-[17px] leading-relaxed text-spruce-800/70">
-            The most useful conversation we have with anyone is the one where they
-            describe their fitness honestly and we talk them out of the wrong trek.
-          </p>
-        </header>
+    <InfoShell
+      photo="woodenHut"
+      eyebrow="Contact"
+      title="Ask us before you book, not after"
+      intro="The most useful conversation we have with anyone is the one where they describe their fitness honestly and we talk them out of the wrong trek."
+    >
+      <div className="grid gap-3 sm:gap-5 lg:grid-cols-[minmax(0,1fr)_380px]">
+        <Panel as="div">
+          <ContactForm />
+        </Panel>
 
-        <div className="grid lg:grid-cols-[1fr_360px] gap-x-16 gap-y-12">
-          <div>
-            {sent ? (
-              <div className="border border-snow-300 bg-snow-50 p-10">
-                <div className="w-12 h-12 bg-deodar-600 text-snow-50 flex items-center justify-center">
-                  <Check size={24} />
+        <aside className="grid content-start gap-3 sm:gap-5" aria-label="Other ways to reach us">
+          {CHANNELS.map((c) => {
+            const Icon = c.icon;
+            return (
+              <div key={c.h} className="flex items-start gap-4 rounded-bento bg-white p-5 shadow-soft sm:p-6">
+                <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-ice-100 text-ice-500">
+                  <Icon size={18} />
+                </span>
+                <div className="min-w-0">
+                  <p className="text-[13px] text-ink-500">{c.h}</p>
+                  {c.href ? (
+                    <a href={c.href} className="mt-1 block break-words text-[16.5px] font-semibold text-ink-900 hover:text-ember-600">
+                      {c.l}
+                    </a>
+                  ) : (
+                    <p className="mt-1 text-[16.5px] font-semibold leading-snug text-ink-900">{c.l}</p>
+                  )}
+                  <p className="mt-1 text-[13px] text-ink-400">{c.s}</p>
                 </div>
-                <h2 className="font-display text-[28px] leading-tight mt-6">Message received</h2>
-                <p className="mt-3 text-[16px] leading-relaxed text-spruce-800/70 measure">
-                  Somebody who has actually walked the trek you asked about will reply,
-                  usually within a working day.
-                </p>
-                <Button onClick={() => setSent(false)} variant="outline" className="mt-7">
-                  Send another
-                </Button>
               </div>
-            ) : (
-              <form
-                className="space-y-6"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setSent(true);
-                }}
-              >
-                <div className="grid sm:grid-cols-2 gap-6">
-                  <Field label="Your name" htmlFor="cname">
-                    <input id="cname" className={inputCls} required placeholder="Full name" />
-                  </Field>
-                  <Field label="Email" htmlFor="cemail">
-                    <input id="cemail" type="email" className={inputCls} required placeholder="you@example.com" />
-                  </Field>
-                </div>
-
-                <Field label="What is this about?" htmlFor="ctopic">
-                  <select
-                    id="ctopic"
-                    value={topic}
-                    onChange={(e) => setTopic(e.target.value)}
-                    className={inputCls}
-                  >
-                    {TOPICS.map((t) => (
-                      <option key={t}>{t}</option>
-                    ))}
-                  </select>
-                </Field>
-
-                <Field label="Which trek?" htmlFor="ctrek" hint="Leave on 'not sure yet' if that is the question">
-                  <select id="ctrek" className={inputCls} defaultValue="">
-                    <option value="">Not sure yet</option>
-                    {treks.map((t) => (
-                      <option key={t.slug} value={t.slug}>{t.name}</option>
-                    ))}
-                  </select>
-                </Field>
-
-                <Field
-                  label="Tell us a bit more"
-                  htmlFor="cmsg"
-                  hint="If it is about fitness, the most useful thing you can give us is how far you can currently run and how long it takes."
-                >
-                  <textarea id="cmsg" rows={6} className={inputCls} required placeholder="Start anywhere" />
-                </Field>
-
-                <Button type="submit">Send message</Button>
-                <p className="text-[13px] text-snow-500">
-                  Demonstration only — this form does not send anything.
-                </p>
-              </form>
-            )}
+            );
+          })}
+          <div className="rounded-bento bg-ink-900 p-6 text-white sm:p-7">
+            <span className="inline-flex items-center gap-2 rounded-full bg-ember-500 px-3 py-1.5 text-[12.5px] font-medium">
+              <Radio size={13} /> On a trek right now?
+            </span>
+            <p className="mt-4 text-[15px] leading-relaxed text-white/75">
+              Basecamp numbers are on the confirmation email for your departure. They
+              are staffed around the clock while a group is out.
+            </p>
           </div>
-
-          <aside className="space-y-px bg-snow-300 border border-snow-300 self-start">
-            {[
-              { icon: Phone, h: "Phone", l: "+91 80 4670 0100", s: "Monday to Saturday, 9 am – 6 pm IST" },
-              { icon: Mail, h: "Email", l: "trek@indiahikes.example", s: "Answered within one working day" },
-              { icon: MapPin, h: "Office", h2: "Bengaluru", l: "139, Defence Colony Road, Indiranagar", s: "Visitors welcome, but call first" },
-            ].map((c) => {
-              const Icon = c.icon;
-              return (
-                <div key={c.h} className="bg-snow-50 p-6">
-                  <div className="flex items-center gap-2.5 text-deodar-600">
-                    <Icon size={17} />
-                    <span className="text-[13.5px] font-semibold">{c.h}</span>
-                  </div>
-                  {c.h2 && <p className="text-[15px] font-semibold mt-3">{c.h2}</p>}
-                  <p className="text-[15.5px] mt-2">{c.l}</p>
-                  <p className="text-[13px] text-snow-500 mt-1.5">{c.s}</p>
-                </div>
-              );
-            })}
-            <div className="bg-snow-50 p-6">
-              <p className="text-[13.5px] font-semibold text-rhodo-600">On a trek right now?</p>
-              <p className="text-[14.5px] mt-2 leading-relaxed text-spruce-800/75">
-                Basecamp numbers are on the confirmation email for your departure. They
-                are staffed around the clock while a group is out.
-              </p>
-            </div>
-          </aside>
-        </div>
-      </main>
-      <SiteFooter />
-    </>
+        </aside>
+      </div>
+    </InfoShell>
   );
 }
