@@ -18,27 +18,43 @@ npx eslint src  # lint
 
 ## The design idea
 
-The organising principle is **altitude**. Everything in trekking is vertical —
-tree line, snow line, day-by-day ascent, acclimatisation — so elevation drives
-the design system rather than decorating it:
+The public site is built from three references: a **bento dashboard** (rounded
+white and near-black tiles, frosted glass laid over photos, compact stat
+blocks), a **national-park site** (an immersive night-sky hero, stats over a
+landscape, alternating photo/text rows, a dark section with a rotating text
+ring) and an **outdoor store** (icy-blue panels, bold sans headings, image
+category tiles, a brush-stroke promo banner, blog cards, a newsletter strip).
 
-- **Colour is mapped to altitude bands.** Deodar green at the bottom, meadow
-  gold in the middle, glacier blue at the snowline. `band()` in `src/lib/types.ts`
-  is the single source of truth, used by the charts, the itinerary markers and
-  the homepage ladder.
-- **The hero is a ridge where every peak is a real trek**, placed on the vertical
-  axis at its true maximum altitude. Hover, focus or tap a peak to read it.
-- **Trek listings are a field register**, not a grid of identical cards — one row
-  per trek with an inline altitude sparkline. A gallery view is available too.
-- **Every trek is introduced by its altitude profile**, drawn from the real
-  campsite heights in its itinerary.
+- **Tokens** live in `src/app/globals.css`: `mist` (page and surfaces), `ink`
+  (text and dark tiles), `ember` (the single warm accent — the glow of a lit
+  tent), `sun` (promo highlight only), `ice` and `pine`. Utilities: `.glass`,
+  `.glass-dark`, `.glass-light`, `.shadow-soft`, `.scrim-b`, `.brush`,
+  `rounded-bento` (28px).
+- **Type** is Geist throughout, set heavy and tight for display, with tabular
+  numerals on every altitude, price and count.
+- **Motion** uses [`motion`](https://motion.dev): `Reveal` fades sections in on
+  scroll, `Parallax` drifts hero photos, `CountUp` animates stats. All of it
+  respects `prefers-reduced-motion`. Carousels use Embla.
+- **The navigation** is a floating glass pill that sits clear over photo heroes
+  and turns to light glass once you scroll.
+- **Altitude still matters**: the home page lets you pick treks by altitude
+  band, and every trek keeps its altitude profile.
 
-Type is Fraunces (variable, with its SOFT and WONK axes dialled in) for display
-and Archivo for UI, with tabular numerals on every altitude, price and count.
+### Photography
 
-Imagery is generated, not photographic: `RidgeArt` draws layered ridge
-silhouettes deterministically from a trek's slug, so the same trek always looks
-the same on the server and the client.
+Photos are free Unsplash images, listed by Unsplash id in
+`src/data/photos.ts` and loaded straight from Unsplash in the browser. To change
+a picture, change its id there — nothing else knows where images come from.
+`trekPhotos` maps each trek to a cover and a small gallery.
+
+`<Photo>` (`src/components/site/Photo.tsx`) draws generated ridge artwork
+underneath every photo, so a slot is never empty: the artwork shows while the
+image loads and stays if it can't be fetched (offline, or a network that blocks
+Unsplash).
+
+The old altitude-band colour tokens (`spruce`, `deodar`, `bugyal`, `glacier`,
+`snow`) are kept only for the admin panel, which is unchanged apart from the
+typeface.
 
 ## Routes
 
@@ -46,7 +62,7 @@ the same on the server and the client.
 
 | Route | What it does |
 | --- | --- |
-| `/` | Interactive ridge hero, altitude ladder, live departure strip |
+| `/` | Night-sky hero with trek finder, bento overview, stats, seasonal spotlight, altitude-band carousel, gear tiles, stories |
 | `/treks` | Filter by grade, altitude ceiling, length, month, region; register and gallery views |
 | `/treks/[slug]` | Altitude profile, day-by-day itinerary, fitness bar, inclusions, live departures |
 | `/treks/[slug]/book` | Four-step booking — trekkers, add-ons, health declaration, review and pay |
@@ -72,8 +88,9 @@ src/
   components/
     site/         public site components
     admin/        admin shell, data table, charts
-    viz/          altitude profile, ridge hero, generated ridge art
-  data/           treks, departures, stories, admin mock data
+    home/         home page pieces — finder, compass, trek rail, text ring
+    viz/          altitude profile, generated ridge art (photo fallback)
+  data/           treks, departures, stories, photos, admin mock data
   lib/types.ts    domain types, altitude bands, formatting
 ```
 
@@ -84,5 +101,6 @@ numbers. The dataset is pinned to a fixed reference date (`TODAY` in
 
 ## Notes
 
-This is a design concept, not an affiliated or official product. All copy,
-data and artwork in it were written and generated for this project.
+This is a design concept, not an affiliated or official product. All copy and
+data were written for this project; photography is from Unsplash under the
+Unsplash License.

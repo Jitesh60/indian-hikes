@@ -54,7 +54,7 @@ export function RidgeArt({
   const palettes = {
     cool: ["#d4e2e8", "#a6c2cf", "#6e93a6", "#2f6350", "#1f4438"],
     warm: ["#f2e0ac", "#e6bd5a", "#d4a22b", "#4c8770", "#173328"],
-    dark: ["#26433c", "#1a2f2a", "#12211e", "#0f1c19", "#0c1613"],
+    dark: ["#2b3d55", "#202f44", "#182434", "#111a26", "#0b121b"],
   } as const;
   const colors = palettes[tone];
 
@@ -77,11 +77,24 @@ export function RidgeArt({
     >
       <defs>
         <linearGradient id={skyId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={tone === "dark" ? "#0c1613" : "#f4f7f7"} />
-          <stop offset="100%" stopColor={tone === "dark" ? "#12211e" : colors[0]} />
+          <stop offset="0%" stopColor={tone === "dark" ? "#070b12" : "#f4f7f7"} />
+          <stop offset="100%" stopColor={tone === "dark" ? "#22324a" : colors[0]} />
         </linearGradient>
       </defs>
       <rect width={W} height={H} fill={`url(#${skyId})`} />
+
+      {/* a night sky gets stars */}
+      {tone === "dark" &&
+        Array.from({ length: 70 }, (_, i) => (
+          <circle
+            key={i}
+            cx={rand() * W}
+            cy={rand() * H * 0.55}
+            r={0.5 + rand() * 1.3}
+            fill="#ffffff"
+            opacity={0.25 + rand() * 0.6}
+          />
+        ))}
 
       {/* sun or moon, placed off-centre by the seed */}
       <circle
