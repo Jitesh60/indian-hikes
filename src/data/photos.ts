@@ -681,6 +681,11 @@ export const trekPhotos: Record<string, PhotoKey[]> = {
   "tarsar-marsar": ["alpineLake2", "alpineLake", "grazing", "greenMountain"],
   "phulara-ridge": ["windingRoad", "greenClouds", "snowRanges", "aerialGreen"],
   "bhrigu-lake": ["blueSkyPeak", "lakeTrees", "greenMountain", "valley"],
+  "nag-tibba": ["mistPines", "forestPath", "snowForest", "campfire"],
+  "kuari-pass": ["snowPeak", "kanchenjunga", "tentStars", "greenClouds"],
+  roopkund: ["blueSkyPeak", "flowerMeadow", "snowRanges", "headlamp"],
+  triund: ["greenMountain", "tentNight", "valley", "aerialGreen"],
+  "pin-parvati-pass": ["barrenRange", "snowGroup", "alpineLake", "cairn"],
 };
 
 export function trekCover(slug: string): PhotoKey {

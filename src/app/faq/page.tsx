@@ -94,9 +94,10 @@ export default function FaqPage() {
         {
           q: "What if I need to cancel?",
           a: <>
-            Plans change, and we understand that. The exact cancellation terms for your
-            trek are confirmed with you at booking. Our <Link href="/policy">cancellation policy</Link>{" "}
-            explains how it works, and you can always <Link href="/contact">ask us</Link>.
+            Cancel 30 days or more before departure for a full refund (minus a processing fee), or 15–29
+            days out for 50%. Inside 14 days there&apos;s no refund, but you can transfer your booking to
+            another person or another date at no extra charge. Details on our{" "}
+            <Link href="/policy">cancellation policy</Link> page.
           </>,
         },
       ],

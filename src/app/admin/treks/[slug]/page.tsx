@@ -186,7 +186,7 @@ export default function AdminTrekEditor({ params }: { params: Promise<{ slug: st
             </AdminButton>
           </div>
           {trek.profile.map((d) => (
-            <div key={d.day} className="grid grid-cols-[28px_60px_1fr_110px_90px_36px] gap-3 items-center px-5 py-3 border-b border-snow-300 last:border-b-0">
+            <div key={`${d.day}-${d.label}`} className="grid grid-cols-[28px_60px_1fr_110px_90px_36px] gap-3 items-center px-5 py-3 border-b border-snow-300 last:border-b-0">
               <GripVertical size={15} className="text-snow-400 cursor-grab" />
               <span className="nums text-[13px] text-snow-500">Day {d.day}</span>
               <input className={input} defaultValue={d.label} onChange={touch} aria-label={`Day ${d.day} campsite`} />

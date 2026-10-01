@@ -144,7 +144,7 @@ export function AltitudeProfile({
       {profile.map((d, i) => {
         const isPeak = i === peakIdx;
         return (
-          <g key={d.day}>
+          <g key={`${d.day}-${d.label}`}>
             {!isPeak && (
               <line
                 x1={x(i)}

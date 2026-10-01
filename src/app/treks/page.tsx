@@ -7,7 +7,7 @@ import { treks } from "@/data/treks";
 export const metadata: Metadata = {
   title: "All treks",
   description:
-    "Fifteen Himalayan treks, filterable by altitude, grade, month and region.",
+    "Guided Himalayan treks across Uttarakhand, Himachal, J&K and Ladakh, filterable by altitude, grade, month and region.",
 };
 
 export default async function TreksPage({

@@ -4,7 +4,7 @@ import { useMemo, useState, type ReactNode } from "react";
 import Link from "next/link";
 import {
   Check, ChevronDown, ChevronLeft, Venus, Lock, Minus, Plus, ArrowRight, CalendarDays, UserRound,
-  Bus, Backpack, Shirt, ShieldCheck, type LucideIcon,
+  Backpack, Shirt, ShieldCheck, type LucideIcon,
 } from "lucide-react";
 import { Button, Field, inputCls } from "@/components/site/ui";
 import { Photo } from "@/components/site/Photo";
@@ -32,7 +32,6 @@ export function BookingFlow({
   waitlist: boolean;
 }) {
   const addOns: AddOn[] = [
-    { id: "transport", label: `Shared transport from ${trek.railhead}`, detail: "Both ways, leaves 6:30 am on day one", price: 2400, per: "person", icon: Bus },
     { id: "offload", label: "Backpack offloading", detail: "A mule carries your bag between camps", price: 1650, per: "person", icon: Backpack },
     { id: "gear", label: "Gear rental bundle", detail: "Jacket, trekking poles, and a rucksack", price: 1200, per: "person", icon: Shirt },
     { id: "insurance", label: "Trek insurance", detail: "Covers evacuation and trip cancellation", price: 520, per: "person", icon: ShieldCheck },
@@ -41,7 +40,7 @@ export function BookingFlow({
   const [step, setStep] = useState(0);
   const [count, setCount] = useState(1);
   const [people, setPeople] = useState([{ name: "", age: "", email: "", phone: "" }]);
-  const [picked, setPicked] = useState<string[]>(["transport"]);
+  const [picked, setPicked] = useState<string[]>([]);
   const [declared, setDeclared] = useState({ conditions: "", running: "", agree: false });
   const [placed, setPlaced] = useState(false);
   const [summaryOpen, setSummaryOpen] = useState(false);
@@ -163,7 +162,7 @@ export function BookingFlow({
           .map((a) => (
             <Line
               key={a.id}
-              k={`${a.id === "transport" ? "Shared transport" : a.label}${a.per === "person" ? ` × ${count}` : ""}`}
+              k={`${a.label}${a.per === "person" ? ` × ${count}` : ""}`}
               v={inr(a.per === "person" ? a.price * count : a.price)}
               muted
             />
@@ -474,9 +473,9 @@ export function BookingFlow({
                     className={checkboxCls}
                   />
                   <span className="text-[14.5px] leading-relaxed text-ink-700">
-                    I understand that the trek leader can end my trek on medical grounds, that
-                    the decision is final on the mountain, and that no refund applies once the
-                    trek has started.
+                    I understand that the trek leader can end my trek on medical or safety grounds,
+                    that the decision is final on the mountain, and that cancellations follow the
+                    published cancellation policy.
                   </span>
                 </label>
               </div>

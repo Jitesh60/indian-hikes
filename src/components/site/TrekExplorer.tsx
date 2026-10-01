@@ -263,7 +263,7 @@ export function TrekExplorer({
           <div className="max-w-[640px]">
             <Eyebrow onDark>All treks</Eyebrow>
             <h1 className="mt-3 font-display text-[clamp(2.2rem,5vw,3.8rem)] leading-[1.02]">
-              Fifteen routes, sorted by how high they go
+              Guided Himalayan treks, sorted by how high they go
             </h1>
             <p className="mt-3 max-w-[48ch] text-[15.5px] leading-relaxed text-white/75 sm:text-[16.5px]">
               Grade says how hard. Altitude says what it will do to you. Months say when you can

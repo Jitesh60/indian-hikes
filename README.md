@@ -8,11 +8,12 @@ Company facts (story, founders, stats, promises, testimonials, contact
 details) live in `src/data/brand.ts`, taken from heyhikers.com. Everything the
 site says about the company reads from there.
 
-Treks, departures and bookings are still mock data in `src/data`. There is no
-backend, no payment provider and no database — forms validate and respond, but
-nothing is sent anywhere. Per-trek prices (other than Kedarkantha's ₹7,499),
-ratings, departure dates and slot counts are placeholders to replace with the
-real figures.
+The site lists 20 of HeyHikers' routes (they advertise 47+), with real route
+geography. Treks, departures and bookings are still mock data in `src/data`.
+There is no backend, no payment provider and no database — forms validate and
+respond, but nothing is sent anywhere. Per-trek prices (other than the
+₹7,499 starting price), ratings, departure dates and slot counts are
+placeholders to replace with the real figures.
 
 ## Running it
 
@@ -127,6 +128,5 @@ numbers. The dataset is pinned to a fixed reference date (`TODAY` in
 
 ## Notes
 
-Company copy is from heyhikers.com; testimonials are paraphrased and should be
-replaced with their exact wording. Photography is from Unsplash under the
+Company copy, testimonials and cancellation terms are from heyhikers.com. Photography is from Unsplash under the
 Unsplash License, credited on `/credits`.

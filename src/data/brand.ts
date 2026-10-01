@@ -64,29 +64,45 @@ export const brand = {
     flexible: ["Custom dates", "Your own pace", "Dietary needs", "Pickup points"],
   },
 
-  /**
-   * Trekker testimonials as featured on heyhikers.com.
-   * Paraphrased from the site — replace with the exact wording when updating.
-   */
+  /** Verified trekker testimonials, as published on heyhikers.com. */
   testimonials: [
     {
       name: "Priya Sharma",
-      trek: "Kedarkantha",
+      trek: "Kedarkantha · Dec 2025",
       quote:
-        "The HeyHikers team made me feel safe from the first day to the last. Watching the sunrise from the summit at 12,500 ft is something I'll never forget.",
+        "I'd never camped in snow before. The HeyHikers team made me feel safe every single step. The summit sunrise — standing at 12,500 ft watching peaks turn gold — I cried. From the beauty.",
     },
     {
       name: "Arjun Mehta",
-      trek: "Verified trekker",
+      trek: "Kashmir Great Lakes · Aug 2025",
       quote:
-        "Logistics were flawless and the food at high altitude was genuinely good. Our guide Farooq knew every turn of the trail.",
+        "Seven lakes, each more unreal than the last. The logistics were flawless — the food at 13,000 ft was better than most restaurants I know. Our guide Farooq knew every stone on the trail. Doing Goechala with them next.",
     },
     {
       name: "Sneha & Rohan",
-      trek: "Honeymoon trek",
+      trek: "Hampta Pass · Jul 2025",
       quote:
-        "Trekking for our honeymoon was the best decision we made. The team knew exactly when to give us space and when to keep us company.",
+        "We did this as our honeymoon. Best decision we ever made. Crossing the pass from green to desert felt like entering another planet. The team gave us space when we needed it and company when we wanted it.",
     },
+  ],
+
+  /** Cancellation terms, as published on heyhikers.com. */
+  cancellation: [
+    { when: "30 days or more before departure", back: "Full refund, minus a processing fee", pct: 100 },
+    { when: "15 to 29 days before departure", back: "50% refund", pct: 50 },
+    {
+      when: "Within 14 days of departure",
+      back: "No refund — but you can transfer your booking to another person or another date at no extra charge",
+      pct: 0,
+    },
+  ],
+
+  /** Trek count by region, as listed on heyhikers.com. */
+  regionCounts: [
+    { region: "Uttarakhand", treks: 21 },
+    { region: "Himachal Pradesh", treks: 18 },
+    { region: "Jammu & Kashmir", treks: 4 },
+    { region: "Ladakh", treks: 1 },
   ],
 } as const;
 

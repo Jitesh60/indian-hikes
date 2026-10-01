@@ -90,10 +90,10 @@ export default async function TrekPage({ params }: { params: Promise<{ slug: str
       sub: `${ft2m(trek.maxAltFt).toLocaleString("en-IN")} m · ${topBand.label}`,
       icon: Mountain,
     },
-    { label: "Duration", value: `${trek.days} days`, sub: `${trek.nights} nights on the trail`, icon: CalendarDays },
+    { label: "Duration", value: `${trek.days} days`, sub: `${trek.nights} ${trek.nights === 1 ? "night" : "nights"} on the trail`, icon: CalendarDays },
     { label: "Distance", value: `${trek.trailKm} km`, sub: `From ${trek.basecamp}`, icon: Route },
     { label: "Grade", value: trek.difficulty, sub: trek.firstTimer ? "Fine for a first trek" : "Some experience helps", icon: Gauge, grade: true },
-    { label: "Trek fee", value: inr(trek.price), sub: "Per person, excl. transport", icon: Footprints },
+    { label: "Trek fee", value: inr(trek.price), sub: "Per person, all-inclusive", icon: Footprints },
   ];
 
   return (
@@ -316,7 +316,7 @@ export default async function TrekPage({ params }: { params: Promise<{ slug: str
                   const isPeak = d.day === peakDay.day;
                   const last = i === trek.profile.length - 1;
                   return (
-                    <li key={d.day} className="relative grid grid-cols-[44px_1fr] gap-x-4 pb-7 last:pb-0 sm:gap-x-5">
+                    <li key={`${d.day}-${d.label}`} className="relative grid grid-cols-[44px_1fr] gap-x-4 pb-7 last:pb-0 sm:gap-x-5">
                       {!last && (
                         <span className="absolute bottom-0 left-[21.5px] top-12 w-px bg-mist-300" aria-hidden="true" />
                       )}
@@ -541,7 +541,7 @@ function BookingCard({ trek, deps, openSlots }: { trek: Trek; deps: Departure[];
         </span>
       </div>
       <p className="mt-3 text-[13px] leading-relaxed text-white/55">
-        Plus {inr(2400)} for shared transport from {trek.railhead}, if you want it.
+        {trek.included.find((i) => i.startsWith("Pickup")) ?? "All-inclusive pricing"} — no hidden costs.
       </p>
 
       <dl className="mt-6 rounded-[20px] bg-white/[0.06] px-4 text-[13.5px]">
@@ -566,8 +566,8 @@ function BookingCard({ trek, deps, openSlots }: { trek: Trek; deps: Departure[];
         Choose your dates <ArrowUpRight size={16} aria-hidden="true" />
       </a>
       <p className="mt-4 text-[12.5px] leading-relaxed text-white/50">
-        Free to cancel up to 30 days before departure. After that the refund drops on a
-        published scale.
+        Full refund 30+ days out (minus a processing fee). Inside 14 days, transfer your place to
+        someone else or another date for free.
       </p>
       <BorderBeam size={110} duration={10} colorFrom="#7fb99a" colorTo="#ffd84d" borderWidth={1.5} />
     </div>

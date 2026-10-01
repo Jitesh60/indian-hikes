@@ -8,7 +8,7 @@ import { treks, departures } from "@/data/treks";
 
 export const metadata: Metadata = {
   title: "Departure calendar",
-  description: "Every open departure across all fifteen treks, month by month.",
+  description: "Every open HeyHikers departure, month by month.",
 };
 
 export default function DeparturesPage() {
