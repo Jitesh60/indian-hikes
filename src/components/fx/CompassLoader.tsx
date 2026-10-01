@@ -44,8 +44,8 @@ export function CompassLoader({
 
   const c =
     tone === "dark"
-      ? { ring: "#ff6a2b", ring2: "#ffd84d", tick: "rgba(255,255,255,0.85)", tick2: "#ffb48a", north: "#ff6a2b", north2: "#e5531a", south: "#e9eeee", south2: "#ffffff" }
-      : { ring: "#ff6a2b", ring2: "#ffb48a", tick: "#262d35", tick2: "#e5531a", north: "#ff6a2b", north2: "#e5531a", south: "#3a424c", south2: "#111519" };
+      ? { ring: "#1f6b4a", ring2: "#ffd84d", tick: "rgba(255,255,255,0.85)", tick2: "#b2d6c2", north: "#1f6b4a", north2: "#17563b", south: "#e9eeee", south2: "#ffffff" }
+      : { ring: "#1f6b4a", ring2: "#b2d6c2", tick: "#262d35", tick2: "#17563b", north: "#1f6b4a", north2: "#17563b", south: "#3a424c", south2: "#111519" };
 
   const ticks = (stroke: string) => (
     <g strokeWidth="4" strokeDasharray="12 12" strokeDashoffset="12" strokeLinecap="round" transform="translate(80,80)">

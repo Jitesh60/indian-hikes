@@ -26,7 +26,7 @@ export type Departure = {
   booked: number;
   leader: string;
   status: "open" | "filling" | "full" | "waitlist" | "closed";
-  greenTrails: boolean;
+  womenOnly: boolean;
 };
 
 export type Trek = {
@@ -45,7 +45,7 @@ export type Trek = {
   seasons: Month[];
   rating: number;
   reviews: number;
-  greenTrails: boolean;
+  womenOnly: boolean;
   familyFriendly: boolean;
   firstTimer: boolean;
   snow: boolean;

@@ -28,7 +28,7 @@ const NAV = [
   {
     group: "Programmes",
     items: [
-      { href: "/admin/green-trails", label: "Green Trails", icon: Leaf },
+      { href: "/admin/green-trails", label: "Trail clean-up", icon: Leaf },
       { href: "/admin/stories", label: "Stories", icon: FileText },
       { href: "/admin/settings", label: "Settings", icon: Settings },
     ],
@@ -54,7 +54,7 @@ export function AdminShell({
       <div className="px-5 h-[60px] flex items-center justify-between border-b border-glacier-700/25 shrink-0">
         <Link href="/admin" className="flex items-center gap-2.5 text-snow-50">
           <Mountain className="text-bugyal-400" size={21} strokeWidth={1.75} />
-          <span className="font-display text-[19px] leading-none">Indiahikes</span>
+          <span className="font-display text-[19px] leading-none">HeyHikers</span>
         </Link>
         <button className="lg:hidden text-snow-300" onClick={() => setOpen(false)} aria-label="Close menu">
           <X size={19} />

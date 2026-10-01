@@ -649,6 +649,17 @@ export const photos = {
     user: "ditakesphotos",
     blur: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAGCAIAAABxZ0isAAAAoUlEQVR42gGWAGn/ADM5ODQsLzsJIEwiLlpHSVxWVEpKSB0ZHgBTUktTSkZZQUBoTU14ZWJ6cGtoYl1CPTcAenJmeW5jf21jj3tyoY6GpJSMkIR7aGFVAId8b4d8bo1/cqCPhLKgl7Wkm5+Sh3VuXwB0a2B2bWGAdmqTh36kl5ClmJKOhH1kYFMAQEA7SEdBXFpScW5ofnt5e3h5ZGJjNjg0n4U6KsNI6iMAAAAASUVORK5CYII=",
   },
+  hikerSitting: {
+    id: "gb5VDzCIVbA",
+    src: "https://images.unsplash.com/uploads/141148585662612248462/9dad59df",
+    alt: "A hiker sitting on a rock, looking out over the mountains",
+    tone: "cool",
+    width: 5760,
+    height: 3840,
+    by: "Austin Ban",
+    user: "austinban",
+    blur: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAGCAIAAABxZ0isAAAAoUlEQVR42gGWAGn/AND5/9b7/+H+/+j//+f//97//9L7/8r2/wDH7f/N7//X8v7f9f/e9v/W9f/N8v/H7/8Asc3dts7cv9HaxtPcx9Xhw9fnv9ntvNrvAJqosZ6pr6eqra2rr66tt6uxwKq3yKu8zQCPk5KUk5Cek42iko2fkZKYkpuUl6OVnKkAkpOKmJOJopSGpZGCnYuAjoSCg4KHf4OMSbFsIs7GYTMAAAAASUVORK5CYII=",
+  },
 } satisfies Record<string, PhotoDef>;
 
 export type PhotoKey = keyof typeof photos;
@@ -664,9 +675,9 @@ export const trekPhotos: Record<string, PhotoKey[]> = {
   "kashmir-great-lakes": ["alpineLake", "alpineLake2", "grazing", "lakeTrees"],
   "rupin-pass": ["snowValley", "snowGroup", "valleyBetween", "snowRanges"],
   "buran-ghati": ["snowRanges", "ridgeWalkers", "blueSkyPeak", "snowRange2"],
-  "sandakphu-phalut": ["kanchenjunga", "morningLight", "mistPines", "redPanda"],
+  "bali-pass": ["whitePeak", "snowGroup", "snowValley", "headlamp"],
   "valley-of-flowers": ["flowerMeadow", "uttarakhandValley", "greenClouds", "valley"],
-  goechala: ["whitePeak", "prayerFlags", "snowPeak", "silhouette"],
+  "pin-bhaba-pass": ["barrenRange", "cairn", "snowRange2", "valleyBetween"],
   "tarsar-marsar": ["alpineLake2", "alpineLake", "grazing", "greenMountain"],
   "phulara-ridge": ["windingRoad", "greenClouds", "snowRanges", "aerialGreen"],
   "bhrigu-lake": ["blueSkyPeak", "lakeTrees", "greenMountain", "valley"],

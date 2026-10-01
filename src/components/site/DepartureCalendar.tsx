@@ -2,7 +2,7 @@
 
 import { useMemo, useState, type ReactNode } from "react";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, Leaf, UserRound, X, CalendarX2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Venus, UserRound, X, CalendarX2 } from "lucide-react";
 import { Photo } from "@/components/site/Photo";
 import { Pill } from "@/components/site/ui";
 import { trekCover } from "@/data/photos";
@@ -49,7 +49,7 @@ export function DepartureCalendar({
         if (grade !== "all" && t.difficulty !== grade) return false;
         if (region !== "all" && t.state !== region) return false;
         if (onlyOpen && d.status === "full") return false;
-        if (greenOnly && !d.greenTrails) return false;
+        if (greenOnly && !d.womenOnly) return false;
         return true;
       }),
     [departures, trekMap, grade, region, onlyOpen, greenOnly]
@@ -122,7 +122,7 @@ export function DepartureCalendar({
               Open only
             </Toggle>
             <Toggle on={greenOnly} onClick={() => setGreenOnly((v) => !v)}>
-              <Leaf size={13} /> Green Trails
+              <Venus size={13} /> Women-only
             </Toggle>
           </div>
         </div>
@@ -271,15 +271,15 @@ function DepartureRow({ d, t }: { d: Departure; t: Trek }) {
         <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1">
           <Link
             href={`/treks/${t.slug}`}
-            className="truncate text-[16.5px] font-semibold tracking-[-0.02em] text-ink-900 hover:text-ember-600"
+            className="truncate text-[16.5px] font-semibold tracking-[-0.02em] text-ink-900 hover:text-forest-600"
           >
             {t.name}
           </Link>
           <Pill tone={a.tone}>{a.label}</Pill>
-          {d.greenTrails && (
-            <span className="inline-flex text-pine-600" title="Green Trails departure">
-              <Leaf size={13} />
-              <span className="sr-only">Green Trails departure</span>
+          {d.womenOnly && (
+            <span className="inline-flex text-pine-600" title="Women-only batch">
+              <Venus size={13} />
+              <span className="sr-only">Women-only batch</span>
             </span>
           )}
         </div>
@@ -309,7 +309,7 @@ function DepartureRow({ d, t }: { d: Departure; t: Trek }) {
             "inline-flex shrink-0 items-center justify-center rounded-full px-5 py-2.5 text-[14px] font-medium whitespace-nowrap transition-colors sm:col-span-1",
             full
               ? "border border-ink-900/15 text-ink-900 hover:border-ink-900"
-              : "bg-ember-500 text-white hover:bg-ember-600",
+              : "bg-forest-500 text-white hover:bg-forest-600",
           ].join(" ")}
         >
           {full ? "Join waitlist" : "Book"}

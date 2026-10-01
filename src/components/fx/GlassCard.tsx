@@ -27,7 +27,7 @@ export interface GlassCardProps extends HTMLAttributes<HTMLDivElement> {
 
 export function GlassCard({
   tone = "dark",
-  orbColors = ["#ffd84d", "#ff6a2b"],
+  orbColors = ["#ffd84d", "#1f6b4a"],
   orbSize = 100,
   className,
   innerClassName,

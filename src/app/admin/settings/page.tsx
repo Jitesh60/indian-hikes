@@ -45,8 +45,8 @@ export default function AdminSettingsPage() {
           <Card>
             <h3 className="font-display-tight text-[18px] mb-5">Details</h3>
             <div className="space-y-5">
-              <Row label="Organisation name"><input className={input} defaultValue="Indiahikes" onChange={touch} /></Row>
-              <Row label="Support email"><input className={input} defaultValue="trek@indiahikes.example" onChange={touch} /></Row>
+              <Row label="Organisation name"><input className={input} defaultValue="HeyHikers" onChange={touch} /></Row>
+              <Row label="Support email"><input className={input} defaultValue="teamheyhikers@gmail.com" onChange={touch} /></Row>
               <Row label="Support phone"><input className={input} defaultValue="+91 80 4670 0100" onChange={touch} /></Row>
               <Row label="Registered office">
                 <textarea rows={3} className={input} defaultValue="139, Defence Colony Road, Indiranagar, Bengaluru 560038" onChange={touch} />
@@ -67,7 +67,7 @@ export default function AdminSettingsPage() {
               </Row>
               <Row label="Default group cap"><input className={`${input} nums`} defaultValue="20" onChange={touch} /></Row>
               <Row label="Group cap on Difficult treks"><input className={`${input} nums`} defaultValue="15" onChange={touch} /></Row>
-              <Row label="Green Trails group cap"><input className={`${input} nums`} defaultValue="12" onChange={touch} /></Row>
+              <Row label="Women-only batch cap"><input className={`${input} nums`} defaultValue="12" onChange={touch} /></Row>
             </div>
           </Card>
         </div>
@@ -155,11 +155,10 @@ export default function AdminSettingsPage() {
               </thead>
               <tbody>
                 {[
-                  ["Jitesh Bhatt", "Operations lead", "Everything", "Now"],
-                  ["Arundhati Rane", "Head of trek operations", "Treks, departures, leaders", "2 hours ago"],
-                  ["Pema Bhutia", "Green Trails coordinator", "Green Trails only", "Yesterday"],
-                  ["Ipshita Bose", "Community programmes", "Stories, trekkers", "3 days ago"],
-                  ["Sundar Rawat", "Basecamp manager, Sankri", "Departures at Sankri", "6 hours ago"],
+                  ["Kartik Rawat", "Founder & Owner", "Everything", "Now"],
+                  ["Praveen Chauhan", "Co-Owner & Operations Head", "Everything", "1 hour ago"],
+                  ["Jitesh Bhatt", "Operations lead", "Treks, departures, bookings", "2 hours ago"],
+                  ["Farooq", "Trek guide, Kashmir", "Departures he leads", "Yesterday"],
                 ].map(([n, r, s, a]) => (
                   <tr key={n} className="border-b border-snow-300 last:border-b-0 hover:bg-snow-100 transition-colors">
                     <td className="px-5 py-3 font-semibold">{n}</td>

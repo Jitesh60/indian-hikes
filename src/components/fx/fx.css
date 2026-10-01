@@ -205,7 +205,7 @@
 
 /* ---- Uiverse · ArrowButton (gharsh11032000 / loud-chicken-53) */
 .fx-arrow-btn {
-  --fx-accent: #ff6a2b;
+  --fx-accent: #1f6b4a;
   --fx-on-accent: #111519;
   position: relative;
   isolation: isolate;
@@ -294,7 +294,7 @@
 
 /* ---- Uiverse · CircularTextButton (Creatlydev / fresh-goose-83) */
 .fx-ctb {
-  --fx-ctb-bg: #ff6a2b;
+  --fx-ctb-bg: #1f6b4a;
   --fx-ctb-fg: #ffffff;
   --fx-ctb-hover-bg: #111519;
   --fx-ctb-size: 104px;

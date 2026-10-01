@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowUpRight, CalendarX2, Leaf, UserRound } from "lucide-react";
+import { ArrowUpRight, CalendarX2, Venus, UserRound } from "lucide-react";
 import type { Departure } from "@/lib/types";
 
 const MONTH_LABEL = (iso: string) =>
@@ -102,9 +102,9 @@ export function DepartureList({
                   <span className="inline-flex items-center gap-1">
                     <UserRound size={12} aria-hidden="true" /> Led by {d.leader}
                   </span>
-                  {d.greenTrails && (
+                  {d.womenOnly && (
                     <span className="inline-flex items-center gap-1 rounded-full bg-pine-500/12 px-2 py-0.5 font-medium text-pine-600">
-                      <Leaf size={11} aria-hidden="true" /> Green Trails
+                      <Venus size={11} aria-hidden="true" /> Women-only
                     </span>
                   )}
                 </p>
@@ -145,7 +145,7 @@ export function DepartureList({
                 ) : (
                   <Link
                     href={`/treks/${slug}/book?d=${d.id}`}
-                    className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-ember-500 px-4 py-2.5 text-[14px] font-medium text-white shadow-[0_8px_20px_-8px_rgb(255_106_43/0.6)] transition-colors hover:bg-ember-600"
+                    className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-forest-500 px-4 py-2.5 text-[14px] font-medium text-white shadow-[0_8px_20px_-8px_rgb(255_106_43/0.6)] transition-colors hover:bg-forest-600"
                   >
                     Book
                     <span className="nums hidden sm:inline">· ₹{price.toLocaleString("en-IN")}</span>

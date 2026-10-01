@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { ArrowDown, Check } from "lucide-react";
+import Link from "next/link";
+import { ArrowDown, ArrowUpRight, Check, MessageCircle } from "lucide-react";
 import { InfoShell, Panel, Prose, H2, Stat } from "@/components/site/InfoShell";
 import { Reveal } from "@/components/site/motion";
 import { Photo } from "@/components/site/Photo";
 import { Button, Pill } from "@/components/site/ui";
 import type { PhotoKey } from "@/data/photos";
-import { inr } from "@/lib/types";
+import { brand, whatsappHref } from "@/data/brand";
 
 export const metadata: Metadata = {
   title: "What to carry",
@@ -62,37 +63,30 @@ const KIT: {
   },
 ];
 
-const RENTALS: [string, number][] = [
-  ["Insulation jacket", 600],
-  ["Rucksack, 55 litre", 450],
-  ["Trekking poles, pair", 250],
-];
-const BUNDLE = 1200;
-
 export default function GearPage() {
   return (
     <InfoShell
       photo="gearFlatlay"
       eyebrow="What to carry"
       title="Nine kilos, and most of it is not clothes"
-      intro="A properly packed rucksack for a six-day winter trek weighs about nine kilograms with water in it. Most people arrive with twelve. Here is what actually earns its place."
+      intro="A well-packed rucksack for a six-day winter trek weighs about nine kilograms with water in it. It is easy to carry more than you need. Here is what actually earns its place."
     >
       <Panel>
         <div className="grid gap-x-14 gap-y-8 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,0.7fr)] lg:items-center">
           <Prose>
             <p>
-              The list below is what we send everyone who books. What is marked{" "}
-              <Pill tone="gold">Rent</Pill> is worth renting from us rather than buying — a
-              down jacket you will use once every two years is not a good purchase, and ours
-              are cleaned and re-rated every season.
+              This is our packing guidance for a Himalayan trek. Anything marked{" "}
+              <Pill tone="gold">Rent</Pill> is usually worth renting rather than buying — a
+              down jacket you will use once every two years is not a good purchase. Ask us
+              about rental options for your trek when you book.
             </p>
           </Prose>
           <div className="grid grid-cols-2 gap-3">
             <div className="rounded-[22px] bg-ink-900 p-5">
-              <Stat value="9 kg" label="Packed properly" onDark />
+              <Stat value="9 kg" label="Packed well" onDark />
             </div>
             <div className="rounded-[22px] bg-mist-100 p-5">
-              <Stat value="12 kg" label="What most bring" />
+              <Stat value="50–60 L" label="Rucksack size" />
             </div>
           </div>
         </div>
@@ -152,32 +146,50 @@ export default function GearPage() {
         </Panel>
       ))}
 
-      {/* Rental promo, MountEquip style */}
+      {/* Help strip, MountEquip style */}
       <Panel tone="ice">
-        <div className="grid gap-x-14 gap-y-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center">
+        <div className="grid gap-x-14 gap-y-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-center">
           <div>
-            <H2 eyebrow="Rental prices" intro="Collected at basecamp on day one, returned on the last day. Nothing to carry up from the city.">
-              Rent the heavy things{" "}
-              <span className="brush mt-2 inline-block whitespace-nowrap">at basecamp</span>
+            <H2
+              eyebrow="Not sure what to bring?"
+              intro={`Every trek is a little different. Tell us which one you are doing and we will help you pack for it. ${brand.contact.responseTime}`}
+            >
+              Ask us before you{" "}
+              <span className="brush mt-2 inline-block whitespace-nowrap">buy anything</span>
             </H2>
           </div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-2">
-            {RENTALS.map(([n, p]) => (
-              <div key={n} className="rounded-[22px] bg-white p-5 shadow-soft">
-                <p className="nums font-display text-[26px] leading-none text-ink-900">{inr(p)}</p>
-                <p className="mt-2.5 text-[14px] leading-snug text-ink-600">{n}</p>
-                <p className="mt-1 text-[12.5px] text-ink-400">For the whole trek</p>
-              </div>
-            ))}
-            <div className="rounded-[22px] bg-ink-900 p-5">
-              <p className="nums font-display text-[26px] leading-none text-white">{inr(BUNDLE)}</p>
-              <p className="mt-2.5 text-[14px] leading-snug text-white/80">Full bundle</p>
-              <p className="mt-1 text-[12.5px] text-white/50">For the whole trek</p>
-            </div>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+            <a
+              href={whatsappHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-4 rounded-[22px] bg-ink-900 p-5 text-white transition-colors hover:bg-ink-700"
+            >
+              <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-forest-500">
+                <MessageCircle size={18} />
+              </span>
+              <span className="min-w-0">
+                <span className="block text-[16px] font-semibold">Chat on WhatsApp</span>
+                <span className="block text-[13px] text-white/60">Send us your trek and dates</span>
+              </span>
+              <span className="sr-only">(opens in a new tab)</span>
+            </a>
+            <Link
+              href="/stories/what-actually-goes-in-the-backpack"
+              className="flex items-center gap-4 rounded-[22px] bg-white p-5 shadow-soft transition-colors hover:bg-mist-50"
+            >
+              <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-ice-100 text-ink-900">
+                <ArrowUpRight size={18} />
+              </span>
+              <span className="min-w-0">
+                <span className="block text-[16px] font-semibold text-ink-900">What goes in the backpack</span>
+                <span className="block text-[13px] text-ink-500">Our packing guide, by weight</span>
+              </span>
+            </Link>
           </div>
         </div>
         <div className="mt-8">
-          <Button href="/treks">Pick a trek, then add rentals</Button>
+          <Button href="/treks">Pick a trek</Button>
         </div>
       </Panel>
     </InfoShell>

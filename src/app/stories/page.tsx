@@ -9,10 +9,11 @@ import { Avatar, Eyebrow } from "@/components/site/ui";
 import { StoryCard, storyDate, storyPhoto } from "@/components/site/content/stories";
 import { stories } from "@/data/stories";
 import { treks } from "@/data/treks";
+import { brand } from "@/data/brand";
 
 export const metadata: Metadata = {
   title: "Stories",
-  description: "Field notes from trek leaders and accounts from trekkers.",
+  description: `Planning guides, fitness plans and field notes from the ${brand.name} team.`,
 };
 
 export default function StoriesPage() {
@@ -30,12 +31,12 @@ export default function StoriesPage() {
                 <Eyebrow>Stories and field notes</Eyebrow>
               </div>
               <h1 className="font-display text-[clamp(2.4rem,6vw,4.4rem)] leading-[1.0] text-ink-900">
-                What we learned, written down
+                What we know, written down
               </h1>
             </div>
             <p className="max-w-[52ch] text-[16.5px] leading-relaxed text-ink-500 sm:text-[17px] lg:justify-self-end">
-              Leaders write up what happened on a trek when they get back down. Some of it is
-              useful to anyone going up next. That is what this is.
+              When to go, how to train, what to pack and how altitude works — guidance from
+              the {brand.name} team for anyone heading up next.
             </p>
           </header>
 
@@ -78,7 +79,7 @@ export default function StoriesPage() {
                     </p>
                   </div>
                 </div>
-                <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-ink-900 transition-colors group-hover:bg-ember-500 group-hover:text-white">
+                <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-ink-900 transition-colors group-hover:bg-forest-500 group-hover:text-white">
                   <ArrowUpRight size={18} />
                   <span className="sr-only">Read the story</span>
                 </span>

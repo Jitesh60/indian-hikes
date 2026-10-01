@@ -3,7 +3,7 @@
 import { useState, type ReactNode } from "react";
 import Link from "next/link";
 import {
-  ArrowUpRight, Check, Download, Leaf, Mountain, Route, CalendarDays, Gauge, Upload, Heart, FileText,
+  ArrowUpRight, Check, Download, Venus, Mountain, Route, CalendarDays, Gauge, Upload, Heart, FileText,
 } from "lucide-react";
 import { AltitudeProfile } from "@/components/viz/AltitudeProfile";
 import { Photo } from "@/components/site/Photo";
@@ -117,9 +117,9 @@ export function AccountDashboard({
                 <Pill tone="glass">
                   <Check size={12} /> Confirmed
                 </Pill>
-                {next.departure.greenTrails && (
+                {next.departure.womenOnly && (
                   <Pill tone="glass">
-                    <Leaf size={12} /> Green Trails
+                    <Venus size={12} /> Women-only
                   </Pill>
                 )}
               </div>
@@ -174,7 +174,7 @@ export function AccountDashboard({
                 {next.trek.fitnessTarget}
               </p>
             </div>
-            <span className="nums inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2 border-ember-500 text-[15px] font-semibold">
+            <span className="nums inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2 border-forest-500 text-[15px] font-semibold">
               82%
             </span>
           </div>
@@ -185,7 +185,7 @@ export function AccountDashboard({
               <span className="nums text-white">5 km · 42:00</span>
             </div>
             <div className="mt-2 h-2 overflow-hidden rounded-full bg-white/10" aria-hidden="true">
-              <div className="h-full rounded-full bg-ember-500" style={{ width: "82%" }} />
+              <div className="h-full rounded-full bg-forest-500" style={{ width: "82%" }} />
             </div>
           </div>
 
@@ -202,7 +202,7 @@ export function AccountDashboard({
                   <li key={d} className="flex h-full flex-1 flex-col items-center justify-end gap-1.5">
                     <span className={`nums text-[11px] ${latest ? "text-white" : "text-white/55"}`}>{pace}</span>
                     <span
-                      className={`w-full rounded-lg ${latest ? "bg-ember-500" : "bg-white/15"}`}
+                      className={`w-full rounded-lg ${latest ? "bg-forest-500" : "bg-white/15"}`}
                       style={{ height: `${h}%` }}
                       title={`${d}: ${km.toFixed(1)} km at ${pace} per km`}
                     />
@@ -219,7 +219,7 @@ export function AccountDashboard({
           </p>
           <Link
             href="/fitness"
-            className="mt-4 inline-flex items-center gap-1.5 self-start text-[13.5px] font-medium text-white hover:text-ember-300"
+            className="mt-4 inline-flex items-center gap-1.5 self-start text-[13.5px] font-medium text-white hover:text-forest-300"
           >
             How to train for altitude <ArrowUpRight size={14} />
           </Link>
@@ -377,7 +377,7 @@ export function AccountDashboard({
               <div className="min-w-0">
                 <Link
                   href={`/treks/${trek.slug}`}
-                  className="text-[16px] font-semibold tracking-[-0.01em] text-ink-900 hover:text-ember-600"
+                  className="text-[16px] font-semibold tracking-[-0.01em] text-ink-900 hover:text-forest-600"
                 >
                   {trek.name}
                 </Link>
@@ -385,9 +385,9 @@ export function AccountDashboard({
                   {fmt(departure.start, { day: "numeric", month: "short", year: "numeric" })}
                   {" · "}
                   {trek.days} days · {departure.leader}
-                  {departure.greenTrails && (
+                  {departure.womenOnly && (
                     <span className="ml-2 inline-flex items-center gap-1 text-pine-600">
-                      <Leaf size={11} /> Green Trails
+                      <Venus size={11} /> Women-only
                     </span>
                   )}
                 </p>
@@ -408,7 +408,7 @@ export function AccountDashboard({
               className="flex items-center justify-between gap-4 border-b border-mist-200 py-3 last:border-b-0"
             >
               <div className="min-w-0">
-                <Link href={`/treks/${p.trek.slug}`} className="text-[15px] font-medium text-ink-900 hover:text-ember-600">
+                <Link href={`/treks/${p.trek.slug}`} className="text-[15px] font-medium text-ink-900 hover:text-forest-600">
                   {p.trek.name}
                 </Link>
                 <p className="nums mt-0.5 text-[12.5px] text-ink-400">

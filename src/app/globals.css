@@ -59,7 +59,7 @@
   --color-ink-500: #5a6470;
   --color-ink-400: #87909a;
 
-  /* ember: the glow of a lit tent — the single warm accent */
+  /* ember: warnings only — hard grades, last few slots, full departures */
   --color-ember-300: #ffb48a;
   --color-ember-400: #ff8a52;
   --color-ember-500: #ff6a2b;
@@ -75,13 +75,25 @@
   --color-ice-200: #cbe4f1;
   --color-ice-500: #5a9fc4;
 
-  /* pine: Green Trails */
+  /* forest: the brand green — buttons, active states, highlights */
+  --color-forest-50: #eef6f1;
+  --color-forest-100: #d8ebe0;
+  --color-forest-200: #b2d6c2;
+  --color-forest-300: #7fb99a;
+  --color-forest-400: #3f8f68;
+  --color-forest-500: #1f6b4a;
+  --color-forest-600: #17563b;
+  --color-forest-700: #11432e;
+
+  /* pine: nature accents */
   --color-pine-500: #3c8a63;
   --color-pine-600: #2c6b4c;
 
   --font-display: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-serif: var(--font-instrument-serif), ui-serif, Georgia, serif;
+  --font-hand: var(--font-caveat), "Segoe Print", cursive;
 
   --radius-card: 20px;
   --radius-bento: 28px;
@@ -144,12 +156,12 @@ body {
 /* Focus that is always visible, on both paper and dark panels. */
 :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
   /* outline follows each element's own radius, so pills stay pills */
-  outline: 2px solid var(--color-ember-500);
+  outline: 2px solid var(--color-forest-500);
   outline-offset: 2px;
 }
 
 .on-dark :where(a, button, input, select, textarea, summary):focus-visible {
-  outline-color: var(--color-ember-400);
+  outline-color: var(--color-forest-400);
 }
 
 /* Contour hatching used behind dark panels — drawn, not a gradient wash. */
@@ -257,13 +269,13 @@ input[type="range"]::-webkit-slider-thumb {
   margin-top: -6.5px;
   border-radius: 99px;
   background: var(--color-ink-900);
-  border: 3px solid var(--color-ember-500);
+  border: 3px solid var(--color-forest-500);
   cursor: pointer;
 }
 input[type="range"]::-moz-range-thumb {
   height: 16px;
   width: 16px;
-  border: 3px solid var(--color-ember-500);
+  border: 3px solid var(--color-forest-500);
   border-radius: 99px;
   background: var(--color-ink-900);
   cursor: pointer;
@@ -349,4 +361,14 @@ input[type="range"]::-moz-range-thumb {
 .font-mono-nums {
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
+}
+
+/* Editorial serif for section titles and the accent word in the hero. */
+.font-serif {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+.font-hand {
+  font-family: var(--font-hand);
 }

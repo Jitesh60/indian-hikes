@@ -1,8 +1,8 @@
 import { ft2m, type ProfilePoint } from "@/lib/types";
 
-/** The single warm accent (ember-500 / ember-600 in globals.css). */
-const EMBER = "#ff6a2b";
-const EMBER_DEEP = "#e5531a";
+/** The single warm accent (forest-500 / forest-600 in globals.css). */
+const EMBER = "#1f6b4a";
+const EMBER_DEEP = "#17563b";
 
 /**
  * The day-by-day altitude profile of a trek, drawn from real numbers.

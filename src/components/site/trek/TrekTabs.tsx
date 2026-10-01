@@ -85,7 +85,7 @@ export function TrekTabs({
       {cta && (
         <a
           href={cta.href}
-          className="ml-1 hidden shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full bg-ember-500 px-4 py-2 text-[14px] font-medium text-white transition-colors hover:bg-ember-600 sm:inline-flex"
+          className="ml-1 hidden shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full bg-forest-500 px-4 py-2 text-[14px] font-medium text-white transition-colors hover:bg-forest-600 sm:inline-flex"
         >
           {cta.label} <ArrowUpRight size={15} aria-hidden="true" />
         </a>

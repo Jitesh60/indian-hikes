@@ -31,7 +31,7 @@ export type ShimmerButtonProps =
 
 export function ShimmerButton(allProps: ShimmerButtonProps) {
   const {
-    shimmerColor = "#ffb48a",
+    shimmerColor = "#b2d6c2",
     shimmerSize = "0.06em",
     shimmerDuration = "3s",
     borderRadius = "100px",

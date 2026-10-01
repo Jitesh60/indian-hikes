@@ -1,13 +1,14 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useId, useState, type ReactNode } from "react";
 import { Plus } from "lucide-react";
 
-export type FaqGroup = { group: string; qs: [string, string][] };
+/** A question and its answer; answers may hold inline links. */
+export type FaqGroup = { group: string; qs: { q: string; a: ReactNode }[] };
 
 /** Grouped questions as rounded accordion cards; one answer open at a time. */
 export function FaqAccordion({ groups }: { groups: FaqGroup[] }) {
-  const [open, setOpen] = useState<string | null>(groups[0]?.qs[0]?.[0] ?? null);
+  const [open, setOpen] = useState<string | null>(groups[0]?.qs[0]?.q ?? null);
   const base = useId();
 
   return (
@@ -21,7 +22,7 @@ export function FaqAccordion({ groups }: { groups: FaqGroup[] }) {
             <span className="nums shrink-0 text-[13px] text-ink-400">{g.qs.length} questions</span>
           </div>
           <div className="grid gap-2.5">
-            {g.qs.map(([q, a], qi) => {
+            {g.qs.map(({ q, a }, qi) => {
               const on = open === q;
               const id = `${base}-${gi}-${qi}`;
               return (
@@ -43,7 +44,7 @@ export function FaqAccordion({ groups }: { groups: FaqGroup[] }) {
                       <span className="text-[16.5px] font-semibold leading-snug text-ink-900 sm:text-[17.5px]">{q}</span>
                       <span
                         className={`inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-all duration-300 ${
-                          on ? "rotate-45 bg-ember-500 text-white" : "bg-mist-100 text-ink-900"
+                          on ? "rotate-45 bg-forest-500 text-white" : "bg-mist-100 text-ink-900"
                         }`}
                         aria-hidden="true"
                       >
@@ -58,7 +59,9 @@ export function FaqAccordion({ groups }: { groups: FaqGroup[] }) {
                     hidden={!on}
                     className="px-5 pb-6 sm:px-6"
                   >
-                    <p className="max-w-[64ch] text-[16px] leading-[1.7] text-ink-600">{a}</p>
+                    <p className="max-w-[64ch] text-[16px] leading-[1.7] text-ink-600 [&_a]:font-medium [&_a]:text-ink-900 [&_a]:underline [&_a]:decoration-forest-500 [&_a]:decoration-2 [&_a]:underline-offset-4 hover:[&_a]:text-forest-600">
+                      {a}
+                    </p>
                   </div>
                 </div>
               );

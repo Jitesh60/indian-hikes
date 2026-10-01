@@ -29,7 +29,7 @@ export function Photo({
   position?: string;
   sizes?: string;
 }) {
-  const def = photos[name];
+  const def = photos[name] as (typeof photos)[PhotoKey] | undefined;
   const ref = useRef<HTMLImageElement>(null);
   const [loaded, setLoaded] = useState(false);
 
@@ -38,6 +38,11 @@ export function Photo({
     const img = ref.current;
     if (img?.complete && img.naturalWidth > 0) setLoaded(true);
   }, []);
+
+  if (!def) {
+    if (process.env.NODE_ENV !== "production") console.warn(`<Photo>: unknown photo "${String(name)}"`);
+    return <div className={`absolute inset-0 bg-mist-200 ${className}`} aria-hidden="true" />;
+  }
 
   const w = Math.min(width, 2400);
   const srcSet = [0.5, 1, 1.5]

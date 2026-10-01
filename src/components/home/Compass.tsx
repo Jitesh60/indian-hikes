@@ -44,7 +44,7 @@ export function Compass({ bearing = 39, size = 190 }: { bearing?: number; size?:
             textAnchor="middle"
             fontSize="12"
             fontWeight="600"
-            fill={l === "N" ? "#ff8a52" : "rgb(255 255 255 / 0.8)"}
+            fill={l === "N" ? "#7fb99a" : "rgb(255 255 255 / 0.8)"}
           >
             {l}
           </text>
@@ -60,7 +60,7 @@ export function Compass({ bearing = 39, size = 190 }: { bearing?: number; size?:
         viewport={{ once: true }}
         transition={{ duration: 2.4, ease: "easeOut" }}
       >
-        <path d="M100 38 L105 100 L100 106 L95 100 Z" fill="#ff8a52" />
+        <path d="M100 38 L105 100 L100 106 L95 100 Z" fill="#7fb99a" />
         <path d="M100 162 L105 100 L100 94 L95 100 Z" fill="rgb(255 255 255 / 0.35)" />
         <circle cx="100" cy="100" r="4" fill="#fff" />
         <circle cx="100" cy="30" r="3.5" fill="#ffd84d" />

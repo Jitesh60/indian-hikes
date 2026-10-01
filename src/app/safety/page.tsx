@@ -1,53 +1,113 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Activity, Gauge, ArrowDown } from "lucide-react";
-import { InfoShell, Panel, Prose, H2, StepNo } from "@/components/site/InfoShell";
+import { InfoShell, Panel, Prose, H2, Stat, StepNo } from "@/components/site/InfoShell";
 import { Reveal } from "@/components/site/motion";
+import { CountUp } from "@/components/fx";
+import { brand } from "@/data/brand";
 
 export const metadata: Metadata = {
   title: "Safety and altitude",
-  description: "The altitude protocol every trek leader carries, written out in full.",
+  description: `How ${brand.name} keeps trekkers safe at altitude — certified leaders, small groups and 24×7 support.`,
 };
 
+const { stats } = brand;
+
+/** General altitude-sickness guidance — the signs every trekker should know. */
 const BANDS = [
-  { range: "Above 85%", title: "Normal at altitude", action: "Carry on as planned", icon: Activity, cls: "bg-pine-500/10", dot: "bg-pine-500", text: "text-pine-600" },
-  { range: "80 – 85%", title: "Watch closely", action: "No further ascent that day; rechecked hourly", icon: Gauge, cls: "bg-sun-400/25", dot: "bg-sun-400", text: "text-ink-800" },
-  { range: "Below 80%", title: "Descend", action: "Leader takes you down with two staff, immediately", icon: ArrowDown, cls: "bg-ember-500/10", dot: "bg-ember-500", text: "text-ember-600" },
+  {
+    stage: "Mild",
+    title: "Headache, poor appetite, bad sleep",
+    action: "Rest, drink water, and do not go higher until it eases. Tell your leader.",
+    icon: Activity,
+    cls: "bg-pine-500/10",
+    dot: "bg-pine-500",
+    text: "text-pine-600",
+  },
+  {
+    stage: "Not improving",
+    title: "Symptoms that stay or get worse with rest",
+    action: "No further ascent. Your leader decides whether you wait it out or head down.",
+    icon: Gauge,
+    cls: "bg-sun-400/25",
+    dot: "bg-sun-400",
+    text: "text-ink-800",
+  },
+  {
+    stage: "Serious",
+    title: "Confusion, unsteady walking, breathless at rest",
+    action: "Descend straight away. Going down is the treatment that works.",
+    icon: ArrowDown,
+    cls: "bg-forest-500/10",
+    dot: "bg-forest-500",
+    text: "text-forest-600",
+  },
 ];
 
-const KIT = [
-  ["Bottled oxygen", "Two cylinders on routes above 11,000 ft, three above 14,000 ft."],
-  ["A portable altitude chamber", "A pressure bag that simulates a 5,000 ft descent without moving anyone."],
-  ["A stocked medical kit", "Including dexamethasone and nifedipine, and a leader trained to use them."],
-  ["Satellite communication", "On every route where mobile signal is absent for more than a day."],
-  ["A written descent plan", "Per campsite, with the fastest route down and how long it takes at night."],
-  ["A named driver on call", "At each basecamp, for the length of every departure."],
+const [, praveen] = brand.founders;
+
+const PROMISES: [string, string][] = [
+  ["Certified trek leaders", "Every group is led by trained, certified leaders who know the route personally."],
+  ["Small groups", "Batches stay small, so leaders can watch every trekker, every day."],
+  ["24×7 support", "Caring on-trail support, and someone at the end of the phone around the clock."],
+  ["Routes we know", "We have personally walked every route we offer before we lead anyone on it."],
+  [
+    "Safety has an owner",
+    `${praveen.name}, our ${praveen.role.toLowerCase()}, oversees trek quality and safety protocols himself.`,
+  ],
+  ["Gradual itineraries", "Treks are paced to give your body time to adjust to altitude, not to rush a summit."],
 ];
 
-const CALLS = ["Whether a pass is crossed", "Whether a summit attempt goes ahead", "Whether an individual descends on medical grounds"];
+const CALLS = ["Whether a pass is crossed", "Whether a summit attempt goes ahead", "Whether someone needs to descend"];
 
 export default function SafetyPage() {
   return (
     <InfoShell
       photo="snowTrekkers"
       eyebrow="Safety and altitude"
-      title="What happens when something goes wrong"
-      intro="Most treks finish without incident. The ones that do not are the reason this protocol exists, and the reason we publish it rather than keep it internal."
+      title="Safe treks are the whole point"
+      intro={`We have led more than ${stats.trekkers.toLocaleString("en-IN")} trekkers with zero serious incidents in ${stats.years} years. Here is how we think about altitude, weather and turning around — in plain words.`}
     >
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-5">
+        {[
+          { v: <CountUp to={stats.trekkers} suffix="+" />, l: "Trekkers led safely", dark: true },
+          { v: "Zero", l: `Serious incidents in ${stats.years} years` },
+          { v: "24×7", l: "Support while you are on the trail" },
+        ].map((s, i) => (
+          <Reveal key={s.l} delay={i * 0.06} className="h-full">
+            <div
+              className={`h-full rounded-bento p-5 sm:p-7 ${
+                s.dark ? "bg-ink-900" : i === 1 ? "bg-ice-100" : "bg-white shadow-soft"
+              }`}
+            >
+              <Stat value={s.v} label={s.l} onDark={s.dark} />
+            </div>
+          </Reveal>
+        ))}
+      </div>
+
       <Panel>
         <div className="grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
           <div>
-            <H2 eyebrow="The daily check">Twice a day, every trekker</H2>
+            <H2 eyebrow="Altitude">Know the signs, say something early</H2>
             <Prose>
               <p>
-                Blood oxygen saturation and resting pulse are recorded every morning before you
-                leave camp and every evening after you arrive. The numbers go into the trek log
-                against your name and the campsite, and the log comes down with the leader.
+                Altitude sickness has very little to do with how fit you are. It depends on how
+                quickly you go up and how your body adjusts on the way — which is why our
+                itineraries climb gradually and our leaders check in with every trekker through
+                the day.
               </p>
               <p>
-                We are not looking at any single reading. We are looking at the trend. A
-                saturation of 78 on the evening of a hard climbing day is expected. The same
-                number the next morning, after a night of rest, is not — and that is when a
-                trek ends.
+                What matters most is that you speak up. A headache on its own is ordinary; a
+                headache with no appetite and a bad night, at altitude, is a signal. The earlier
+                your leader knows, the simpler the fix. Read more in{" "}
+                <Link
+                  href="/stories/what-12000-feet-does-to-you"
+                  className="font-medium text-ink-900 underline decoration-forest-500 decoration-2 underline-offset-4 hover:text-forest-600"
+                >
+                  what 12,000 feet does to you
+                </Link>
+                .
               </p>
             </Prose>
           </div>
@@ -55,7 +115,7 @@ export default function SafetyPage() {
             {BANDS.map((b, i) => {
               const Icon = b.icon;
               return (
-                <Reveal key={b.range} delay={i * 0.08}>
+                <Reveal key={b.stage} delay={i * 0.08}>
                   <div className={`flex items-start gap-4 rounded-[22px] p-5 sm:p-6 ${b.cls}`}>
                     <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-ink-900">
                       <Icon size={18} />
@@ -63,10 +123,10 @@ export default function SafetyPage() {
                     <div className="min-w-0">
                       <p className={`text-[13px] font-medium ${b.text}`}>
                         <span className={`mr-2 inline-block h-2 w-2 rounded-full ${b.dot}`} aria-hidden="true" />
-                        {b.title}
+                        {b.stage}
                       </p>
-                      <p className="nums font-display mt-1.5 text-[clamp(1.7rem,3vw,2.2rem)] leading-none text-ink-900">
-                        {b.range}
+                      <p className="mt-1.5 text-[19px] font-semibold leading-snug tracking-[-0.02em] text-ink-900">
+                        {b.title}
                       </p>
                       <p className="mt-2 text-[14.5px] leading-snug text-ink-600">{b.action}</p>
                     </div>
@@ -74,17 +134,19 @@ export default function SafetyPage() {
                 </Reveal>
               );
             })}
-            <p className="px-1 text-[12.5px] text-ink-400">Resting SpO₂, read on a pulse oximeter.</p>
+            <p className="px-1 text-[12.5px] text-ink-400">General guidance, not medical advice. Your leader&rsquo;s call on the day comes first.</p>
           </div>
         </div>
       </Panel>
 
       <Panel tone="none">
         <div className="px-1 pt-6 sm:px-2 sm:pt-10">
-          <H2 eyebrow="On every departure">What every trek carries</H2>
+          <H2 eyebrow="On every trek" intro={brand.promise}>
+            What keeps you safe
+          </H2>
         </div>
         <div className="grid gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
-          {KIT.map(([h, b], i) => (
+          {PROMISES.map(([h, b], i) => (
             <Reveal key={h} delay={(i % 3) * 0.07} className="h-full">
               <div className="flex h-full flex-col rounded-bento bg-white p-6 shadow-soft sm:p-7">
                 <StepNo n={i + 1} tone={i === 0 ? "ember" : "dark"} />
@@ -100,19 +162,17 @@ export default function SafetyPage() {
         <div className="grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
           <div>
             <H2 eyebrow="Leader's call" onDark>
-              The decisions that are not yours
+              The decisions that are the leader&rsquo;s
             </H2>
             <Prose onDark>
               <p>
-                Three calls belong to the trek leader and cannot be overridden by a trekker,
-                by a group, or by the office: whether a pass is crossed, whether a summit
-                attempt goes ahead, and whether an individual descends on medical grounds.
+                On the mountain, safety calls belong to the trek leader: whether a pass is
+                crossed, whether a summit attempt goes ahead, and whether someone needs to
+                descend. Weather and altitude do not negotiate, and neither can we.
               </p>
               <p>
-                This is written into what you agree to when you book, and it is the single
-                most important line in that agreement. A leader who sends you down on day four
-                of a six-day trek is doing their job, and no refund is due — which is why we
-                say it here rather than at basecamp.
+                A leader who turns a group around is doing their job well. We would always rather
+                bring you back another season than push on in conditions that are not right.
               </p>
             </Prose>
           </div>
@@ -123,12 +183,11 @@ export default function SafetyPage() {
                 <p className="text-[16px] font-medium leading-snug text-white">{c}</p>
               </div>
             ))}
-            <div className="mt-2 rounded-[22px] bg-ember-500 p-5 sm:p-6">
-              <p className="text-[13px] font-medium text-white/80">What is yours</p>
+            <div className="mt-2 rounded-[22px] bg-forest-500 p-5 sm:p-6">
+              <p className="text-[13px] font-medium text-white/85">What is yours</p>
               <p className="mt-2 text-[16px] leading-relaxed text-white">
-                You can turn back at any point, for any reason, and a member of staff will come
-                with you. Nobody is ever left to descend alone, and nobody is asked to explain
-                themselves.
+                You can choose to turn back at any point, for any reason. Tell your leader, and
+                we will make sure you get down safely — nobody is asked to explain themselves.
               </p>
             </div>
           </div>

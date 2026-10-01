@@ -201,7 +201,7 @@ export function StepNo({ n, tone = "dark" }: { n: number; tone?: "dark" | "light
   const tones = {
     dark: "bg-ink-900 text-white",
     light: "bg-white text-ink-900",
-    ember: "bg-ember-500 text-white",
+    ember: "bg-forest-500 text-white",
     pine: "bg-pine-500 text-white",
   };
   return (

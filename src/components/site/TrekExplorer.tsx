@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { BlurFade } from "@/components/fx";
 import {
   LayoutGrid,
-  Leaf,
+  Venus,
   Rows3,
   Search,
   SlidersHorizontal,
@@ -92,7 +92,7 @@ export function TrekExplorer({
       if (t.days > maxDays) return false;
       if (snow && !t.snow) return false;
       if (family && !t.familyFriendly) return false;
-      if (green && !t.greenTrails) return false;
+      if (green && !t.womenOnly) return false;
       if (firstTimer && !t.firstTimer) return false;
       return true;
     });
@@ -134,7 +134,7 @@ export function TrekExplorer({
     ...(firstTimer ? [{ label: "First trek", clear: () => setFirstTimer(false) }] : []),
     ...(snow ? [{ label: "Snow", clear: () => setSnow(false) }] : []),
     ...(family ? [{ label: "With children", clear: () => setFamily(false) }] : []),
-    ...(green ? [{ label: "Green Trails", clear: () => setGreen(false) }] : []),
+    ...(green ? [{ label: "Women-only", clear: () => setGreen(false) }] : []),
   ];
 
   const filters = (
@@ -243,8 +243,8 @@ export function TrekExplorer({
           <Toggle on={family} onClick={() => setFamily(!family)} count={treks.filter((t) => t.familyFriendly).length}>
             <Users size={13} aria-hidden="true" /> Going with children
           </Toggle>
-          <Toggle on={green} onClick={() => setGreen(!green)} count={treks.filter((t) => t.greenTrails).length}>
-            <Leaf size={13} aria-hidden="true" /> Green Trails departures
+          <Toggle on={green} onClick={() => setGreen(!green)} count={treks.filter((t) => t.womenOnly).length}>
+            <Venus size={13} aria-hidden="true" /> Women-only batches
           </Toggle>
         </div>
       </FilterBlock>
@@ -298,7 +298,7 @@ export function TrekExplorer({
                 <button
                   type="button"
                   onClick={clearAll}
-                  className="rounded-full bg-ember-500/10 px-3 py-1 text-[12.5px] font-medium text-ember-600 transition-colors hover:bg-ember-500/20"
+                  className="rounded-full bg-forest-500/10 px-3 py-1 text-[12.5px] font-medium text-forest-600 transition-colors hover:bg-forest-500/20"
                 >
                   Clear {activeCount}
                 </button>
@@ -331,7 +331,7 @@ export function TrekExplorer({
               <SlidersHorizontal size={15} aria-hidden="true" />
               Filters
               {activeCount > 0 && (
-                <span className="nums inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-ember-500 px-1.5 text-[11.5px]">
+                <span className="nums inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-forest-500 px-1.5 text-[11.5px]">
                   {activeCount}
                 </span>
               )}
@@ -415,7 +415,7 @@ export function TrekExplorer({
               <button
                 type="button"
                 onClick={clearAll}
-                className="text-[12.5px] font-medium text-ember-600 hover:underline"
+                className="text-[12.5px] font-medium text-forest-600 hover:underline"
               >
                 Clear all
               </button>

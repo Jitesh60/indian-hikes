@@ -11,6 +11,7 @@ import { Avatar, Button } from "@/components/site/ui";
 import { StoryCard, storyDate, storyPhoto } from "@/components/site/content/stories";
 import { stories, storyBySlug } from "@/data/stories";
 import { trekBySlug } from "@/data/treks";
+import { brand } from "@/data/brand";
 
 export function generateStaticParams() {
   return stories.map((s) => ({ slug: s.slug }));
@@ -51,7 +52,7 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
                 <ArrowLeft size={14} /> Stories
               </Link>
               <p className="mt-6 text-[13px] font-medium uppercase tracking-[0.16em] text-white/70">
-                <span className="mr-2 inline-block h-1.5 w-1.5 rounded-full bg-ember-500 align-middle" aria-hidden="true" />
+                <span className="mr-2 inline-block h-1.5 w-1.5 rounded-full bg-forest-500 align-middle" aria-hidden="true" />
                 {story.category}
               </p>
               <h1 className="font-display mt-3 max-w-[20ch] text-[clamp(2.2rem,5.6vw,4.4rem)] leading-[1.02] text-white">
@@ -91,9 +92,15 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
                 <div className="mt-12 flex items-start gap-4 rounded-[22px] bg-mist-100 p-5 sm:p-6">
                   <Avatar name={story.author} size={48} tone="ink" />
                   <p className="text-[14.5px] leading-relaxed text-ink-600">
-                    Written by <span className="font-medium text-ink-900">{story.author}</span>,{" "}
-                    {story.role.toLowerCase()}. Field notes are published as they were filed, with
-                    names of trekkers changed unless they asked us to keep them.
+                    Written by <span className="font-medium text-ink-900">{story.author}</span> in{" "}
+                    {brand.base}. Questions about this?{" "}
+                    <a
+                      href={`mailto:${brand.contact.email}`}
+                      className="font-medium text-ink-900 underline decoration-forest-500 decoration-2 underline-offset-4 hover:text-forest-600"
+                    >
+                      Email us
+                    </a>{" "}
+                    — {brand.contact.responseTime.charAt(0).toLowerCase() + brand.contact.responseTime.slice(1)}
                   </p>
                 </div>
               </div>
@@ -103,7 +110,7 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
               <aside className="min-w-0">
                 <div className="grid gap-3 lg:sticky lg:top-28">
                   <p className="px-2 pt-1 text-[13px] font-medium uppercase tracking-[0.14em] text-ink-500 lg:pt-0">
-                    This story came off
+                    Related trek
                   </p>
                   <TrekCard trek={trek} />
                 </div>

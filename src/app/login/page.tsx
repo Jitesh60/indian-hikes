@@ -5,9 +5,9 @@ import Link from "next/link";
 import { Mountain, Mail, ArrowLeft } from "lucide-react";
 import { Photo } from "@/components/site/Photo";
 import { Button, Field, inputCls } from "@/components/site/ui";
-import { treks } from "@/data/treks";
+import { brand } from "@/data/brand";
 
-const STATES = new Set(treks.map((t) => t.state)).size;
+const { stats } = brand;
 
 export default function LoginPage() {
   const [mode, setMode] = useState<"in" | "up">("in");
@@ -21,11 +21,11 @@ export default function LoginPage() {
         <div className="scrim-b absolute inset-0" aria-hidden="true" />
         <div className="scrim-t absolute inset-0" aria-hidden="true" />
         <div className="relative flex h-full flex-col justify-between p-5 text-white sm:p-8 lg:p-10">
-          <Link href="/" className="flex w-fit items-center gap-2" aria-label="Indiahikes home">
+          <Link href="/" className="flex w-fit items-center gap-2" aria-label={`${brand.name} home`}>
             <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white text-ink-900">
               <Mountain size={18} strokeWidth={2} />
             </span>
-            <span className="text-[18px] font-semibold tracking-[-0.02em]">Indiahikes</span>
+            <span className="text-[18px] font-semibold tracking-[-0.02em]">{brand.name}</span>
           </Link>
 
           <figure className="glass max-w-[460px] rounded-[20px] p-4 sm:p-6">
@@ -33,7 +33,7 @@ export default function LoginPage() {
               Your trek record, your fitness, and every date you have held.
             </blockquote>
             <figcaption className="nums mt-2 text-[12.5px] text-white/70 sm:mt-4 sm:text-[13.5px]">
-              38,200 trekkers · {treks.length} routes · {STATES} states
+              {stats.trekkers.toLocaleString("en-IN")}+ trekkers · {stats.routes}+ routes · {stats.rating}/5 average rating
             </figcaption>
           </figure>
         </div>
@@ -44,7 +44,7 @@ export default function LoginPage() {
         <div className="w-full max-w-[400px]">
           {sent ? (
             <div>
-              <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-ember-500/12 text-ember-600">
+              <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-forest-500/12 text-forest-600">
                 <Mail size={22} />
               </span>
               <h1 className="mt-6 font-display text-[clamp(1.9rem,4vw,2.4rem)] leading-tight text-ink-900">
@@ -110,7 +110,7 @@ export default function LoginPage() {
                   <input id="email" type="email" className={inputCls} placeholder="you@example.com" autoComplete="email" required />
                 </Field>
                 {mode === "up" && (
-                  <Field label="Phone" htmlFor="phone" hint="Only used by your trek leader, three days before you go">
+                  <Field label="Phone" htmlFor="phone" hint="So our team can reach you about your trek">
                     <input id="phone" type="tel" className={inputCls} placeholder="+91" autoComplete="tel" />
                   </Field>
                 )}
@@ -123,7 +123,7 @@ export default function LoginPage() {
                 {mode === "in" ? "New here? " : "Already have an account? "}
                 <button
                   onClick={() => setMode(mode === "in" ? "up" : "in")}
-                  className="font-medium text-ink-900 underline decoration-ember-500 decoration-2 underline-offset-4 transition-colors hover:text-ember-600"
+                  className="font-medium text-ink-900 underline decoration-forest-500 decoration-2 underline-offset-4 transition-colors hover:text-forest-600"
                 >
                   {mode === "in" ? "Create an account" : "Sign in"}
                 </button>

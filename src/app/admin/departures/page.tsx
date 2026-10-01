@@ -105,8 +105,8 @@ export default function AdminDeparturesPage() {
     { key: "status", header: "Status", sortable: true, value: (d) => d.status, cell: (d) => <StatusTag status={d.status} /> },
     {
       key: "gt",
-      header: "Green Trails",
-      cell: (d) => (d.greenTrails ? <StatusTag status="published" /> : <span className="text-[12px] text-snow-400">—</span>),
+      header: "Women-only",
+      cell: (d) => (d.womenOnly ? <StatusTag status="published" /> : <span className="text-[12px] text-snow-400">—</span>),
     },
   ];
 
@@ -199,10 +199,10 @@ export default function AdminDeparturesPage() {
               </div>
               <label className="flex items-center gap-2.5 text-[14px] cursor-pointer">
                 <input type="checkbox" />
-                Run this as a Green Trails departure
+                Run this as a women-only batch
               </label>
               <p className="text-[12.5px] text-snow-500 leading-relaxed">
-                Green Trails departures cap at twelve trekkers and need a coordinator
+                Women-only batches are led by a female trek leader
                 assigned before they can be published.
               </p>
             </div>

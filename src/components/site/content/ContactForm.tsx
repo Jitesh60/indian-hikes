@@ -4,13 +4,15 @@ import { useState } from "react";
 import { Check } from "lucide-react";
 import { Button, Field, inputCls } from "@/components/site/ui";
 import { treks } from "@/data/treks";
+import { brand } from "@/data/brand";
 
 const TOPICS = [
-  "Choosing between two treks",
+  "Choosing a trek",
   "An existing booking",
   "Fitness and whether I am ready",
-  "Group or corporate departures",
-  "Working as a trek leader",
+  "A custom trek for my group",
+  "Women-only batches",
+  "Working with you",
   "Something else",
 ];
 
@@ -28,8 +30,8 @@ export function ContactForm() {
           Message received
         </h2>
         <p className="mt-3 max-w-[52ch] text-[16px] leading-relaxed text-ink-500">
-          Somebody who has actually walked the trek you asked about will reply,
-          usually within a working day.
+          Thank you — someone from the {brand.name} team will get back to you.{" "}
+          {brand.contact.responseTime}
         </p>
         <Button onClick={() => setSent(false)} variant="outline" className="mt-7">
           Send another
@@ -50,7 +52,7 @@ export function ContactForm() {
         <h2 className="font-display text-[clamp(1.6rem,3vw,2.2rem)] leading-tight text-ink-900">
           Send us a message
         </h2>
-        <p className="mt-2 text-[15px] text-ink-500">We read every one, and reply from the mountains when we can.</p>
+        <p className="mt-2 text-[15px] text-ink-500">We read every one. {brand.contact.responseTime}</p>
       </div>
 
       <div className="grid gap-5 sm:grid-cols-2">
@@ -95,7 +97,13 @@ export function ContactForm() {
         <Button type="submit" size="lg">
           Send message
         </Button>
-        <p className="text-[13px] text-ink-400">Demonstration only — this form does not send anything.</p>
+        <p className="text-[13px] text-ink-400">
+          Demonstration only — this form does not send anything. Write to{" "}
+          <a href={`mailto:${brand.contact.email}`} className="text-ink-700 underline underline-offset-2 hover:text-forest-600">
+            {brand.contact.email}
+          </a>{" "}
+          instead.
+        </p>
       </div>
     </form>
   );

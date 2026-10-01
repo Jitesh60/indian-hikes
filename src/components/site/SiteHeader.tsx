@@ -9,7 +9,7 @@ import { AnimatePresence, motion } from "motion/react";
 const NAV = [
   { href: "/treks", label: "Treks" },
   { href: "/departures", label: "Departures" },
-  { href: "/green-trails", label: "Green Trails" },
+  { href: "/custom-treks", label: "Custom treks" },
   { href: "/stories", label: "Stories" },
   { href: "/about", label: "About" },
 ];
@@ -19,9 +19,10 @@ const NAV = [
  * `dark` is for pages that open on a full-bleed photo: the bar starts as
  * clear glass over the image and turns into light glass once you scroll.
  * `paper` pages get light glass from the start, plus a spacer so content
- * isn't hidden underneath the fixed bar.
+ * isn't hidden underneath the fixed bar. `light` is light glass with no
+ * spacer, for pages that open on a bright full-bleed photo.
  */
-export function SiteHeader({ variant = "paper" }: { variant?: "paper" | "dark" }) {
+export function SiteHeader({ variant = "paper" }: { variant?: "paper" | "dark" | "light" }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -47,7 +48,7 @@ export function SiteHeader({ variant = "paper" }: { variant?: "paper" | "dark" }
           ].join(" ")}
         >
           <div className="flex h-[58px] items-center justify-between gap-4 pl-5 pr-2">
-            <Link href="/" className="flex shrink-0 items-center gap-2" aria-label="Indiahikes home">
+            <Link href="/" className="flex shrink-0 items-center gap-2" aria-label="HeyHikers home">
               <span
                 className={`inline-flex h-8 w-8 items-center justify-center rounded-full ${
                   overImage ? "bg-white text-ink-900" : "bg-ink-900 text-white"
@@ -55,7 +56,7 @@ export function SiteHeader({ variant = "paper" }: { variant?: "paper" | "dark" }
               >
                 <Mountain size={17} strokeWidth={2} />
               </span>
-              <span className="text-[17px] font-semibold tracking-[-0.02em]">Indiahikes</span>
+              <span className="text-[17px] font-semibold tracking-[-0.02em]">HeyHikers</span>
             </Link>
 
             <nav className="hidden items-center gap-0.5 lg:flex" aria-label="Main">

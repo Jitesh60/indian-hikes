@@ -3,7 +3,7 @@
 import { useMemo, useState, type ReactNode } from "react";
 import Link from "next/link";
 import {
-  Check, ChevronDown, ChevronLeft, Leaf, Lock, Minus, Plus, ArrowRight, CalendarDays, UserRound,
+  Check, ChevronDown, ChevronLeft, Venus, Lock, Minus, Plus, ArrowRight, CalendarDays, UserRound,
   Bus, Backpack, Shirt, ShieldCheck, type LucideIcon,
 } from "lucide-react";
 import { Button, Field, inputCls } from "@/components/site/ui";
@@ -112,7 +112,7 @@ export function BookingFlow({
               <p className="text-[13px] text-white/70">{dateRange}</p>
               <p className="mt-1 text-[22px] font-semibold tracking-[-0.02em]">{trek.name}</p>
             </div>
-            <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-ember-500 text-white shadow-[0_8px_24px_-8px_rgb(255_106_43/0.7)]">
+            <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-forest-500 text-white shadow-[0_8px_24px_-8px_rgb(255_106_43/0.7)]">
               <Check size={24} />
             </span>
           </div>
@@ -214,7 +214,7 @@ export function BookingFlow({
                     <span
                       className={[
                         "nums inline-flex h-8 w-8 items-center justify-center rounded-full text-[13px] font-semibold",
-                        on ? "bg-ember-500 text-white" : done ? "bg-ink-900 text-white" : "bg-mist-100 text-ink-400",
+                        on ? "bg-forest-500 text-white" : done ? "bg-ink-900 text-white" : "bg-mist-100 text-ink-400",
                       ].join(" ")}
                     >
                       {done ? <Check size={15} strokeWidth={2.5} /> : i + 1}
@@ -389,7 +389,7 @@ export function BookingFlow({
                     <label
                       key={a.id}
                       className={[
-                        "relative flex cursor-pointer flex-col rounded-[20px] border p-5 transition-all has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ember-500",
+                        "relative flex cursor-pointer flex-col rounded-[20px] border p-5 transition-all has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-forest-500",
                         on
                           ? "border-ink-900 bg-mist-50 shadow-[inset_0_0_0_1px_var(--color-ink-900)]"
                           : "border-mist-200 bg-white hover:border-mist-400",
@@ -412,7 +412,7 @@ export function BookingFlow({
                         <span
                           aria-hidden="true"
                           className={`inline-flex h-6 w-6 items-center justify-center rounded-full border transition-colors ${
-                            on ? "border-ember-500 bg-ember-500 text-white" : "border-mist-300 text-transparent"
+                            on ? "border-forest-500 bg-forest-500 text-white" : "border-mist-300 text-transparent"
                           }`}
                         >
                           <Check size={14} strokeWidth={3} />
@@ -586,9 +586,9 @@ export function BookingFlow({
               <span className="glass-dark nums inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[12px] text-white">
                 {trek.days} days · {trek.maxAltFt.toLocaleString("en-IN")} ft
               </span>
-              {departure.greenTrails && (
+              {departure.womenOnly && (
                 <span className="glass inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[12px] text-white">
-                  <Leaf size={12} /> Green Trails
+                  <Venus size={12} /> Women-only batch
                 </span>
               )}
             </div>

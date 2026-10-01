@@ -7,9 +7,11 @@ import {
   Wind,
   Thermometer,
   Radio,
-  Play,
   Leaf,
   ShieldCheck,
+  BadgeCheck,
+  Headset,
+  IndianRupee,
   Backpack,
   Footprints,
   Shirt,
@@ -22,15 +24,11 @@ import { Photo } from "@/components/site/Photo";
 import { Reveal, Parallax, Float } from "@/components/site/motion";
 import {
   AnimatedList,
-  AnimatedShinyText,
   ArrowButton,
   BlurText,
   BorderBeam,
-  CircularTextButton,
   CountUp,
   Magnet,
-  Marquee,
-  Meteors,
   NumberTicker,
   ScrollVelocity,
   ShimmerButton,
@@ -40,171 +38,257 @@ import { HeroFinder } from "@/components/home/HeroFinder";
 import { Compass } from "@/components/home/Compass";
 import { CircleText } from "@/components/home/CircleText";
 import { TrekRail } from "@/components/home/TrekRail";
-import { treks, departures, trekBySlug, departuresFor } from "@/data/treks";
+import { TornEdge } from "@/components/home/TornEdge";
+import { treks, trekBySlug, departuresFor } from "@/data/treks";
 import { stories } from "@/data/stories";
-import { leaders, bookings } from "@/data/admin";
+import { storyPhoto } from "@/components/site/content/stories";
+import { brand, whatsappHref } from "@/data/brand";
 import { trekCover, trekPhotos, type PhotoKey } from "@/data/photos";
 import { inr, daysUntil } from "@/lib/types";
 
 const fmt = (iso: string) =>
   new Date(iso + "T00:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "short", timeZone: "UTC" });
-
-const STORY_PHOTO: Record<string, PhotoKey> = {
-  "what-12000-feet-does-to-you": "snowTrekkers",
-  "ninety-one-kilos-of-waste": "windingRoad",
-  "i-turned-back-at-the-pass": "snowRange2",
-  "reading-a-himalayan-weather-window": "silhouette",
-  "what-actually-goes-in-the-backpack": "gearFlatlay",
-  "the-village-at-the-start-of-the-trail": "grazing",
-};
-
 /** A falling rhododendron petal, drawn — the floating leaf from the park reference. */
 function Petal({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 60 40" className={className} aria-hidden="true">
-      <path d="M2 30 C 14 4, 44 0, 58 8 C 44 22, 22 38, 2 30 Z" fill="#ff8a52" />
-      <path d="M4 29 C 22 22, 38 14, 56 9" stroke="#e5531a" strokeWidth="1.2" fill="none" />
+      <path d="M2 30 C 14 4, 44 0, 58 8 C 44 22, 22 38, 2 30 Z" fill="#7fb99a" />
+      <path d="M4 29 C 22 22, 38 14, 56 9" stroke="#17563b" strokeWidth="1.2" fill="none" />
     </svg>
   );
 }
 
 export default function HomePage() {
-  const open = departures.filter((d) => d.status !== "full");
-  const next = open[0];
-  const nextTrek = trekBySlug(next.trek)!;
-  const totalSlots = departures.reduce((s, d) => s + (d.capacity - d.booked), 0);
-  const minPrice = Math.min(...treks.map((t) => t.price));
 
   const kgl = trekBySlug("kashmir-great-lakes")!;
   const kk = trekBySlug("kedarkantha")!;
   const kkDep = departuresFor("kedarkantha").find((d) => d.status !== "full")!;
   const deoria = trekBySlug("deoriatal-chandrashila")!;
-  const goechala = trekBySlug("goechala")!;
-  const nima = leaders.find((l) => l.name === "Nima Lepcha")!;
-  const spotlight = [kk, kgl, trekBySlug("sandakphu-phalut")!];
-  const justBooked = bookings.filter((b) => b.status === "confirmed").slice(0, 8);
+  const hampta = trekBySlug("hampta-pass")!;
+  const founder = brand.founders[0];
+  const spotlight = [kk, hampta, kgl];
+  const { stats } = brand;
 
   return (
     <>
-      <SiteHeader variant="dark" />
+      <SiteHeader variant="light" />
 
       <main>
-        {/* ── 1. Hero: a lit tent under the stars ─────────────────────── */}
-        <section className="px-3 pt-3 sm:px-5 sm:pt-4">
-          <div className="relative mx-auto flex min-h-[calc(100svh-24px)] max-w-[1320px] flex-col overflow-hidden rounded-bento bg-ink-950 text-white sm:min-h-[760px] lg:min-h-[calc(100svh-32px)]">
-            <Parallax distance={60} className="absolute inset-0">
-              <Photo name="tentMilkyWay" width={2400} priority imgClassName="scale-[1.04]" />
-            </Parallax>
-            <div className="absolute inset-0 bg-gradient-to-b from-ink-950/55 via-ink-950/10 to-ink-950/85" aria-hidden="true" />
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-2/3 overflow-hidden" aria-hidden="true">
-              <Meteors number={9} minDelay={1} maxDelay={9} minDuration={4} maxDuration={10} />
-            </div>
+        {/* ── 1. Hero: bright, airy, a hiker looking out ─────────────── */}
+        <section className="relative isolate overflow-hidden bg-mist-50">
+          <Parallax distance={40} className="absolute inset-0">
+            <Photo name="hikerSitting" width={2400} priority position="62% 55%" />
+          </Parallax>
+          {/* light wash from the left so dark type reads, plus a soft top for the nav */}
+          <div
+            className="absolute inset-0 bg-gradient-to-r from-mist-50 via-mist-50/80 to-mist-50/0 sm:via-mist-50/65"
+            aria-hidden="true"
+          />
+          <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-mist-50/80 to-transparent" aria-hidden="true" />
 
-            <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-5 pb-10 pt-32 text-center sm:pt-36">
-              <Reveal>
-                <span className="glass inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-[13px]">
-                  <span className="relative flex h-2 w-2">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ember-400 opacity-75" />
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-ember-500" />
-                  </span>
-                  <AnimatedShinyText shimmerColor="rgba(255,255,255,0.95)" className="text-white/75">
-                    Departures open through November 2027
-                  </AnimatedShinyText>
+          <div className="relative mx-auto flex min-h-[640px] max-w-[1320px] flex-col justify-center px-5 pb-28 pt-36 sm:min-h-[760px] sm:px-10 lg:min-h-[min(100svh,880px)]">
+            <Reveal>
+              <p className="text-[12px] font-semibold uppercase tracking-[0.28em] text-forest-500">
+                Safe <span className="mx-2 text-forest-300">·</span> Guided <span className="mx-2 text-forest-300">·</span> Himalayan
+              </p>
+            </Reveal>
+            <h1 className="mt-5 max-w-[13ch] text-[clamp(2.8rem,6.6vw,5.4rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-ink-900">
+              <BlurText as="span" text="Your Next Himalayan Trek" delay={90} className="inline-flex" />
+              <span className="font-serif mt-1 block text-[1.18em] italic leading-[0.95] tracking-[-0.02em] text-forest-500">
+                Awaits
+              </span>
+            </h1>
+            <Reveal delay={0.15}>
+              <p className="mt-6 max-w-[44ch] text-[16.5px] leading-relaxed text-ink-600 sm:text-[17.5px]">
+                {brand.promise}
+              </p>
+            </Reveal>
+            <Reveal delay={0.25} className="mt-9">
+              <HeroFinder />
+            </Reveal>
+            <Reveal delay={0.35}>
+              <div className="mt-7 flex items-start gap-2 pl-2 text-forest-600" aria-hidden="true">
+                <svg width="38" height="34" viewBox="0 0 38 34" fill="none" className="mt-1 shrink-0">
+                  <path d="M4 2c-3 12 2 22 26 24" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+                  <path d="M25 20l6 6-7 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <span className="font-hand -rotate-6 text-[24px] leading-[1.05]">
+                  Small groups,
+                  <br />
+                  big mountains
                 </span>
-              </Reveal>
-              <BlurText
-                as="h1"
-                text="Your Himalaya begins here."
-                delay={110}
-                className="font-display mx-auto mt-6 max-w-[14ch] justify-center text-[clamp(2.8rem,8vw,6.2rem)] leading-[0.95] tracking-[-0.045em]"
-              />
-              <Reveal delay={0.16}>
-                <p className="mx-auto mt-6 max-w-[46ch] text-[16.5px] leading-relaxed text-white/75 sm:text-[18px]">
-                  {treks.length} routes across five states, walked in small groups with a trek leader
-                  who checks your oxygen every morning and every night.
-                </p>
-              </Reveal>
-              <Reveal delay={0.24} className="mt-9 w-full flex justify-center">
-                <HeroFinder />
-              </Reveal>
-              <Reveal delay={0.3}>
-                <p className="mt-5 text-[13.5px] text-white/60">
-                  Starting at <span className="nums font-semibold text-white">{inr(minPrice)}</span> / person ·{" "}
-                  <span className="nums">{totalSlots.toLocaleString("en-IN")}</span> slots open
-                </p>
-              </Reveal>
-            </div>
-
-            {/* bottom glass row */}
-            <div className="relative z-10 grid gap-3 px-3 pb-3 sm:grid-cols-[1fr_auto_1fr] sm:items-end sm:px-5 sm:pb-5">
-              <Link
-                href={`/treks/${nextTrek.slug}`}
-                className="glass group flex items-center gap-3 rounded-[22px] p-2.5 pr-4 transition-colors hover:bg-white/20 sm:max-w-[340px]"
-              >
-                <span className="relative h-14 w-14 shrink-0 overflow-hidden rounded-2xl">
-                  <Photo name={trekCover(nextTrek.slug)} width={200} alt="" />
-                </span>
-                <span className="min-w-0 flex-1">
-                  <span className="block text-[11.5px] uppercase tracking-[0.12em] text-white/55">Leaving next</span>
-                  <span className="block truncate text-[15px] font-medium">{nextTrek.name}</span>
-                  <span className="nums block text-[12.5px] text-white/65">
-                    {fmt(next.start)} · {next.capacity - next.booked} slots left
-                  </span>
-                </span>
-                <ArrowUpRight size={18} className="shrink-0 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-              </Link>
-
-              <div className="hidden justify-center sm:flex">
-                <CircularTextButton
-                  href="#explore"
-                  text="SCROLL · TO · EXPLORE · "
-                  label="Scroll to explore"
-                  size={92}
-                  speed={14}
-                />
               </div>
+            </Reveal>
+          </div>
 
-              <Link
-                href="/treks"
-                className="glass hidden items-center gap-3 justify-self-end rounded-[22px] p-2.5 pl-4 transition-colors hover:bg-white/20 sm:flex"
-              >
-                <span>
-                  <span className="block text-[11.5px] uppercase tracking-[0.12em] text-white/55">Explore</span>
-                  <span className="block text-[15px] font-medium">{treks.length} Himalayan routes</span>
+          {/* trust badge, bottom right */}
+          <Reveal delay={0.4} className="absolute bottom-20 right-5 hidden sm:right-10 sm:block">
+            <div className="glass-light flex items-center gap-3 rounded-2xl px-4 py-3 shadow-soft">
+              <span className="flex -space-x-2">
+                {brand.testimonials.map((t, i) => (
+                  <Avatar key={t.name} name={t.name} size={32} tone={(["ember", "pine", "ice"] as const)[i % 3]} />
+                ))}
+              </span>
+              <span>
+                <Stars rating={stats.rating} />
+                <span className="nums block text-[12.5px] text-ink-500">
+                  {stats.trekkers.toLocaleString("en-IN")}+ trekkers led safely
                 </span>
-                <span className="flex -space-x-3">
-                  {(["alpineLake", "flowerMeadow", "whitePeak"] as PhotoKey[]).map((k) => (
-                    <span key={k} className="relative h-12 w-12 overflow-hidden rounded-full ring-2 ring-white/40">
-                      <Photo name={k} width={160} alt="" />
+              </span>
+            </div>
+          </Reveal>
+
+          <TornEdge seed={11} />
+        </section>
+
+        {/* ── Feature row ─────────────────────────────────────────────── */}
+        <section aria-label="What every trek includes" className="px-5 pt-10 sm:px-10 sm:pt-14">
+          <div className="mx-auto grid max-w-[1180px] grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-4 lg:gap-0 lg:divide-x lg:divide-mist-300">
+            {[
+              { icon: BadgeCheck, t: "Certified leaders", d: "Trained trek leaders who have walked every route personally." },
+              { icon: ShieldCheck, t: "Safe & secure", d: `Zero serious incidents in ${stats.years} years of guiding.` },
+              { icon: Headset, t: "24×7 support", d: "Caring on-trail support, and a phone that is always answered." },
+              { icon: IndianRupee, t: "All-inclusive pricing", d: "Transparent prices, pickup & drop included — no hidden costs." },
+            ].map((f, i) => (
+              <Reveal key={f.t} delay={i * 0.06} className="lg:px-8 first:lg:pl-0 last:lg:pr-0">
+                <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-forest-50 text-forest-500">
+                  <f.icon size={21} strokeWidth={1.8} />
+                </span>
+                <h3 className="mt-4 text-[16px] font-semibold text-forest-600">{f.t}</h3>
+                <p className="mt-1.5 max-w-[26ch] text-[14px] leading-snug text-ink-500">{f.d}</p>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+
+        {/* ── Popular treks: serif heading + photo grid ───────────────── */}
+        <section className="px-3 py-20 sm:px-5 sm:py-28">
+          <div className="mx-auto grid max-w-[1320px] items-center gap-10 px-2 sm:px-5 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.4fr)] lg:gap-14">
+            <Reveal>
+              <p className="flex items-center gap-3 text-[12px] font-semibold uppercase tracking-[0.24em] text-forest-500">
+                <span className="h-px w-10 bg-forest-400" aria-hidden="true" /> Popular treks
+              </p>
+              <h2 className="font-serif mt-5 text-[clamp(2.4rem,4.6vw,3.8rem)] leading-[1.02] text-ink-900">
+                Explore the Himalaya’s most <span className="italic text-forest-500">beautiful</span> trails
+              </h2>
+              <p className="mt-5 max-w-[42ch] text-[16px] leading-relaxed text-ink-500">
+                From a first snow summit to week-long crossings — {stats.routes}+ routes across Uttarakhand,
+                Himachal, J&amp;K and Ladakh, each one walked by our own team.
+              </p>
+              <div className="mt-8 flex flex-wrap items-center gap-4">
+                <Link
+                  href="/treks"
+                  className="inline-flex items-center gap-2 rounded-full bg-forest-500 px-6 py-3 text-[14.5px] font-medium text-white transition-colors hover:bg-forest-600"
+                >
+                  View all treks <ArrowRight size={16} />
+                </Link>
+                <span className="text-[14px] text-ink-500">
+                  From <span className="nums font-semibold text-ink-900">{inr(stats.fromPrice)}</span>
+                </span>
+              </div>
+            </Reveal>
+
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-[1.35fr_1fr] lg:grid-rows-2">
+              {[kk, kgl, hampta].map((t, i) => (
+                <Reveal
+                  key={t.slug}
+                  delay={i * 0.08}
+                  className={i === 0 ? "col-span-2 lg:col-span-1 lg:row-span-2" : ""}
+                >
+                  <Link
+                    href={`/treks/${t.slug}`}
+                    className={`group relative block overflow-hidden rounded-[22px] ${
+                      i === 0 ? "aspect-[4/3] lg:aspect-auto lg:h-full lg:min-h-[480px]" : "aspect-[4/3] lg:aspect-auto lg:h-full"
+                    }`}
+                  >
+                    <Photo
+                      name={trekCover(t.slug)}
+                      width={i === 0 ? 1200 : 700}
+                      imgClassName="transition-transform duration-700 group-hover:scale-[1.05]"
+                    />
+                    <div className="scrim-b absolute inset-0" aria-hidden="true" />
+                    <span className="glass-light absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[12px] font-medium text-ink-900">
+                      <MapPin size={12} className="text-forest-500" /> {t.state}
                     </span>
-                  ))}
-                </span>
-              </Link>
+                    <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-4 text-white sm:p-5">
+                      <span>
+                        <span className={`block font-semibold tracking-[-0.02em] ${i === 0 ? "text-[24px] sm:text-[28px]" : "text-[17px] sm:text-[19px]"}`}>
+                          {t.name}
+                        </span>
+                        <span className="nums block text-[12.5px] text-white/75">
+                          {t.days} days · {t.maxAltFt.toLocaleString("en-IN")} ft
+                        </span>
+                      </span>
+                      <span className="nums hidden rounded-full bg-white/90 px-3 py-1 text-[12.5px] font-semibold text-ink-900 sm:inline">
+                        {inr(t.price)}
+                      </span>
+                    </span>
+                  </Link>
+                </Reveal>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* ── Route strip ─────────────────────────────────────────────── */}
-        <section aria-label="Our routes" className="pt-10 sm:pt-14">
-          <Marquee pauseOnHover duration="70s" gap="0.75rem" className="[mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
-            {treks.map((t) => (
-              <Link
-                key={t.slug}
-                href={`/treks/${t.slug}`}
-                className="group inline-flex shrink-0 items-center gap-3 rounded-full bg-white py-1.5 pl-1.5 pr-5 shadow-soft transition-shadow hover:shadow-[0_14px_30px_-16px_rgb(16_24_40/0.35)]"
-              >
-                <span className="relative h-10 w-10 overflow-hidden rounded-full">
-                  <Photo name={trekCover(t.slug)} width={120} alt="" />
-                </span>
-                <span>
-                  <span className="block text-[14px] font-medium text-ink-900">{t.name}</span>
-                  <span className="nums block text-[12px] text-ink-400">
-                    {t.maxAltFt.toLocaleString("en-IN")} ft · {t.state}
-                  </span>
-                </span>
-              </Link>
-            ))}
-          </Marquee>
+        {/* ── Treks we organise: a giant word set into the landscape ──── */}
+        <section className="relative isolate overflow-hidden bg-ink-900 text-white">
+          <Parallax distance={50} className="absolute inset-0">
+            <Photo name="snowRanges" width={2400} alt="" />
+          </Parallax>
+          <div className="absolute inset-0 bg-gradient-to-b from-ink-950/30 via-ink-950/10 to-ink-950/60" aria-hidden="true" />
+          <TornEdge flip seed={23} />
+          <div className="relative flex min-h-[420px] items-center justify-center px-4 py-28 sm:min-h-[560px]">
+            <p
+              aria-hidden="true"
+              className="select-none text-center text-[clamp(4.2rem,17vw,15rem)] font-black uppercase leading-[0.85] tracking-[-0.05em] text-white/80 mix-blend-overlay"
+            >
+              Himalaya
+            </p>
+          </div>
+          <TornEdge seed={31} />
+        </section>
+
+        <section className="px-3 pb-20 pt-6 sm:px-5 sm:pb-28">
+          <div className="mx-auto max-w-[1320px] px-2 sm:px-5">
+            <Reveal className="mx-auto max-w-[640px] text-center">
+              <p className="text-[12px] font-semibold uppercase tracking-[0.28em] text-forest-500">Treks we organise</p>
+              <h2 className="font-serif mt-4 text-[clamp(2.2rem,4.2vw,3.4rem)] leading-[1.04] text-ink-900">
+                A trek for every kind of <span className="italic text-forest-500">hiker</span>
+              </h2>
+              <p className="mt-4 text-[16px] leading-relaxed text-ink-500">
+                First snow, first summit, a high pass or a group that wants its own dates — we plan and lead them all,
+                across the Garhwal, Kumaon and Himachal ranges.
+              </p>
+            </Reveal>
+            <div className="mt-12 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+              {(
+                [
+                  { k: "snowPines", t: "Winter snow treks", d: "Dec – Apr", href: "/treks?snow=1" },
+                  { k: "sunriseSummit", t: "First Himalayan trek", d: "Easy to moderate", href: "/treks?difficulty=Easy%E2%80%93Moderate" },
+                  { k: "snowGroup", t: "High passes", d: "For experienced trekkers", href: "/treks?difficulty=Difficult" },
+                  { k: "tallPines", t: "Women-only batches", d: "Led by female trek leaders", href: "/treks?green=1" },
+                ] as { k: PhotoKey; t: string; d: string; href: string }[]
+              ).map((c, i) => (
+                <Reveal key={c.t} delay={i * 0.06}>
+                  <Link href={c.href} className="group block">
+                    <div className="relative aspect-[3/4] overflow-hidden rounded-[22px]">
+                      <Photo name={c.k} width={700} imgClassName="transition-transform duration-700 group-hover:scale-[1.06]" />
+                      <div className="scrim-b absolute inset-0" aria-hidden="true" />
+                      <span className="absolute inset-x-0 bottom-0 p-4 text-white sm:p-5">
+                        <span className="block text-[17px] font-semibold tracking-[-0.01em] sm:text-[19px]">{c.t}</span>
+                        <span className="mt-0.5 flex items-center justify-between text-[13px] text-white/75">
+                          {c.d}
+                          <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-ink-900 transition-transform group-hover:translate-x-0.5">
+                            <ArrowUpRight size={15} />
+                          </span>
+                        </span>
+                      </span>
+                    </div>
+                  </Link>
+                </Reveal>
+              ))}
+            </div>
+          </div>
         </section>
 
         {/* ── 2. Bento: the whole product on one screen ───────────────── */}
@@ -212,9 +296,9 @@ export default function HomePage() {
           <div className="mx-auto max-w-[1320px]">
             <Reveal>
               <SectionHead
-                eyebrow="Plan, pack, walk"
-                title="Everything a trek needs, in one place"
-                intro="Routes, dates, the people leading them and the conditions on the trail — so you can decide with the full picture."
+                eyebrow="Why HeyHikers"
+                title="A small team that treats you like a guest"
+                intro="Owner-operated from Dehradun. We have personally walked every route we offer, and you deal directly with the people whose name is on the company."
                 action={{ href: "/treks", label: "Browse all treks" }}
               />
             </Reveal>
@@ -224,7 +308,7 @@ export default function HomePage() {
               <div className="flex flex-col gap-4">
                 <Reveal className="flex flex-1 flex-col rounded-bento bg-white p-6 shadow-soft">
                   <div className="flex items-start justify-between">
-                    <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-ember-500/10 text-ember-500">
+                    <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-forest-500/10 text-forest-500">
                       <Tent size={28} strokeWidth={1.6} />
                     </span>
                     <Link href="/about" aria-label="About us" className="text-ink-400 transition-colors hover:text-ink-900">
@@ -232,26 +316,22 @@ export default function HomePage() {
                     </Link>
                   </div>
                   <p className="mt-6 text-[19px] font-medium leading-snug tracking-[-0.01em] text-ink-900">
-                    Leave the city and walk into the Himalaya with people who know every campsite by name.
+                    Born in the foothills of Uttarakhand, built by people who grew up walking these trails.
                   </p>
                   <div className="mt-auto pt-7">
                     <p className="mb-3 flex items-center gap-2 text-[12px] uppercase tracking-[0.14em] text-ink-400">
-                      <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-pine-500" aria-hidden="true" />
-                      Recently booked
+                      <span className="h-1.5 w-1.5 rounded-full bg-pine-500" aria-hidden="true" />
+                      Every trek comes with
                     </p>
-                    <AnimatedList delay={2200} loop className="h-[168px] items-stretch gap-2 overflow-hidden">
-                      {justBooked.map((b) => (
-                        <div key={b.id} className="flex items-center gap-2.5 rounded-2xl bg-mist-100 p-2">
-                          <span className="relative h-9 w-9 shrink-0 overflow-hidden rounded-xl">
-                            <Photo name={trekCover(b.trek)} width={100} alt="" />
+                    <AnimatedList delay={1800} loop className="h-[168px] items-stretch gap-2 overflow-hidden">
+                      {brand.promises.map((p) => (
+                        <div key={p.title} className="flex items-center gap-2.5 rounded-2xl bg-mist-100 px-3 py-2.5">
+                          <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white text-pine-600">
+                            <ShieldCheck size={15} />
                           </span>
                           <span className="min-w-0 flex-1">
-                            <span className="block truncate text-[13px] font-medium text-ink-900">
-                              {b.trekker.split(" ")[0]} · {b.city}
-                            </span>
-                            <span className="block truncate text-[12px] text-ink-400">
-                              {b.trekName} · {b.people} {b.people === 1 ? "seat" : "seats"}
-                            </span>
+                            <span className="block truncate text-[13px] font-medium text-ink-900">{p.title}</span>
+                            <span className="block truncate text-[12px] text-ink-400">{p.body}</span>
                           </span>
                         </div>
                       ))}
@@ -355,25 +435,24 @@ export default function HomePage() {
                   <Photo name="mistForest" width={1200} alt="" />
                   <div className="absolute inset-0 bg-ink-900/40" aria-hidden="true" />
                   <div className="glass relative m-0 flex flex-wrap items-center gap-x-6 gap-y-4 rounded-bento p-5">
-                    <Avatar name={nima.name} size={54} tone="ember" />
+                    <Avatar name={founder.name} size={54} tone="ember" />
                     <div className="min-w-0 flex-1">
-                      <p className="text-[16px] font-medium">{nima.name}</p>
-                      <p className="text-[13px] text-white/70">
-                        Trek leader · {nima.home} · since {nima.since}
-                      </p>
+                      <p className="text-[16px] font-medium">{founder.name}</p>
+                      <p className="text-[13px] text-white/70">{founder.role} · personally scouts and guides</p>
                     </div>
                     <dl className="flex gap-5 sm:gap-7">
                       {(
                         [
-                          [nima.treksLed, "Treks led", 0],
-                          [nima.rating, "Rating", 1],
-                          [2026 - nima.since, "Years", 0],
+                          [50, "Treks", 0, "+"],
+                          [7, "Years", 0, "+"],
+                          [stats.rating, "Rating", 1, ""],
                         ] as const
-                      ).map(([v, l, dp]) => (
+                      ).map(([v, l, dp, sfx]) => (
                         <div key={l} className="text-center">
                           <dt className="sr-only">{l}</dt>
                           <dd className="nums text-[20px] font-semibold leading-none">
                             <NumberTicker value={v} decimalPlaces={dp} className="text-white" />
+                            {sfx}
                           </dd>
                           <dd aria-hidden="true" className="mt-1 text-[11.5px] text-white/60">{l}</dd>
                         </div>
@@ -385,9 +464,9 @@ export default function HomePage() {
 
                 <Reveal delay={0.15} className="grid items-center gap-6 rounded-bento bg-ink-900 p-6 text-white sm:grid-cols-[1fr_auto] sm:p-7">
                   <div>
-                    <p className="text-[16px] font-medium">Trail conditions · {goechala.name}</p>
+                    <p className="text-[16px] font-medium">Trail conditions · {kk.name}</p>
                     <p className="nums mt-1 text-[13px] text-white/50">
-                      27.47° N, 88.15° E · <span className="text-white/70">Dzongri, 13,024 ft</span>
+                      31.02° N, 78.17° E · <span className="text-white/70">Kedarkantha Base, 11,250 ft</span>
                     </p>
                     <dl className="mt-6 grid grid-cols-2 gap-5">
                       <div>
@@ -406,9 +485,9 @@ export default function HomePage() {
                     <div className="mt-6 flex flex-wrap items-center gap-3">
                       <Link
                         href="/safety"
-                        className="inline-flex items-center gap-2 rounded-full border border-ember-500/50 px-4 py-2 text-[13.5px] text-ember-300 transition-colors hover:border-ember-400 hover:bg-ember-500/10"
+                        className="inline-flex items-center gap-2 rounded-full border border-forest-500/50 px-4 py-2 text-[13.5px] text-forest-300 transition-colors hover:border-forest-400 hover:bg-forest-500/10"
                       >
-                        <Radio size={15} /> How we handle emergencies
+                        <Radio size={15} /> 24×7 support, on and off the trail
                       </Link>
                       <span className="text-[12px] text-white/40">Sample radio check, 06:40</span>
                     </div>
@@ -469,7 +548,7 @@ export default function HomePage() {
                       Reserve a spot · {daysUntil(kkDep.start)} days to go
                     </Link>
                   </div>
-                  <BorderBeam size={120} duration={9} colorFrom="#ff8a52" colorTo="#ffd84d" borderWidth={1.5} />
+                  <BorderBeam size={120} duration={9} colorFrom="#7fb99a" colorTo="#ffd84d" borderWidth={1.5} />
                 </Reveal>
 
                 <Reveal delay={0.15} className="rounded-bento bg-white p-3 shadow-soft">
@@ -481,20 +560,16 @@ export default function HomePage() {
                   </div>
                   <div className="px-2 pb-2 pt-4">
                     <div className="flex items-baseline justify-between gap-2">
-                      <h3 className="text-[16px] font-semibold tracking-[-0.01em] text-ink-900">Homestay before you start</h3>
+                      <h3 className="text-[16px] font-semibold tracking-[-0.01em] text-ink-900">From your doorstep to the trail</h3>
                       <Pill tone="green">Included</Pill>
                     </div>
                     <p className="mt-2 text-[13.5px] leading-snug text-ink-500">
-                      Your first night is in a village home at the road head — a warm meal, a briefing, and a
-                      gear check before the climb.
+                      Most treks start with pickup from Dehradun or Manali and a night at the road head —
+                      a warm meal, a briefing and a gear check before the climb.
                     </p>
                     <div className="mt-4 flex items-center justify-between">
-                      <span className="flex -space-x-2">
-                        {["Asha Pillai", "Rahul Verma", "Zoya Khan"].map((n, i) => (
-                          <Avatar key={n} name={n} size={30} tone={(["ember", "ink", "ice"] as const)[i]} />
-                        ))}
-                      </span>
-                      <span className="text-[12.5px] text-ink-400">Sankri · Yuksom · Lohajung</span>
+                      <Pill tone="ice">Pickup &amp; drop</Pill>
+                      <span className="text-[12.5px] text-ink-400">Sankri · Lohajung · Manali</span>
                     </div>
                   </div>
                 </Reveal>
@@ -512,18 +587,18 @@ export default function HomePage() {
             <div className="absolute inset-0 bg-gradient-to-r from-ink-950/85 via-ink-950/50 to-ink-950/30" aria-hidden="true" />
             <div className="relative px-6 py-16 sm:px-12 sm:py-24">
               <Reveal>
-                <Eyebrow onDark>Since 2008</Eyebrow>
+                <Eyebrow onDark>{stats.years} years on the trail</Eyebrow>
                 <p className="mt-4 max-w-[30ch] text-[clamp(1.4rem,2.6vw,2rem)] font-medium leading-snug tracking-[-0.02em]">
-                  We walk these trails every season, carry our rubbish down, and turn people around when the mountain
-                  says no.
+                  Safety first, every time. Transparent, all-inclusive pricing with no hidden costs. And a team
+                  that picks up the phone at any hour.
                 </p>
               </Reveal>
               <dl className="mt-14 grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-4">
                 {[
-                  { v: treks.length, l: "Himalayan routes", s: "" },
-                  { v: departures.length, l: "Departures open", s: "" },
-                  { v: 31400, l: "Waste carried down", s: "kg" },
-                  { v: 98, l: "Trekkers who'd return", s: "%" },
+                  { v: stats.trekkers, l: "Trekkers led safely", s: "+" },
+                  { v: stats.routes, l: "Himalayan routes", s: "+" },
+                  { v: stats.rating, l: "Average rating", s: "/5" },
+                  { v: stats.seriousIncidents, l: `Serious incidents in ${stats.years} years`, s: "" },
                 ].map((x, i) => (
                   <Reveal key={x.l} delay={i * 0.08}>
                     <dt className="sr-only">{x.l}</dt>
@@ -554,9 +629,9 @@ export default function HomePage() {
             <Reveal>
               <SectionHead
                 center
-                eyebrow="This season"
+                eyebrow="Most loved"
                 title="Three treks worth taking leave for"
-                intro="Picked for the months ahead: a winter summit, a week of alpine lakes, and the best view of Kanchenjunga in India."
+                intro="A winter summit made for first-timers, a crossing from green Kullu into stark Lahaul, and a week of alpine lakes in Kashmir."
               />
             </Reveal>
 
@@ -580,7 +655,7 @@ export default function HomePage() {
                       </div>
                     </Reveal>
                     <Reveal delay={0.1} className={flip ? "md:order-1" : ""}>
-                      <span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-ember-500 shadow-soft">
+                      <span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-forest-500 shadow-soft">
                         {i === 0 ? <Mountain size={20} /> : i === 1 ? <Leaf size={20} /> : <Tent size={20} />}
                       </span>
                       <p className="mt-5 text-[13px] uppercase tracking-[0.14em] text-ink-400">
@@ -639,7 +714,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ── 6. Dark: who shares the trail ───────────────────────────── */}
+        {/* ── 6. Dark: treks your way + what trekkers say ──────────────── */}
         <section className="px-3 sm:px-5">
           <div className="relative mx-auto max-w-[1320px] overflow-hidden rounded-bento bg-ink-950 px-5 py-20 text-white sm:px-12 sm:py-28">
             <div className="pointer-events-none absolute inset-x-0 top-0 h-40 opacity-40" aria-hidden="true">
@@ -649,55 +724,65 @@ export default function HomePage() {
 
             <div className="relative grid items-center gap-16 lg:grid-cols-[1fr_1.1fr]">
               <Reveal>
-                <Eyebrow onDark>On the trail</Eyebrow>
+                <Eyebrow onDark>Treks your way</Eyebrow>
                 <h2 className="font-display mt-4 max-w-[16ch] text-[clamp(2rem,4vw,3.2rem)] leading-[1.02]">
-                  The mountain has residents. We walk like guests.
+                  Your dates, your pace, your group.
                 </h2>
                 <p className="mt-5 max-w-[46ch] text-[16px] leading-relaxed text-white/65">
-                  Red pandas in the bamboo on Singalila, monal pheasants flashing across Tungnath,
-                  blue sheep above Goechala. Groups stay on the trail, keep their voices down, and carry
-                  every wrapper back to the road head.
+                  We plan fully customised treks for school groups, corporate teams and solo travellers — custom
+                  dates, pace, dietary needs and pickup points. And our women-only batches, led by female trek
+                  leaders, are the ones solo women trekkers trust most.
                 </p>
+                <ul className="mt-6 flex flex-wrap gap-2">
+                  {[...brand.custom.flexible].map((f) => (
+                    <li key={f} className="glass rounded-full px-3.5 py-1.5 text-[13px]">
+                      {f}
+                    </li>
+                  ))}
+                </ul>
                 <div className="mt-8 flex flex-wrap gap-3">
-                  <ArrowButton href="/green-trails" accent="#ffffff" onAccent="#111519">
-                    How Green Trails works
+                  <ArrowButton href="/custom-treks" accent="#ffffff" onAccent="#111519">
+                    Plan a custom trek
                   </ArrowButton>
-                  <Button href="/stories" variant="outline-light">
-                    Field notes
+                  <Button href={whatsappHref} variant="outline-light">
+                    Chat on WhatsApp
                   </Button>
                 </div>
               </Reveal>
 
               <div className="relative mx-auto flex h-[340px] w-[340px] items-center justify-center sm:h-[440px] sm:w-[440px]">
-                <CircleText text="RED PANDA · HIMALAYAN MONAL · BLUE SHEEP · LAMMERGEIER · SNOW PARTRIDGE · " size={440} />
+                <CircleText text="SCHOOL GROUPS · CORPORATE TEAMS · SOLO TRAVELLERS · WOMEN-ONLY BATCHES · " size={440} />
                 <Reveal className="relative h-[230px] w-[230px] overflow-hidden rounded-full sm:h-[300px] sm:w-[300px]">
-                  <Photo name="redPanda" width={700} />
+                  <Photo name="ridgeWalkers" width={700} />
                 </Reveal>
               </div>
             </div>
 
-            <Reveal delay={0.1} className="relative mx-auto mt-16 grid max-w-[760px] overflow-hidden rounded-bento bg-ink-800 sm:grid-cols-[240px_1fr]">
-              <div className="relative min-h-[220px]">
-                <Photo name="hikerView" width={600} />
-                <span className="glass absolute bottom-3 left-3 inline-flex items-center gap-2 rounded-full py-1 pl-1 pr-3 text-[12px]">
-                  <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white text-ink-900">
-                    <Play size={12} className="ml-0.5 fill-current" />
-                  </span>
-                  Rupin Pass
-                </span>
+            <div className="relative mt-20">
+              <Reveal>
+                <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+                  <h3 className="font-display text-[clamp(1.6rem,3vw,2.3rem)] leading-[1.05]">What our trekkers say</h3>
+                  <p className="inline-flex items-center gap-2 text-[14px] text-white/60">
+                    <Stars rating={stats.rating} onDark /> average across {stats.trekkers.toLocaleString("en-IN")}+ trekkers
+                  </p>
+                </div>
+              </Reveal>
+              <div className="grid gap-4 md:grid-cols-3">
+                {brand.testimonials.map((t, i) => (
+                  <Reveal key={t.name} delay={i * 0.08} as="article" className="flex flex-col rounded-bento bg-ink-800 p-7">
+                    <Quote size={24} className="text-forest-400" aria-hidden="true" />
+                    <blockquote className="mt-4 flex-1 text-[16px] leading-relaxed text-white/85">“{t.quote}”</blockquote>
+                    <footer className="mt-6 flex items-center gap-3">
+                      <Avatar name={t.name} size={40} tone={(["ember", "ice", "pine"] as const)[i % 3]} />
+                      <div>
+                        <p className="text-[15px] font-medium">{t.name}</p>
+                        <p className="text-[13px] text-white/50">{t.trek}</p>
+                      </div>
+                    </footer>
+                  </Reveal>
+                ))}
               </div>
-              <figure className="flex flex-col justify-center p-7 sm:p-9">
-                <Quote size={26} className="text-ember-400" aria-hidden="true" />
-                <blockquote className="mt-4 text-[17px] leading-relaxed text-white/85">
-                  “Our leader turned me around four hundred metres below the pass. I was furious for a day.
-                  Eleven months later I went back, slept well at the high camp, and walked over it.”
-                </blockquote>
-                <figcaption className="mt-6">
-                  <p className="text-[15px] font-medium">Shreya Bhattacharya</p>
-                  <p className="text-[13px] text-white/50">Trekker · Rupin Pass</p>
-                </figcaption>
-              </figure>
-            </Reveal>
+            </div>
           </div>
         </section>
 
@@ -713,8 +798,8 @@ export default function HomePage() {
                 Snow season opens <span className="brush inline-block px-1">2 December</span>
               </h2>
               <p className="mt-6 max-w-[40ch] text-[16px] leading-relaxed text-ink-500">
-                Kedarkantha, Brahmatal, Dayara and Deoriatal go white for four months. Winter batches are the first to
-                fill — and Green Trails batches run smaller groups at the same fee.
+                Kedarkantha, Brahmatal, Dayara Bugyal and Deoriatal go white for four months, and winter batches are
+                the first to fill. Kedarkantha starts at {inr(stats.fromPrice)} — all-inclusive, no hidden costs.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Magnet padding={60} magnetStrength={4}>
@@ -786,7 +871,7 @@ export default function HomePage() {
                   <Link href={`/stories/${s.slug}`} className="group flex h-full flex-col rounded-bento bg-white p-2.5 shadow-soft">
                     <div className="relative aspect-[16/10] overflow-hidden rounded-[20px]">
                       <Photo
-                        name={STORY_PHOTO[s.slug] ?? trekCover(s.trek)}
+                        name={storyPhoto(s)}
                         width={900}
                         imgClassName="transition-transform duration-700 group-hover:scale-[1.05]"
                       />
@@ -827,17 +912,18 @@ export default function HomePage() {
               </Reveal>
               <Reveal delay={0.1}>
                 <p className="mx-auto mt-5 max-w-[44ch] text-[16.5px] leading-relaxed text-white/75">
-                  Tell us where your fitness is today. We’ll suggest three treks that fit — and a date for each.
+                  Tell us where your fitness is today and when you can get away. We’ll suggest the trek that fits —
+                  and reply within 24 hours.
                 </p>
               </Reveal>
               <Reveal delay={0.2} className="mt-9 flex flex-wrap justify-center gap-3">
                 <Magnet padding={80} magnetStrength={4}>
-                  <ShimmerButton href="/treks" shimmerColor="#ffd84d" background="#ff6a2b" className="px-8 py-4 text-[15.5px] font-medium">
+                  <ShimmerButton href="/treks" shimmerColor="#ffd84d" background="#1f6b4a" className="px-8 py-4 text-[15.5px] font-medium">
                     Find your trek <ArrowUpRight size={17} />
                   </ShimmerButton>
                 </Magnet>
-                <Button href="/contact" variant="glass" size="lg">
-                  Talk to a trek coordinator
+                <Button href={whatsappHref} variant="glass" size="lg">
+                  Chat with us on WhatsApp
                 </Button>
               </Reveal>
             </div>

@@ -3,9 +3,9 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: {
     default: "Admin",
-    template: "%s · Admin · Indiahikes",
+    template: "%s · Admin · HeyHikers",
   },
-  description: "Operations panel — treks, departures, bookings and Green Trails.",
+  description: "Operations panel — treks, departures, bookings and trekkers.",
   robots: { index: false, follow: false },
 };
 

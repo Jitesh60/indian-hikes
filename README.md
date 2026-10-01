@@ -1,11 +1,18 @@
-# Indiahikes — concept redesign
+# HeyHikers — website redesign
 
-A front-end redesign of a Himalayan trekking company's website, plus an admin
-panel mockup. Next.js 16 (App Router), React 19, TypeScript, Tailwind v4.
+A redesign of the [HeyHikers](https://heyhikers.com) website — a Dehradun-based
+company running guided Himalayan treks — plus an admin panel mockup.
+Next.js 16 (App Router), React 19, TypeScript, Tailwind v4.
 
-Everything runs on mock data held in `src/data`. There is no backend, no
-payment provider and no database — forms validate and respond, but nothing is
-sent anywhere.
+Company facts (story, founders, stats, promises, testimonials, contact
+details) live in `src/data/brand.ts`, taken from heyhikers.com. Everything the
+site says about the company reads from there.
+
+Treks, departures and bookings are still mock data in `src/data`. There is no
+backend, no payment provider and no database — forms validate and respond, but
+nothing is sent anywhere. Per-trek prices (other than Kedarkantha's ₹7,499),
+ratings, departure dates and slot counts are placeholders to replace with the
+real figures.
 
 ## Running it
 
@@ -18,20 +25,23 @@ npx eslint src  # lint
 
 ## The design idea
 
-The public site is built from three references: a **bento dashboard** (rounded
-white and near-black tiles, frosted glass laid over photos, compact stat
-blocks), a **national-park site** (an immersive night-sky hero, stats over a
-landscape, alternating photo/text rows, a dark section with a rotating text
-ring) and an **outdoor store** (icy-blue panels, bold sans headings, image
-category tiles, a brush-stroke promo banner, blog cards, a newsletter strip).
+The home page follows two references: a bright, airy travel landing page (a
+hiker photo with a left-aligned headline ending in a serif-italic accent word,
+a white search pill, a handwritten note, a feature row and a popular-treks
+photo grid) and an adventure landing page (a giant word set into the
+landscape, with torn-paper edges). The rest of the site uses a bento/glass
+system: rounded white and near-black tiles, frosted glass over photos, pill
+controls.
 
 - **Tokens** live in `src/app/globals.css`: `mist` (page and surfaces), `ink`
-  (text and dark tiles), `ember` (the single warm accent — the glow of a lit
-  tent), `sun` (promo highlight only), `ice` and `pine`. Utilities: `.glass`,
+  (text and dark tiles), `forest` (the brand green — buttons, active states,
+  highlights), `ember` (warnings only: hard grades, last few slots, full
+  departures), `sun` (promo highlight only), `ice` and `pine`. Utilities: `.glass`,
   `.glass-dark`, `.glass-light`, `.shadow-soft`, `.scrim-b`, `.brush`,
   `rounded-bento` (28px).
-- **Type** is Geist throughout, set heavy and tight for display, with tabular
-  numerals on every altitude, price and count.
+- **Type** is Geist for UI and headlines, Instrument Serif for editorial
+  section titles and accent words, and Caveat for handwritten notes, with
+  tabular numerals on every altitude, price and count.
 - **Motion** comes from real component libraries, vendored into
   `src/components/fx/` with their sources and licenses noted in each file
   (see `src/components/fx/README.md`):
@@ -82,9 +92,9 @@ typeface.
 | `/treks/[slug]/book` | Four-step booking — trekkers, add-ons, health declaration, review and pay |
 | `/departures` | Month-by-month calendar across all treks, with filters |
 | `/stories`, `/stories/[slug]` | Editorial |
-| `/green-trails` | Waste recovery programme, with the numbers |
 | `/account` | Trekker dashboard — upcoming, fitness, documents, saved |
 | `/login` | Passwordless sign-in |
+| `/custom-treks` | Customised treks for schools, companies and solo travellers; women-only batches |
 | `/about` `/contact` `/fitness` `/safety` `/gear` `/policy` `/faq` `/careers` | Supporting content |
 | `/credits` | Photographer credits |
 
@@ -92,7 +102,7 @@ typeface.
 
 Dashboard with season charts and an attention queue; treks list and a
 five-tab trek editor; departures with a scheduling modal; bookings with a
-detail drawer; trekkers; trek leaders; Green Trails waste logging; stories;
+detail drawer; trekkers; trek leaders; trail clean-up logging; stories;
 and settings. Sortable, searchable, paginated tables throughout.
 
 ## Structure
@@ -117,6 +127,6 @@ numbers. The dataset is pinned to a fixed reference date (`TODAY` in
 
 ## Notes
 
-This is a design concept, not an affiliated or official product. All copy and
-data were written for this project; photography is from Unsplash under the
-Unsplash License.
+Company copy is from heyhikers.com; testimonials are paraphrased and should be
+replaced with their exact wording. Photography is from Unsplash under the
+Unsplash License, credited on `/credits`.

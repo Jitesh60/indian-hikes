@@ -18,7 +18,7 @@ export default function AccountPage() {
     .filter((b) => b.departure);
 
   const saved = treks.filter((t) =>
-    ["kashmir-great-lakes", "rupin-pass", "goechala"].includes(t.slug)
+    ["kashmir-great-lakes", "rupin-pass", "bali-pass"].includes(t.slug)
   );
 
   const past = [

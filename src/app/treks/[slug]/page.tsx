@@ -7,7 +7,7 @@ import {
   Check,
   ChevronRight,
   Heart,
-  Leaf,
+  Venus,
   MapPin,
   Minus,
   Share2,
@@ -154,9 +154,9 @@ export default async function TrekPage({ params }: { params: Promise<{ slug: str
                   <span className="glass inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[12.5px]">
                     <MapPin size={12} aria-hidden="true" /> {trek.region}, {trek.state}
                   </span>
-                  {trek.greenTrails && (
+                  {trek.womenOnly && (
                     <span className="inline-flex items-center gap-1.5 rounded-full bg-pine-500 px-3 py-1.5 text-[12.5px] font-medium">
-                      <Leaf size={12} aria-hidden="true" /> Green Trails route
+                      <Venus size={12} aria-hidden="true" /> Women-only batches
                     </span>
                   )}
                   <span className="glass inline-flex items-center rounded-full px-3 py-1.5">
@@ -324,7 +324,7 @@ export default async function TrekPage({ params }: { params: Promise<{ slug: str
                         className={[
                           "nums relative z-10 inline-flex h-11 w-11 items-center justify-center rounded-full text-[14px] font-semibold",
                           isPeak
-                            ? "bg-ember-500 text-white shadow-[0_8px_20px_-8px_rgb(255_106_43/0.7)]"
+                            ? "bg-forest-500 text-white shadow-[0_8px_20px_-8px_rgb(255_106_43/0.7)]"
                             : "bg-ink-900 text-white",
                         ].join(" ")}
                         aria-label={`Day ${d.day}`}
@@ -348,7 +348,7 @@ export default async function TrekPage({ params }: { params: Promise<{ slug: str
                           {i > 0 && delta !== 0 && (
                             <span
                               className={`rounded-full px-2.5 py-1 ${
-                                delta > 0 ? "bg-ember-500/10 text-ember-600" : "bg-ice-100 text-ice-500"
+                                delta > 0 ? "bg-forest-500/10 text-forest-600" : "bg-ice-100 text-ice-500"
                               }`}
                             >
                               {delta > 0 ? "▲ +" : "▼ −"}
@@ -561,7 +561,7 @@ function BookingCard({ trek, deps, openSlots }: { trek: Trek; deps: Departure[];
 
       <a
         href="#departures"
-        className="mt-6 flex items-center justify-center gap-2 rounded-full bg-ember-500 px-5 py-3.5 text-[15px] font-medium text-white shadow-[0_8px_24px_-8px_rgb(255_106_43/0.6)] transition-colors hover:bg-ember-600"
+        className="mt-6 flex items-center justify-center gap-2 rounded-full bg-forest-500 px-5 py-3.5 text-[15px] font-medium text-white shadow-[0_8px_24px_-8px_rgb(255_106_43/0.6)] transition-colors hover:bg-forest-600"
       >
         Choose your dates <ArrowUpRight size={16} aria-hidden="true" />
       </a>
@@ -569,7 +569,7 @@ function BookingCard({ trek, deps, openSlots }: { trek: Trek; deps: Departure[];
         Free to cancel up to 30 days before departure. After that the refund drops on a
         published scale.
       </p>
-      <BorderBeam size={110} duration={10} colorFrom="#ff8a52" colorTo="#ffd84d" borderWidth={1.5} />
+      <BorderBeam size={110} duration={10} colorFrom="#7fb99a" colorTo="#ffd84d" borderWidth={1.5} />
     </div>
   );
 }

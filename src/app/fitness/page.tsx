@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { InfoShell, Panel, Prose, H2, Stat, StepNo } from "@/components/site/InfoShell";
 import { Reveal } from "@/components/site/motion";
+import Link from "next/link";
 import { Button, DifficultyMeter } from "@/components/site/ui";
 import { treks } from "@/data/treks";
 import { DIFFICULTY_ORDER } from "@/lib/types";
@@ -10,11 +11,12 @@ export const metadata: Metadata = {
   description: "What each grade asks of you, and how to get there from where you are.",
 };
 
+/** A summary of our eight-week plan — the full version is on the stories page. */
 const WEEKS = [
-  { w: "Weeks 1–2", goal: "3 km, any pace", note: "Four days a week. The point is the habit, not the time." },
-  { w: "Weeks 3–4", goal: "4 km under 40 minutes", note: "Add one day of stairs or a hill. Legs, not lungs, are the limit here." },
-  { w: "Weeks 5–6", goal: "5 km under 42 minutes", note: "Start walking with a loaded rucksack once a week." },
-  { w: "Weeks 7–8", goal: "5 km under 38 minutes", note: "Or 10 km under 90 if you are going above 13,500 ft." },
+  { w: "Weeks 1–2", goal: "Build the base", note: "Brisk 30-minute walks every day, stairs up to 10 floors, squats and lunges three times a week." },
+  { w: "Weeks 3–4", goal: "Add load", note: "Carry a 5–7 kg daypack on your walks and stair sessions, and stretch walks towards 45 minutes." },
+  { w: "Weeks 5–6", goal: "Build endurance", note: "One long 2–3 hour loaded session each weekend, plus jogging or cycling — aim to run 5 km comfortably." },
+  { w: "Weeks 7–8", goal: "Peak, then taper", note: "Your longest loaded walk in week seven, then ease off so you arrive rested, in boots you have broken in." },
 ];
 
 export default function FitnessPage() {
@@ -25,14 +27,14 @@ export default function FitnessPage() {
       photo="hikerPeak"
       eyebrow="Fitness standards"
       title="Fitness is the one thing you control"
-      intro="You cannot control the weather, the snow or how your body handles altitude. You can control whether you arrive able to walk for six hours. Here is exactly what each grade asks for."
+      intro="You cannot control the weather, the snow or how your body handles altitude. You can control whether you arrive able to walk for six hours. Here is what each grade asks for."
     >
       <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
         {[
           { v: "6 hrs", l: "Walking on a long day", dark: true },
           { v: "8 wks", l: "From zero to ready" },
           { v: "5 km", l: "The benchmark run" },
-          { v: String(difficult.length), l: "Treks that need a record" },
+          { v: String(difficult.length), l: "Difficult-grade treks" },
         ].map((s, i) => (
           <Reveal key={s.l} delay={i * 0.06} className="h-full">
             <div
@@ -86,9 +88,18 @@ export default function FitnessPage() {
             <H2 eyebrow="Training plan">Eight weeks from nothing</H2>
             <Prose>
               <p>
-                This is the plan we send to anyone who tells us they do not currently run. It
-                assumes you are starting from zero and have two months. If you have less time,
-                pick an easier trek rather than compressing the plan.
+                Training for a Himalayan trek is less about brute strength and more about
+                endurance, leg stamina and the grit to keep moving. This plan works even if you
+                are starting from a desk job. If you have less time, pick an easier trek rather
+                than compressing the plan.
+              </p>
+              <p>
+                <Link
+                  href="/stories/how-to-train-for-himalayan-trek-8-weeks"
+                  className="font-medium text-ink-900 underline decoration-forest-500 decoration-2 underline-offset-4 hover:text-forest-600"
+                >
+                  Read the full eight-week plan
+                </Link>
               </p>
             </Prose>
           </div>
@@ -123,21 +134,20 @@ export default function FitnessPage() {
       <Panel>
         <div className="grid gap-x-14 gap-y-8 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,0.7fr)] lg:items-end">
           <div>
-            <H2 eyebrow="Before you book">How we check</H2>
+            <H2 eyebrow="Before you book">Be honest with us, and yourself</H2>
             <Prose>
               <p>
-                For Easy and Moderate treks we take you at your word. You tell us where your
-                fitness is when you book, and your trek leader has that note at basecamp.
+                When you book, tell us where your fitness really is. It helps us suggest the
+                right trek, and it helps your trek leader look after you on the trail.
               </p>
               <p>
-                For Difficult treks — {difficult.map((t) => t.name).join(", ").replace(/, ([^,]*)$/, " and $1")} — we ask for a record
-                before we confirm the booking. A screenshot from any running app is enough. This
-                is not gatekeeping for its own sake: on those routes there is no easy way
-                down from the middle of the trek.
+                It matters most on Difficult treks — {difficult.map((t) => t.name).join(", ").replace(/, ([^,]*)$/, " and $1")}. On
+                those routes there is no easy way down from the middle of the trek, so arrive
+                trained and with some Himalayan trekking behind you.
               </p>
               <p>
-                Nobody is turned away for being early in their training. We move people to a
-                later departure or a different trek, and we hold the money.
+                Not quite ready yet? That is fine. Talk to us and we will help you find a trek
+                that suits where you are now — or plan a customised trek at your own pace.
               </p>
             </Prose>
           </div>

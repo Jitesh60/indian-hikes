@@ -6,12 +6,11 @@ import type { Story } from "@/data/stories";
 
 /** A fitting photograph per story; anything unmapped falls back to its trek's cover. */
 const STORY_PHOTOS: Record<string, PhotoKey> = {
+  "best-time-to-trek-himalayas-month-by-month": "kanchenjunga",
+  "how-to-train-for-himalayan-trek-8-weeks": "ridgeWalkers",
   "what-12000-feet-does-to-you": "snowTrekkers",
-  "ninety-one-kilos-of-waste": "windingRoad",
-  "i-turned-back-at-the-pass": "snowRange2",
   "reading-a-himalayan-weather-window": "silhouette",
   "what-actually-goes-in-the-backpack": "gearFlatlay",
-  "the-village-at-the-start-of-the-trail": "grazing",
 };
 
 export function storyPhoto(story: Story): PhotoKey {

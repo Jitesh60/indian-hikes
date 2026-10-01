@@ -113,16 +113,9 @@ export type Leader = {
 };
 
 export const leaders: Leader[] = [
-  { name: "Arundhati Rane", since: 2007, home: "Sankri", grades: "All grades", treksLed: 312, rating: 4.9, status: "on trek", nextDeparture: "Rupin Pass, 24 Sep", certifications: ["WFR", "Rope rescue", "Avalanche 1"] },
-  { name: "Kabir Sheikh", since: 2014, home: "Sankri", grades: "Up to Difficult", treksLed: 188, rating: 4.9, status: "available", nextDeparture: "Kedarkantha, 12 Dec", certifications: ["WFR", "Rope rescue"] },
-  { name: "Nima Lepcha", since: 2011, home: "Yuksom", grades: "All grades", treksLed: 241, rating: 4.8, status: "on trek", nextDeparture: "Goechala, 2 Oct", certifications: ["WFR", "Rope rescue", "Avalanche 1"] },
-  { name: "Devika Nair", since: 2018, home: "Lohajung", grades: "Up to Moderate–Difficult", treksLed: 96, rating: 4.8, status: "available", nextDeparture: "Brahmatal, 20 Dec", certifications: ["WFR"] },
-  { name: "Tashi Namgyal", since: 2013, home: "Manali", grades: "All grades", treksLed: 205, rating: 4.7, status: "on leave", certifications: ["WFR", "Avalanche 2"] },
-  { name: "Rohan Mehta", since: 2016, home: "Manali", grades: "Up to Difficult", treksLed: 143, rating: 4.9, status: "on trek", nextDeparture: "Hampta Pass, 19 Sep", certifications: ["WFR", "Rope rescue"] },
-  { name: "Ipshita Bose", since: 2019, home: "Sepi", grades: "Up to Moderate", treksLed: 71, rating: 4.8, status: "available", nextDeparture: "Sandakphu, 14 Oct", certifications: ["WFR"] },
-  { name: "Sundar Rawat", since: 2009, home: "Sankri", grades: "All grades", treksLed: 288, rating: 4.9, status: "available", nextDeparture: "Har Ki Dun, 28 Sep", certifications: ["WFR", "Rope rescue", "Avalanche 1"] },
-  { name: "Meera Iyer", since: 2021, home: "Sonamarg", grades: "Up to Moderate", treksLed: 38, rating: 4.7, status: "training", certifications: ["WFR"] },
-  { name: "Yeshe Dorjee", since: 2015, home: "Yuksom", grades: "Up to Difficult", treksLed: 167, rating: 4.8, status: "available", nextDeparture: "Goechala, 18 Oct", certifications: ["WFR", "Rope rescue"] },
+  { name: "Kartik Rawat", since: 2019, home: "Dehradun", grades: "All grades", treksLed: 50, rating: 4.9, status: "available", nextDeparture: "Kedarkantha, 4 Dec", certifications: ["Founder & Owner", "WFR"] },
+  { name: "Praveen Chauhan", since: 2020, home: "Dehradun", grades: "All grades", treksLed: 42, rating: 4.9, status: "available", nextDeparture: "Brahmatal, 20 Dec", certifications: ["Co-Owner", "Operations & safety"] },
+  { name: "Farooq", since: 2020, home: "Sonamarg", grades: "Up to Difficult", treksLed: 60, rating: 4.9, status: "on trek", nextDeparture: "Kashmir Great Lakes", certifications: ["Trek guide", "WFR"] },
 ];
 
 export type WasteLog = {
@@ -142,7 +135,7 @@ export const wasteLogs: WasteLog[] = (() => {
   const rand = rng(909);
   const camps = [
     ["Sankri", "kedarkantha"], ["Lohajung", "brahmatal"], ["Manali", "hampta-pass"],
-    ["Sonamarg", "kashmir-great-lakes"], ["Sepi", "sandakphu-phalut"], ["Raithal", "dayara-bugyal"],
+    ["Sonamarg", "kashmir-great-lakes"], ["Kafnu", "pin-bhaba-pass"], ["Raithal", "dayara-bugyal"],
     ["Aru", "tarsar-marsar"], ["Govindghat", "valley-of-flowers"],
   ];
   const out: WasteLog[] = [];
@@ -162,7 +155,7 @@ export const wasteLogs: WasteLog[] = (() => {
       glass,
       metal,
       other: Math.round((kg - plastic - glass - metal) * 10) / 10,
-      coordinator: ["Pema Bhutia", "Anoushka Grewal", "Vikram Chand"][i % 3],
+      coordinator: ["Kartik Rawat", "Praveen Chauhan", "Farooq"][i % 3],
     });
   }
   return out;

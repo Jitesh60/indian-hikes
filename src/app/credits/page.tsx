@@ -36,7 +36,7 @@ export default function CreditsPage() {
                 </span>
               </span>
               <Link
-                href={`https://unsplash.com/@${c.user}?utm_source=indiahikes_concept&utm_medium=referral`}
+                href={`https://unsplash.com/@${c.user}?utm_source=heyhikers&utm_medium=referral`}
                 className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-ink-900/10 text-ink-900 transition-colors hover:border-ink-900"
                 aria-label={`${c.by} on Unsplash`}
                 target="_blank"

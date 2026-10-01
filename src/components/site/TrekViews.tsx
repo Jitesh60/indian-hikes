@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight, Leaf, Snowflake, Users, Mountain, CalendarDays } from "lucide-react";
+import { ArrowUpRight, Venus, Snowflake, Users, Mountain, CalendarDays } from "lucide-react";
 import { AltitudeSpark } from "@/components/viz/AltitudeProfile";
 import { Photo } from "@/components/site/Photo";
 import { DifficultyMeter, Pill, Stars } from "@/components/site/ui";
@@ -32,9 +32,9 @@ export function TrekRow({ trek, index }: { trek: Trek; index: number }) {
         </div>
         <p className="mt-1 max-w-[52ch] text-[14px] leading-snug text-ink-500">{trek.tagline}</p>
         <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
-          {trek.greenTrails && (
+          {trek.womenOnly && (
             <Pill tone="green">
-              <Leaf size={11} /> Green Trails
+              <Venus size={11} /> Women-only batches
             </Pill>
           )}
           {trek.snow && (
@@ -96,10 +96,10 @@ export function TrekCard({ trek, priority = false }: { trek: Trek; priority?: bo
           <span className="glass-dark nums inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[12px] text-white">
             <Mountain size={12} /> {trek.maxAltFt.toLocaleString("en-IN")} ft
           </span>
-          {trek.greenTrails && (
-            <span className="glass inline-flex h-7 w-7 items-center justify-center rounded-full text-white" title="Green Trails route">
-              <Leaf size={13} />
-              <span className="sr-only">Green Trails route</span>
+          {trek.womenOnly && (
+            <span className="glass inline-flex h-7 w-7 items-center justify-center rounded-full text-white" title="Women-only batches">
+              <Venus size={13} />
+              <span className="sr-only">Women-only batches available</span>
             </span>
           )}
         </div>

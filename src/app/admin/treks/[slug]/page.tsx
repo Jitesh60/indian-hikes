@@ -128,7 +128,7 @@ export default function AdminTrekEditor({ params }: { params: Promise<{ slug: st
               <p className="text-[13px] font-semibold mb-2.5">Flags</p>
               <div className="grid sm:grid-cols-2 gap-2.5">
                 {[
-                  ["Green Trails route", trek.greenTrails],
+                  ["Women-only batches", trek.womenOnly],
                   ["Suitable for families", trek.familyFriendly],
                   ["Good first Himalayan trek", trek.firstTimer],
                   ["Involves walking on snow", trek.snow],
@@ -312,7 +312,7 @@ export default function AdminTrekEditor({ params }: { params: Promise<{ slug: st
           <Card>
             <h3 className="font-display-tight text-[18px] mb-5">Search listing</h3>
             <Labelled label="Page title">
-              <input className={input} defaultValue={`${trek.name} · Indiahikes`} onChange={touch} />
+              <input className={input} defaultValue={`${trek.name} · HeyHikers`} onChange={touch} />
             </Labelled>
             <div className="mt-5">
               <Labelled label="Meta description" hint="Around 155 characters">
@@ -323,7 +323,7 @@ export default function AdminTrekEditor({ params }: { params: Promise<{ slug: st
               href={`/treks/${trek.slug}`}
               className="inline-block mt-5 text-[13.5px] text-snow-500 hover:text-spruce-800 transition-colors"
             >
-              indiahikes.com/treks/{trek.slug}
+              heyhikers.com/treks/{trek.slug}
             </Link>
           </Card>
         </div>

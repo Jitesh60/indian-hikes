@@ -7,18 +7,58 @@ export type Story = {
   trek: string;
   date: string;
   minutes: number;
-  category: "Field notes" | "Green Trails" | "Safety" | "Trekker story" | "Gear";
+  category: "Planning" | "Fitness" | "Safety" | "Field notes" | "Gear";
   body: string[];
 };
 
 export const stories: Story[] = [
   {
+    slug: "best-time-to-trek-himalayas-month-by-month",
+    title: "Best time to trek the Himalayas, month by month",
+    standfirst:
+      "There is no single best time to trek in the Himalayas — it depends on the trail you want and the experience you are after. Here is what every month brings, and which treks it suits.",
+    author: "HeyHikers Team",
+    role: "Trek planning",
+    trek: "kedarkantha",
+    date: "2026-08-30",
+    minutes: 8,
+    category: "Planning",
+    body: [
+      "January and February are deep winter. Heavy snow falls at every altitude above 2,500 m and high camps drop to −10°C to −20°C overnight. This is snow-trek season: Kedarkantha, Brahmatal and Nag Tibba are at their best.",
+      "March and April bring the spring bloom. Snow melts back from the lower trails and the rhododendron forests flower crimson, pink and white at different heights. Chopta–Tungnath, Kedarkantha, Har Ki Dun, Dayara Bugyal and Deoriatal–Chandrashila all shine.",
+      "May and June are pre-monsoon: warm, dry and long-houred, with snow largely gone from the main trails, though rivers run high with melt. It is the window for Valley of Flowers' early season, Har Ki Dun, Rupin Pass, Hampta Pass and Bali Pass.",
+      "July and August are monsoon. Uttarakhand and Himachal get heavy rain, trails turn slippery, leeches appear below 2,500 m and road approaches see landslides. The exceptions are rain-shadow treks — Lahaul, Spiti and Ladakh stay largely dry — plus Valley of Flowers at peak bloom, Hampta Pass and Pin Bhaba Pass.",
+      "September and October are post-monsoon and, for many, the best of the year. Skies are clear and stable, meadows are green and washed clean, days sit at 10–20°C and nights at 0–8°C. October in particular has the longest stable weather windows and the clearest air for photography.",
+      "November is the shoulder season. First snow arrives above 3,500 m by mid-month, temperatures fall sharply and days shorten — quieter trails for those prepared for the cold.",
+      "December is early winter, and trekking then can feel like a private Himalaya. It is colder and the highest routes close, but the classic winter treks open up under fresh snow.",
+    ],
+  },
+  {
+    slug: "how-to-train-for-himalayan-trek-8-weeks",
+    title: "How to train for a Himalayan trek in 8 weeks",
+    standfirst:
+      "Training for a Himalayan trek is less about brute strength and more about endurance, leg stamina and the grit to keep moving. This plan works even if you are starting from a desk job.",
+    author: "HeyHikers Team",
+    role: "Trek fitness",
+    trek: "hampta-pass",
+    date: "2026-07-26",
+    minutes: 7,
+    category: "Fitness",
+    body: [
+      "Weeks 1–2: build the base. Walk briskly for 30 minutes every day — elevation matters more than speed, so use stairs if you have them, working up to 10 floors per session by the end of week two. Add bodyweight squats (3 × 15) and lunges (3 × 12 per leg) three times a week. Consistency beats intensity: missing a day is fine, missing a week is not.",
+      "Weeks 3–4: introduce load. Carry a 5–7 kg daypack on your walks and stair sessions so your legs and shoulders learn what a trail day feels like. Stretch your walks towards 45 minutes and keep the strength work going.",
+      "Weeks 5–6: build endurance. Add one long session each weekend — two to three hours on hills, stairs or a local trail with your pack. Bring in jogging or cycling on two weekdays to lift your cardio, aiming to run 5 km comfortably.",
+      "Weeks 7–8: peak and taper. Do your longest loaded walk in week seven, then ease off in the final week so you arrive rested. Break in your boots on every session, practise with the pack you will carry, and prioritise sleep and hydration.",
+      "On the trek itself, walk slower than you think you need to on the first two days, drink more water than you want, and eat even when altitude dulls your appetite. Your trek leader will set the pace — trust it.",
+    ],
+  },
+  {
     slug: "what-12000-feet-does-to-you",
     title: "What 12,000 feet actually does to you",
     standfirst:
       "Altitude sickness is not a fitness problem, and treating it like one is how people get hurt. A plain explanation of what changes in your body above the treeline.",
-    author: "Dr. Ananya Kulkarni",
-    role: "Mountain medicine advisor",
+    author: "HeyHikers Team",
+    role: "Trek safety",
     trek: "kedarkantha",
     date: "2026-08-28",
     minutes: 9,
@@ -27,44 +67,8 @@ export const stories: Story[] = [
       "The first thing to understand is that acute mountain sickness has almost nothing to do with how strong you are. Marathon runners get it. People who have never run a kilometre in their lives sometimes do not. What decides it is how quickly you went up, and how well your body compensated on the way.",
       "At 12,000 feet there is roughly 40 per cent less oxygen in every breath you take than at sea level. Your body responds by breathing faster and, over a day or two, by changing the chemistry of your blood. That adaptation takes time. If you climb faster than the adaptation can keep up, pressure builds where it should not — usually in the brain, occasionally in the lungs.",
       "The symptoms are unglamorous and easy to dismiss. A headache that does not respond to water. Loss of appetite at dinner. Sleeping badly and waking up short of breath. On their own each of these is ordinary. Together, at altitude, they are a signal.",
-      "This is why every one of our trek leaders carries a pulse oximeter and why we record readings twice a day for every trekker on the trek. It is not a formality. A resting saturation that drops below 80 and does not recover overnight ends someone's trek, regardless of how they feel about it.",
+      "This is why your trek leader keeps a close eye on every trekker, every day, and why a leader's call to rest or turn back is not up for negotiation. It is not a formality — it is the reason the trek ends well.",
       "The single most effective thing you can do is also the least dramatic: walk slowly on the first two days, drink more than you want to, and eat dinner even when you do not feel like it. Almost everything else is downstream of those three.",
-    ],
-  },
-  {
-    slug: "ninety-one-kilos-of-waste",
-    title: "Ninety-one kilos came off one ridge in a single season",
-    standfirst:
-      "Every Green Trails group carries an eco-bag. Here is what four months of that added up to on the Singalila ridge, sorted by what it was.",
-    author: "Pema Bhutia",
-    role: "Green Trails coordinator",
-    trek: "sandakphu-phalut",
-    date: "2026-08-14",
-    minutes: 6,
-    category: "Green Trails",
-    body: [
-      "Between March and June this year, groups on Sandakphu–Phalut brought down ninety-one kilograms of waste that was not theirs. We weigh it at Sepi, sort it, and log it — which means we can tell you exactly what a popular trail accumulates.",
-      "Just over half of it was multi-layer plastic: wrappers from biscuits, chips and instant noodles. These are the hardest category to deal with because nobody recycles them. They go to a cement kiln in Siliguri that co-processes them as fuel.",
-      "Glass was the second-largest share by weight, and almost all of it came from within two hundred metres of the trekkers' huts. Aluminium and tin were a distant third, but they are the only category that actually pays for its own transport down.",
-      "The number that matters more than ninety-one is this: the same stretch produced a hundred and forty kilos in the same window two years ago. It is going down. Not because the mountain cleans itself, but because enough groups now arrive expecting to carry something out.",
-    ],
-  },
-  {
-    slug: "i-turned-back-at-the-pass",
-    title: "I turned back four hundred metres from the pass",
-    standfirst:
-      "A trekker on Rupin describes the decision, why her leader made it easy, and why she does not regret it eleven months later.",
-    author: "Shreya Bhattacharya",
-    role: "Trekker, Rupin Pass 2025",
-    trek: "rupin-pass",
-    date: "2026-07-30",
-    minutes: 7,
-    category: "Trekker story",
-    body: [
-      "We were in the gully by six. The snow was firm, the steps were cut, and I had been doing fine for six days. Then somewhere around fourteen thousand eight hundred feet my hands stopped working properly and I could not get my fingers into my glove.",
-      "Kabir did not make a speech about it. He asked me to touch my nose with my eyes closed, watched me do it badly, and said we were going down. Two of the support staff came with me. The rest of the group went over.",
-      "What I want people to know is how completely unremarkable it felt. Nobody treated it as a failure. Nobody made me feel like I had cost anyone anything. I sat in the sun at Dhanderas Thach for six hours, ate a great deal, and felt fine by evening.",
-      "I went back last October and crossed it. The second time I knew exactly how the gully would feel, and I knew that turning around was available to me if I needed it. I think that is the only reason I made it.",
     ],
   },
   {
@@ -72,8 +76,8 @@ export const stories: Story[] = [
     title: "How we read a weather window before a pass day",
     standfirst:
       "Three forecasts, a barometer, and somebody's uncle in the village. What actually goes into the call on the night before a crossing.",
-    author: "Rohan Mehta",
-    role: "Senior trek leader",
+    author: "HeyHikers Team",
+    role: "Trek leaders",
     trek: "hampta-pass",
     date: "2026-07-11",
     minutes: 8,
@@ -90,8 +94,8 @@ export const stories: Story[] = [
     title: "What actually goes in the backpack, by weight",
     standfirst:
       "We weighed a properly packed bag for a six-day winter trek. Nine kilos, and two-thirds of it is things people try to leave behind.",
-    author: "Devika Nair",
-    role: "Trek leader",
+    author: "HeyHikers Team",
+    role: "Trek leaders",
     trek: "brahmatal",
     date: "2026-06-19",
     minutes: 5,
@@ -101,24 +105,6 @@ export const stories: Story[] = [
       "The heaviest single item should be your insulation layer, and it is worth every gram. The second heaviest should be water — two litres, carried, not bought. After that the list drops off fast.",
       "The things people most often leave out and most often need: a headlamp with working batteries, sunglasses rated for snow glare, and a second pair of dry socks kept in a plastic bag. That last one sounds trivial until the evening of day three.",
       "The things people most often carry and never use: jeans, a full-size toiletry kit, a power bank larger than ten thousand milliamp hours, and a book. The book is the only one I have any sympathy for.",
-    ],
-  },
-  {
-    slug: "the-village-at-the-start-of-the-trail",
-    title: "The economics of a village at the start of a trail",
-    standfirst:
-      "Sankri has about four hundred households. In a good season, trekking is the largest single source of cash income for more than half of them.",
-    author: "Ipshita Bose",
-    role: "Community programmes",
-    trek: "har-ki-dun",
-    date: "2026-05-22",
-    minutes: 10,
-    category: "Field notes",
-    body: [
-      "Before the road came up the Tons valley, Sankri's economy ran on apples, rajma and whatever could be carried down to Purola. Cash was seasonal and thin. What trekking changed was not the amount so much as the timing — money now arrives in December and January, which is when the old economy had nothing.",
-      "A horseman working a full winter season on Kedarkantha will earn more between December and February than a season of apples brings in. That is a real change in a household's year, and it explains why almost every family in the village has someone working the trails.",
-      "It also creates a dependency that is worth being honest about. A bad snow year, a road closure, or a permit change hits this village harder than it hits us. When the sanctuary closed for six weeks in 2023, we kept our staff on payroll, and the horsemen — who work for themselves — had nothing.",
-      "We now pay a guaranteed minimum for the season rather than per trek, which shifts some of that risk onto us where it belongs. It is not a complete answer. It is better than what came before it.",
     ],
   },
 ];

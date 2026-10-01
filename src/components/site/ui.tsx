@@ -65,7 +65,7 @@ export function Eyebrow({ children, onDark = false }: { children: ReactNode; onD
         onDark ? "text-white/60" : "text-ink-500"
       }`}
     >
-      <span className="h-1.5 w-1.5 rounded-full bg-ember-500" aria-hidden="true" />
+      <span className="h-1.5 w-1.5 rounded-full bg-forest-500" aria-hidden="true" />
       {children}
     </p>
   );
@@ -147,7 +147,7 @@ export function Button({
   const base =
     "inline-flex items-center justify-center gap-2 rounded-full font-medium whitespace-nowrap transition-all duration-200 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed";
   const variants = {
-    primary: "bg-ember-500 text-white hover:bg-ember-600 shadow-[0_8px_24px_-8px_rgb(255_106_43/0.6)]",
+    primary: "bg-forest-500 text-white hover:bg-forest-600 shadow-[0_8px_24px_-8px_rgb(255_106_43/0.6)]",
     dark: "bg-ink-900 text-white hover:bg-ink-700",
     light: "bg-white text-ink-900 hover:bg-mist-100",
     outline: "border border-ink-900/15 text-ink-900 hover:border-ink-900 bg-transparent",
@@ -206,7 +206,7 @@ export function Avatar({
     .slice(0, 2)
     .join("");
   const tones = {
-    ember: "bg-ember-400 text-white",
+    ember: "bg-forest-400 text-white",
     ink: "bg-ink-800 text-white",
     ice: "bg-ice-200 text-ink-800",
     pine: "bg-pine-500 text-white",
