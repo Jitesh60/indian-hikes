@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Health Reminder</title>
+  <meta name="description" content="Medicine and meal reminders with a high-protein, high-fibre, low-carb, low-fat meal plan.">
+  <meta name="theme-color" content="#0f766e">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Health">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img src="icon.svg" alt="" width="32" height="32">
+      <div>
+        <h1>Health Reminder</h1>
+        <p id="today-label"></p>
+      </div>
+    </div>
+  </header>
+
+  <main id="view" tabindex="-1"></main>
+
+  <nav class="tabbar" aria-label="Sections">
+    <button type="button" data-tab="today" aria-current="page"><span data-icon="today"></span>Today</button>
+    <button type="button" data-tab="meds"><span data-icon="pill"></span>Medicines</button>
+    <button type="button" data-tab="meals"><span data-icon="meal"></span>Meals</button>
+    <button type="button" data-tab="settings"><span data-icon="sliders"></span>Settings</button>
+  </nav>
+
+  <div id="alarms" aria-live="assertive"></div>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <input type="file" id="import-file" accept="application/json,.json" hidden>
+
+  <dialog id="med-dialog" aria-labelledby="med-dialog-title">
+    <form id="med-form" method="dialog" novalidate>
+      <div class="dialog-head">
+        <h2 id="med-dialog-title">Add medicine</h2>
+        <button type="button" class="icon-btn" data-action="close-dialog" aria-label="Close"><span data-icon="x"></span></button>
+      </div>
+
+      <div class="dialog-body">
+        <label class="field">
+          <span>Medicine name</span>
+          <input name="name" required autocomplete="off" placeholder="e.g. Metformin">
+        </label>
+        <label class="field">
+          <span>Dose <em>(optional)</em></span>
+          <input name="dose" autocomplete="off" placeholder="e.g. 1 tablet · 500 mg">
+        </label>
+
+        <fieldset class="field">
+          <legend>How often</legend>
+          <div class="segmented">
+            <label><input type="radio" name="frequency" value="daily" checked><span>Every day</span></label>
+            <label><input type="radio" name="frequency" value="weekly"><span>Weekly</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="field" data-show="weekly">
+          <legend>On which days</legend>
+          <div class="chips" id="weekday-chips"></div>
+        </fieldset>
+
+        <fieldset class="field">
+          <legend>Take it</legend>
+          <div class="chips">
+            <label class="chip"><input type="radio" name="relation" value="before"><span>Before meal</span></label>
+            <label class="chip"><input type="radio" name="relation" value="with"><span>With meal</span></label>
+            <label class="chip"><input type="radio" name="relation" value="after" checked><span>After meal</span></label>
+            <label class="chip"><input type="radio" name="relation" value="empty"><span>Empty stomach</span></label>
+            <label class="chip"><input type="radio" name="relation" value="any"><span>Any time</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="field" data-show="meal-linked">
+          <legend>Set the time by</legend>
+          <div class="segmented">
+            <label><input type="radio" name="schedule" value="meals" checked><span>My meal times</span></label>
+            <label><input type="radio" name="schedule" value="clock"><span>Clock times</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="field" data-show="by-meals">
+          <legend>With which meals</legend>
+          <div class="chips" id="meal-chips"></div>
+          <label class="inline-field" data-show="offset">
+            <select name="offset">
+              <option value="10">10 min</option>
+              <option value="15">15 min</option>
+              <option value="30" selected>30 min</option>
+              <option value="45">45 min</option>
+              <option value="60">1 hour</option>
+            </select>
+            <span id="offset-label">after the meal</span>
+          </label>
+        </fieldset>
+
+        <fieldset class="field" data-show="by-clock">
+          <legend>How many times a day</legend>
+          <div class="stepper">
+            <button type="button" class="icon-btn" data-action="times-minus" aria-label="Fewer times">−</button>
+            <output id="times-count">1</output>
+            <button type="button" class="icon-btn" data-action="times-plus" aria-label="More times">+</button>
+            <span class="muted" id="times-word">time a day</span>
+          </div>
+          <div class="time-grid" id="time-inputs"></div>
+        </fieldset>
+
+        <fieldset class="field">
+          <legend>Duration</legend>
+          <div class="row">
+            <label class="field compact">
+              <span>Start</span>
+              <input type="date" name="startDate" required>
+            </label>
+            <label class="field compact" data-hide="ongoing">
+              <span>For</span>
+              <input type="number" name="durationValue" min="1" max="999" value="7" inputmode="numeric">
+            </label>
+            <label class="field compact">
+              <span>&nbsp;</span>
+              <select name="durationUnit">
+                <option value="days">days</option>
+                <option value="weeks">weeks</option>
+                <option value="months">months</option>
+                <option value="ongoing">Ongoing</option>
+              </select>
+            </label>
+          </div>
+          <p class="hint" id="end-hint"></p>
+        </fieldset>
+
+        <label class="check" data-show="weekly">
+          <input type="checkbox" name="eveBefore" checked>
+          <span>Also remind me the evening before</span>
+        </label>
+
+        <label class="field">
+          <span>Notes <em>(optional)</em></span>
+          <textarea name="notes" rows="2" placeholder="e.g. Don't take with milk"></textarea>
+        </label>
+
+        <p class="preview" id="schedule-preview"></p>
+        <p class="error" id="form-error" role="alert"></p>
+      </div>
+
+      <div class="dialog-foot">
+        <button type="button" class="btn ghost" data-action="close-dialog">Cancel</button>
+        <button type="submit" class="btn primary">Save medicine</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
